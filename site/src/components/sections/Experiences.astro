@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import IconGrid from '../IconGrid.astro';
+import horseRiding from '../../assets/activities/horse-riding.jpg';
+import quadBonfire from '../../assets/activities/quad-bonfire.jpg';
+import trustWalk from '../../assets/activities/team-trust-walk.jpg';
+
+const activities = [
+  { icon: 'target', label: 'Archery', desc: 'Steady-handed sessions under the eyes of camp guides.' },
+  { icon: 'horse', label: 'Scenic Horse Riding', desc: 'Open plains, dappled forest paths, and Mt. Kenya on the horizon.' },
+  { icon: 'mountain', label: 'Guided Hikes — Mau Caves', desc: 'A storied ascent through forest into the highland caves.' },
+  { icon: 'quad', label: 'Quad Biking', desc: 'Off-road trails through the lower foothills.' },
+  { icon: 'flame', label: 'Bonfire & Games', desc: 'Evenings around the fire — roasted treats, stories, stars.' },
+  { icon: 'dice', label: 'Board Games Lounge', desc: 'A quiet room for slow afternoons and well-played hours.' },
+  { icon: 'pool', label: 'Pool Table', desc: 'A clubhouse classic, set to the rhythm of the evening.' },
+  { icon: 'leaf', label: 'Bush Walks', desc: 'Guided morning walks attuned to the small details of the wild.' },
+];
+---
+<section id="experiences" class="relative bg-cream py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-16 md:mb-24">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Adventure Awaits</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Days you&rsquo;ll talk about for years.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 prose-editorial">
+        <div class="reveal reveal--fade-up" style="--reveal-delay:150ms;">
+          <p>
+            Choose your own pace. Move with the horses through the open plains, draw a bowstring at
+            the archery lawn, or take a guided hike through the highland forest to the Mau Caves.
+            Or simply slow down &mdash; an unhurried afternoon under canvas can be its own kind of
+            adventure.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero image strip — two big editorial shots -->
+    <div class="grid grid-cols-12 gap-4 md:gap-6 mb-16 md:mb-20">
+      <figure class="reveal reveal--scale-image col-span-12 md:col-span-7 relative overflow-hidden aspect-[16/10]">
+        <Image src={horseRiding} alt="Guests on horseback among the acacias of Laikipia" widths={[640, 1024, 1440, 1920]} sizes="(min-width:768px) 58vw, 100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+      <figure class="reveal reveal--scale-image col-span-6 md:col-span-5 relative overflow-hidden aspect-[4/5]" style="--reveal-delay:150ms;">
+        <Image src={quadBonfire} alt="Evening gathering — bonfire and quad bikes under the Laikipia sky" widths={[480, 720, 960]} sizes="(min-width:768px) 40vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+      <figure class="reveal reveal--scale-image col-span-6 md:col-span-12 relative overflow-hidden aspect-[21/9]" style="--reveal-delay:240ms;">
+        <Image src={trustWalk} alt="Team building — guided trust activities under the trees" widths={[640, 1024, 1440, 1920]} sizes="100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+    </div>
+
+    <IconGrid items={activities} tone="cream" columns={4} />
+  </div>
+</section>

@@ -1,0 +1,61 @@
+---
+interface Item {
+  icon: string; // lucide-style icon name (we ship inline SVGs for the ones we use)
+  label: string;
+  desc?: string;
+}
+interface Props {
+  items: Item[];
+  /** Tonal palette — controls icon/text colour. */
+  tone?: 'cream' | 'forest';
+  /** Columns at md+. */
+  columns?: 3 | 4;
+}
+const { items, tone = 'cream', columns = 4 } = Astro.props;
+const isDark = tone === 'forest';
+
+// Inline SVGs — single source of truth for icons used across the site.
+// Keys map to a 24×24 path-only string; we wrap them in a styled <svg>.
+const ICONS: Record<string, string> = {
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>',
+  horse: '<path d="M14 4l3 1-1 3-2 1-2 3v3l2 3-2 3h-3l-1-3-3-2v-3l-2-2 1-3 3-1 2-3z"/>',
+  mountain: '<path d="M3 19l5-9 3 4 3-7 6 12z"/><circle cx="8" cy="7" r="1.5"/>',
+  quad: '<circle cx="6.5" cy="16" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/><path d="M4 13l2-5h6l3 4h5l-1 4"/>',
+  flame: '<path d="M12 3c2 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4-.5 2 .5 3 2 3 0-3 1-5 1-8z"/>',
+  dice: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/>',
+  pool: '<path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/>',
+  spa: '<path d="M12 22V12"/><path d="M12 12c-3-4-7-4-7-1 0 3 4 6 7 7 3-1 7-4 7-7 0-3-4-3-7 1z"/>',
+  leaf: '<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19c4-4 8-7 14-13"/>',
+  bed: '<path d="M3 18V8"/><path d="M3 13h18v5"/><path d="M21 13v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11" r="1.5"/>',
+  bath: '<path d="M3 12h18v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M5 12V6a2 2 0 0 1 4 0"/>',
+  desk: '<rect x="3" y="6" width="18" height="3"/><path d="M5 9v9M19 9v9M9 12h6"/>',
+};
+
+const colsClass = columns === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+---
+<ul class={`grid grid-cols-2 ${colsClass} gap-px ${isDark ? 'bg-cream/15' : 'bg-coffee/15'}`}>
+  {items.map((item, i) => (
+    <li
+      class={`reveal reveal--fade-up group flex flex-col gap-4 ${isDark ? 'bg-forest-deep' : 'bg-cream'} p-7 md:p-10 transition-colors duration-500 ease-editorial ${isDark ? 'hover:bg-forest-dark' : 'hover:bg-mist'}`}
+      style={`--reveal-delay:${(i % 4) * 80}ms;`}
+    >
+      <span class={`flex h-12 w-12 items-center justify-center rounded-full border ${isDark ? 'border-sand/40 text-sand' : 'border-coffee/30 text-forest'} transition-colors group-hover:bg-sand group-hover:border-sand group-hover:text-ink`}>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          set:html={ICONS[item.icon] ?? ICONS.leaf}
+        />
+      </span>
+      <span class={`font-display text-xl ${isDark ? 'text-cream' : 'text-forest'}`}>{item.label}</span>
+      {item.desc && (
+        <span class={`font-body text-sm leading-relaxed ${isDark ? 'text-cream/70' : 'text-ink/65'}`}>{item.desc}</span>
+      )}
+    </li>
+  ))}
+</ul>

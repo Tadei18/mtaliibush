@@ -1,0 +1,86 @@
+---
+import Kicker from '../Kicker.astro';
+import DiningCard from '../DiningCard.astro';
+import tentedDining from '../../assets/dining/tented-dining.jpg';
+import mtKenyaTerrace from '../../assets/dining/mt-kenya-terrace.jpg';
+import bushDinner from '../../assets/dining/bush-dinner.jpg';
+import outdoorDining from '../../assets/dining/outdoor-dining.jpg';
+import safariTable from '../../assets/dining/safari-table.jpg';
+---
+<section id="dine" class="relative bg-mist py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="max-w-3xl mb-16 md:mb-24">
+      <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
+      <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+        Five tables. Five very different conversations with the wild.
+      </h2>
+      <p class="reveal reveal--fade-up mt-7 prose-editorial" style="--reveal-delay:200ms;">
+        We believe every meal should be an experience &mdash; flavourful and memorable. Each of our
+        restaurants offers a different taste of the wild, the world, and the warmth of African
+        hospitality.
+      </p>
+    </header>
+
+    <!-- 5 dining cards — 3 up + 2 up grid -->
+    <div class="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+      <DiningCard
+        image={tentedDining}
+        alt="Mwamba Restaurant — tented dining structure surrounded by gardens"
+        number="01"
+        name="Mwamba Restaurant"
+        tagline="Continental buffet with Mt. Kenya views"
+      >
+        Pan-African ambiance and an indulgent buffet of global favourites and African classics drawn
+        from Laikipia&rsquo;s rich farms, seating 200+ guests. Live cooking stations &mdash; chapati,
+        grilled meats, pasta, omelettes &mdash; themed buffet nights, and an elaborate dessert bar.
+      </DiningCard>
+
+      <DiningCard
+        image={mtKenyaTerrace}
+        alt="Italian Restaurant & Steakhouse interior, country-side charm and culinary fire"
+        number="02"
+        name="Italian Restaurant & Steakhouse"
+        tagline="Country-side charm, culinary fire"
+      >
+        Juicy steaks, hand-rolled pasta, hand-tossed pizzas and crafted cocktails at the whiskey bar
+        &mdash; tucked inside the lively Mshefa Lounge. The perfect hideout after a day of wild
+        adventure, served with Mtalii&rsquo;s signature warmth.
+      </DiningCard>
+
+      <DiningCard
+        image={bushDinner}
+        alt="Mwituni Bush Restaurant — open-air dining under the stars with wildlife passing nearby"
+        number="03"
+        name="Mwituni — The Bush Restaurant"
+        tagline="Where wilderness meets fine dining"
+      >
+        A magical bush-dining experience under the stars, surrounded by gently wandering wildlife.
+        Ideal for intimate dinners, special celebrations, sundowner gatherings and the signature
+        Bush BBQ &mdash; every bite to the sound of nature and the warm glow of firelight.
+      </DiningCard>
+
+      <DiningCard
+        image={outdoorDining}
+        alt="Globetrotters Street Kitchen — global street food under canvas"
+        number="04"
+        name="Globetrotters Street Kitchen"
+        tagline="The streets of the world, on one plate"
+      >
+        Thai stir-fries, Turkish kebabs, coastal Swahili food and Kenyan-style shawarmas under one
+        roof &mdash; each rotation an invitation to discover something new.
+      </DiningCard>
+
+      <DiningCard
+        image={safariTable}
+        alt="Cowboy Barbecue & Smoke House — poolside grill and smoke pit"
+        number="05"
+        name="Cowboy Barbecue & Smoke House"
+        tagline="Where fire meets flavour, poolside"
+      >
+        The ultimate barbecue hub: succulent briskets, flame-seared ribs, T-bone steaks, lamb chops,
+        gourmet sausages, and fall-off-the-bone smoked meats grilled live. Stay for themed cowboy
+        nights with music, boots and barbecue under the stars.
+      </DiningCard>
+    </div>
+  </div>
+</section>

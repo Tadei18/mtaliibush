@@ -1,0 +1,91 @@
+---
+import Kicker from '../Kicker.astro';
+
+const attractions = [
+  {
+    name: 'Ol Pejeta Conservancy',
+    distance: '20 min',
+    body:
+      'Home to the last two northern white rhinos. Big Five game drives, a chimpanzee sanctuary, lion tracking and night safaris.',
+  },
+  {
+    name: 'Ngare Ndare Forest',
+    distance: '1 hr',
+    body:
+      'Waterfalls, blue glacial pools, ancient fig trees, a suspended canopy walk and natural springs.',
+  },
+  {
+    name: 'Lewa Wildlife Conservancy',
+    distance: '1 hr 15 min',
+    body:
+      'A UNESCO World Heritage Site. Black rhinos, Grévy&rsquo;s zebras, luxury safari and community projects.',
+  },
+  {
+    name: 'Ol Jogi Wildlife Conservancy',
+    distance: '40 min',
+    body:
+      'An exclusive private haven on 58,000 acres of wilderness &mdash; advance booking required.',
+  },
+  {
+    name: 'Mount Kenya National Park',
+    distance: 'On your doorstep',
+    body:
+      'Guided forest hikes, birdwatching, and multi-day climbs to Lenana, Batian or Nelion.',
+  },
+  {
+    name: 'Nanyuki Town Art & Craft Market',
+    distance: 'Town centre',
+    body:
+      'Beadwork, wood carvings, coffee farm tours and barista cafés.',
+  },
+  {
+    name: 'Scenic Flights & Air Safaris',
+    distance: 'Nanyuki Airstrip',
+    body:
+      'Flights over Mt.&nbsp;Kenya, Samburu and Laikipia from the airstrip across the road.',
+  },
+  {
+    name: 'Nanyuki Sports Club & Golf Course',
+    distance: 'Town centre',
+    body: 'Golf, tennis and squash, with the mountain framing every hole.',
+  },
+];
+---
+<section id="nearby" class="relative bg-mist py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-16 md:mb-24">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Beyond the Camp</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Exciting things to do, just down the road.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 prose-editorial">
+        <div class="reveal reveal--fade-up" style="--reveal-delay:150ms;">
+          <p>
+            Mtalii sits at the centre of a remarkable corner of Kenya. From Big Five game drives at
+            Ol Pejeta to canopy walks at Ngare Ndare and scenic flights from the airstrip across
+            the road, the wider Laikipia &amp; Mt.&nbsp;Kenya region is yours to discover &mdash;
+            and the camp is your basecamp.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <ul class="grid gap-x-12 gap-y-10 md:grid-cols-2">
+      {attractions.map((attr, i) => (
+        <li class="reveal reveal--fade-up group border-t border-coffee/15 pt-7" style={`--reveal-delay:${(i % 2) * 80}ms;`}>
+          <div class="flex items-start justify-between gap-4">
+            <h3 class="font-display text-2xl text-forest group-hover:text-forest-deep transition-colors">
+              {attr.name}
+            </h3>
+            <span class="flex-none rounded-full border border-coffee/30 px-3 py-1 font-body text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-coffee-light">
+              {attr.distance}
+            </span>
+          </div>
+          <p class="mt-4 font-body text-ink/75 leading-relaxed max-w-prose" set:html={attr.body}></p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

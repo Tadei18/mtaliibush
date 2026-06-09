@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import VenueCard from '../VenueCard.astro';
+import corporateGroup from '../../assets/events/corporate-group.jpg';
+import eventEnergy from '../../assets/events/event-energy.jpg';
+import eventGathering from '../../assets/events/event-gathering.jpg';
+---
+<section id="events" class="relative bg-cream py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-16 md:mb-24">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Gather & Grow</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Meetings, events &amp; team building &mdash; held by the mountain.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 prose-editorial">
+        <div class="reveal reveal--fade-up" style="--reveal-delay:150ms;">
+          <p>
+            Corporate team building and group retreats designed to inspire collaboration, creativity
+            and growth, set among serene landscapes. Three distinct venues plus an expansive camping
+            arena &mdash; each shaped for a different kind of gathering.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Image strip -->
+    <div class="grid grid-cols-12 gap-4 md:gap-6 mb-16 md:mb-20">
+      <figure class="reveal reveal--scale-image col-span-12 md:col-span-7 relative overflow-hidden aspect-[16/10]">
+        <Image src={corporateGroup} alt="Corporate group gathered for a Mtalii team-building retreat" widths={[640, 1024, 1440, 1920]} sizes="(min-width:768px) 58vw, 100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+      <figure class="reveal reveal--scale-image col-span-6 md:col-span-5 relative overflow-hidden aspect-[4/5]" style="--reveal-delay:150ms;">
+        <Image src={eventEnergy} alt="High-energy team activity on the open lawn at Mtalii" widths={[480, 720, 960]} sizes="(min-width:768px) 40vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+      <figure class="reveal reveal--scale-image col-span-6 md:col-span-12 relative overflow-hidden aspect-[21/9]" style="--reveal-delay:240ms;">
+        <Image src={eventGathering} alt="Large gathering on the central lawn" widths={[640, 1024, 1440, 1920]} sizes="100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      </figure>
+    </div>
+
+    <!-- 4 venue cards -->
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <VenueCard
+        number="01"
+        name="Mau Mau Conference Hall"
+        tagline="Grand. Iconic. Inspiring."
+        capacity="Up to 500 guests"
+      >
+        Named in honour of Kenya&rsquo;s liberation heroes. Theatre-style seating, a raised
+        40-seater stage, private backstage, and flexible layouts &mdash; banquet, boardroom,
+        classroom, open-floor. Perfect for AGMs, faith gatherings, bootcamps, festivals, weddings,
+        performances and galas.
+      </VenueCard>
+
+      <VenueCard
+        number="02"
+        name="Uhuru Boardroom"
+        tagline="Executive space, quiet focus."
+        capacity="15 – 20 guests"
+      >
+        Discreet and well-appointed for VVIP delegations and board-level engagements &mdash; built
+        for the kind of conversation that needs no audience.
+      </VenueCard>
+
+      <VenueCard
+        number="03"
+        name="Mzalendo Hall"
+        tagline="Flexible flagship."
+        capacity="Up to 100 guests"
+      >
+        Mid-sized conferences, workshops and social functions, with full audiovisual support and
+        the serene backdrop of Mt.&nbsp;Kenya through the windows.
+      </VenueCard>
+
+      <VenueCard
+        number="04"
+        name="Mitini Camping Arena"
+        tagline="Festivals beneath the mountain."
+        capacity="Up to 1,000 guests"
+      >
+        Expansive, well-curated camping against the backdrop of Mt.&nbsp;Kenya &mdash; ideal for
+        festivals, retreats, group getaways, and large-scale events, with bonfire nights and
+        outdoor dining under the stars.
+      </VenueCard>
+    </div>
+  </div>
+</section>

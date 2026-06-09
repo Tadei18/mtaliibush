@@ -1,0 +1,23 @@
+---
+interface Props {
+  size?: number;
+  tone?: 'sand' | 'coffee' | 'forest';
+  class?: string;
+}
+const { size = 28, tone = 'coffee', class: className = '' } = Astro.props;
+const color = tone === 'sand' ? '#E4C084' : tone === 'forest' ? '#186030' : '#603C0C';
+---
+<svg
+  width={size}
+  height={size * 0.6}
+  viewBox="0 0 60 36"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  class={className}
+  aria-hidden="true"
+>
+  <path d="M2 34 L14 18 L20 28 L17 34 Z" fill={color} opacity="0.45"/>
+  <path d="M58 34 L46 18 L40 28 L43 34 Z" fill={color} opacity="0.45"/>
+  <path d="M30 6 L46 34 L14 34 Z" fill={color}/>
+  <circle cx="34" cy="9" r="2" fill={color}/>
+</svg>

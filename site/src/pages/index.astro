@@ -1,14 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import StoryPreview from '../components/StoryPreview.astro';
+import Story from '../components/sections/Story.astro';
+import DirectorsMessage from '../components/sections/DirectorsMessage.astro';
+import TentedVillages from '../components/sections/TentedVillages.astro';
+import Dining from '../components/sections/Dining.astro';
+import Lounges from '../components/sections/Lounges.astro';
+import PoolGardens from '../components/sections/PoolGardens.astro';
+import Experiences from '../components/sections/Experiences.astro';
+import Spa from '../components/sections/Spa.astro';
+import Events from '../components/sections/Events.astro';
+import Nearby from '../components/sections/Nearby.astro';
+import Team from '../components/sections/Team.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
 ---
 <BaseLayout
   title="Mtalii Bush Camps — Luxury tented safari camp at the foothills of Mt. Kenya"
-  description="A boutique tented safari retreat at the foothills of Mount Kenya in Nanyuki. Where adventure meets purpose."
+  description="A boutique tented safari retreat at the foothills of Mount Kenya in Nanyuki. Luxurious tented suites, fine dining, spa wellness, and unforgettable bush experiences."
 >
   <Hero />
-  <StoryPreview />
-  <!-- TODO Phase 2: full long-form homepage — Director's Message, Tented Villages,
-       Dining, Lounges, Pool Gardens, Experiences, Spa, Events, Nearby, Team, Final CTA. -->
+  <Story />
+  <DirectorsMessage />
+  <TentedVillages />
+  <Dining />
+  <Lounges />
+  <PoolGardens />
+  <Experiences />
+  <Spa />
+  <Events />
+  <Nearby />
+  <Team />
+  <FinalCTA />
 </BaseLayout>

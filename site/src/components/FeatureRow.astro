@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from './Kicker.astro';
+
+interface Props {
+  /** Optional eyebrow (small caps kicker). */
+  kicker?: string;
+  /** Section heading. */
+  title: string;
+  /** Imported image (from src/assets/...). */
+  image: ImageMetadata;
+  /** Alt text for the image. */
+  alt: string;
+  /** Image aspect — defaults to a tall editorial 4/5. */
+  aspect?: '4/5' | '3/4' | '1/1' | '16/9' | '5/4';
+  /** Place the image on the left or right of the text. */
+  side?: 'left' | 'right';
+  /** Tonal palette for the band. */
+  tone?: 'cream' | 'mist' | 'forest' | 'ink';
+  /** Override the kicker tone. */
+  kickerTone?: 'coffee' | 'sand' | 'forest';
+}
+
+const {
+  kicker,
+  title,
+  image,
+  alt,
+  aspect = '4/5',
+  side = 'left',
+  tone = 'cream',
+  kickerTone,
+} = Astro.props;
+
+const isDark = tone === 'forest' || tone === 'ink';
+const headingClass = isDark ? 'text-cream' : 'text-forest';
+const computedKickerTone = kickerTone ?? (isDark ? 'sand' : 'coffee');
+
+const toneBg: Record<string, string> = {
+  cream: 'bg-cream',
+  mist: 'bg-mist',
+  forest: 'bg-forest-deep',
+  ink: 'bg-ink',
+};
+
+const aspectClass: Record<string, string> = {
+  '4/5': 'aspect-[4/5]',
+  '3/4': 'aspect-[3/4]',
+  '1/1': 'aspect-square',
+  '16/9': 'aspect-video',
+  '5/4': 'aspect-[5/4]',
+};
+---
+<section class={`relative ${toneBg[tone]} py-24 md:py-36`}>
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <div class={`grid items-center gap-14 md:gap-20 md:grid-cols-12 ${side === 'right' ? 'md:[direction:rtl]' : ''}`}>
+      <div class={`reveal reveal--scale-image md:col-span-7 ${side === 'right' ? '[direction:ltr]' : ''}`}>
+        <div class={`relative overflow-hidden ${aspectClass[aspect]} shadow-soft`}>
+          <Image
+            src={image}
+            alt={alt}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 768px) 55vw, 100vw"
+            quality={80}
+            format="webp"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
+      </div>
+
+      <div class={`md:col-span-5 ${side === 'right' ? '[direction:ltr]' : ''}`}>
+        {kicker && (
+          <div class="reveal reveal--fade-up">
+            <Kicker tone={computedKickerTone}>{kicker}</Kicker>
+          </div>
+        )}
+        <h2 class={`reveal reveal--fade-up mt-6 font-display text-display-md ${headingClass} text-balance`} style="--reveal-delay:100ms;">
+          {title}
+        </h2>
+        <div class={`reveal reveal--fade-up mt-7 prose-editorial ${isDark ? 'text-cream/80' : ''}`} style="--reveal-delay:200ms;">
+          <slot />
+        </div>
+        {Astro.slots.has('cta') && (
+          <div class="reveal reveal--fade-up mt-10" style="--reveal-delay:300ms;">
+            <slot name="cta" />
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

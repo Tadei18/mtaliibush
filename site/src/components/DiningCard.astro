@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  number: string;
+  name: string;
+  tagline?: string;
+}
+const { image, alt, number, name, tagline } = Astro.props;
+---
+<article class="reveal reveal--fade-up group flex flex-col">
+  <div class="relative overflow-hidden aspect-[5/6] mb-6 bg-mist">
+    <Image
+      src={image}
+      alt={alt}
+      widths={[480, 720, 960]}
+      sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+      quality={80}
+      format="webp"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]"
+    />
+    <span class="absolute left-5 top-5 font-body text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-cream/90">
+      {number}
+    </span>
+    <span class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink/70 via-ink/15 to-transparent"></span>
+  </div>
+  <h3 class="font-display text-2xl md:text-3xl text-forest leading-tight">{name}</h3>
+  {tagline && (
+    <p class="mt-2 font-display italic text-coffee text-lg leading-snug">{tagline}</p>
+  )}
+  <div class="mt-5 font-body text-ink/75 leading-relaxed">
+    <slot />
+  </div>
+</article>

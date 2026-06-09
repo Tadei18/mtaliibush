@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import spaDetail from '../../assets/spa/spa-detail.jpg';
+import wellness from '../../assets/spa/wellness-moment.jpg';
+
+const columns = [
+  {
+    title: 'Spa Experiences',
+    items: [
+      'Signature Full Body Spa Rituals',
+      'Swedish Massage',
+      'Deep Tissue Recovery',
+      'Hot Stone Therapy',
+      'Aromatherapy',
+      'Body Scrubs & Exfoliation',
+      'Luxury Body Wraps',
+      'Foot Reflexology',
+      'Couples Spa',
+      'Herbal Steam & Detox',
+      'Rejuvenation Glow Facials',
+      'Post-Safari Recovery Treatments',
+    ],
+  },
+  {
+    title: 'Therapy & Wellness',
+    items: [
+      'Relaxation Massage',
+      'Deep Tissue & Sports Massage',
+      'Aromatherapy',
+      'Body Detox & Cleansing',
+      'Mindfulness & Stress Relief',
+      'Holistic Wellness Consultations',
+      'Recovery & Rejuvenation',
+    ],
+  },
+  {
+    title: 'Fitness & Eco-Gym Studio',
+    items: [
+      'Eco-Gym Workouts',
+      'Functional Fitness',
+      'Cardio & Strength',
+      'Personal Training',
+      'Outdoor Fitness Circuits',
+      'Group Classes — Bootcamps & Stretch',
+    ],
+  },
+];
+---
+<section id="spa" class="relative bg-ink text-cream py-24 md:py-36 overflow-hidden">
+  <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_85%_15%,rgba(228,192,132,0.10),transparent_65%)]"></span>
+
+  <div class="relative mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-16 md:mb-24">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="sand">Restore & Renew</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-cream text-balance" style="--reveal-delay:100ms;">
+          Casadra Spa &amp; Wellness Centre.
+        </h2>
+        <p class="reveal reveal--fade-up mt-7 prose-editorial text-cream/80" style="--reveal-delay:200ms;">
+          A sanctuary of balance where nature meets wellness &mdash; therapeutic spa treatments, an
+          eco-gym studio, guided fitness sessions and holistic therapies.
+        </p>
+      </div>
+      <div class="md:col-span-7 grid grid-cols-2 gap-4 md:gap-6">
+        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[3/4]">
+          <Image src={spaDetail} alt="A quiet wellness moment at Casadra Spa" widths={[480, 720, 960]} sizes="(min-width:768px) 32vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+        </figure>
+        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[3/4] mt-12" style="--reveal-delay:150ms;">
+          <Image src={wellness} alt="Eco-gym studio and outdoor fitness at Casadra" widths={[480, 720, 960]} sizes="(min-width:768px) 32vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+        </figure>
+      </div>
+    </header>
+
+    <div class="grid gap-12 md:grid-cols-3 md:gap-10 lg:gap-14">
+      {columns.map((col, i) => (
+        <div class="reveal reveal--fade-up" style={`--reveal-delay:${i * 120}ms;`}>
+          <span class="hairline-sand block w-full mb-7"></span>
+          <h3 class="font-display text-2xl text-sand mb-6">{col.title}</h3>
+          <ul class="space-y-3 font-body text-cream/85">
+            {col.items.map((item) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-2 block h-px w-3 flex-none bg-sand/70"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

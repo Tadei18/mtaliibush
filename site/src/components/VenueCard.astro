@@ -1,0 +1,33 @@
+---
+interface Props {
+  number?: string;
+  name: string;
+  tagline?: string;
+  capacity?: string;
+  tone?: 'cream' | 'dark';
+}
+const { number, name, tagline, capacity, tone = 'cream' } = Astro.props;
+const isDark = tone === 'dark';
+---
+<article class={`reveal reveal--fade-up relative flex flex-col gap-4 p-7 md:p-9 border ${isDark ? 'border-cream/15 bg-forest-deep text-cream' : 'border-coffee/15 bg-cream text-ink'}`}>
+  {number && (
+    <span class={`font-body text-[0.66rem] font-semibold uppercase tracking-[0.32em] ${isDark ? 'text-sand' : 'text-coffee-light'}`}>
+      {number}
+    </span>
+  )}
+  <h3 class={`font-display text-2xl md:text-3xl leading-tight ${isDark ? 'text-cream' : 'text-forest'}`}>{name}</h3>
+  {tagline && (
+    <p class={`-mt-1 font-display italic text-lg leading-snug ${isDark ? 'text-sand' : 'text-coffee'}`}>{tagline}</p>
+  )}
+  {capacity && (
+    <span class={`inline-flex items-center gap-2 font-body text-[0.72rem] uppercase tracking-[0.24em] font-semibold ${isDark ? 'text-sand' : 'text-forest'}`}>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1" />
+      </svg>
+      {capacity}
+    </span>
+  )}
+  <div class={`mt-2 font-body leading-relaxed ${isDark ? 'text-cream/80' : 'text-ink/75'}`}>
+    <slot />
+  </div>
+</article>

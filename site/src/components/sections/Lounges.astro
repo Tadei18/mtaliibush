@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import vvipLounge from '../../assets/lounges/vvip-lounge.jpg';
+import mshefaClubhouse from '../../assets/lounges/mshefa-clubhouse.jpg';
+import mwakiFire from '../../assets/lounges/mwaki-fire.jpg';
+
+const lounges = [
+  {
+    image: vvipLounge,
+    alt: 'Mtalii VVIP lounge with curated wine cellar and plush interiors',
+    number: '01',
+    name: 'Mtalii VVIP',
+    tagline: 'Wine & fine moments',
+    body:
+      'A private escape for VVIPs and intimate gatherings — a curated wine cellar, plush interiors, a Mt. Kenya highland coffee house and pastry kitchen, a thoughtful library nook, and a secluded VVIP meeting section.',
+  },
+  {
+    image: mshefaClubhouse,
+    alt: 'Mshefa Clubhouse — vibrant social hub with sports bar and signature dining',
+    number: '02',
+    name: 'Mshefa Clubhouse',
+    tagline: 'The pulse of Mtalii',
+    body:
+      'The vibrant social hub of camp — two signature dining spaces, a dedicated sports bar on big screens, a cocktail and whiskey bar for sundowners, theme nights, karaoke and table games. Relaxed retreat by day; lively, cosmopolitan scene by night.',
+  },
+  {
+    image: mwakiFire,
+    alt: 'Mwaki Lounge — a laid-back bonfire area for day guests',
+    number: '03',
+    name: 'Mwaki Lounge',
+    tagline: 'Kikuyu for fire',
+    body:
+      'A laid-back bonfire area for day guests to relax with local beers and signature cocktails — sunset views, bush breeze, light music and good company.',
+  },
+];
+---
+<section id="lounges" class="relative bg-cream py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-16 md:mb-24">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Leisure, Elevated</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Three lounges. One feeling: unhurried.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 prose-editorial">
+        <div class="reveal reveal--fade-up" style="--reveal-delay:150ms;">
+          <p>
+            Leisure is an experience. Our diverse collection of lounges offers something for every
+            guest &mdash; from elegant VVIP moments to laid-back traditional vibes under the sun.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid gap-y-14 md:gap-y-24">
+      {lounges.map((lounge, i) => (
+        <article class={`grid gap-10 md:gap-16 items-center md:grid-cols-12 ${i % 2 === 1 ? 'md:[direction:rtl]' : ''}`}>
+          <div class="reveal reveal--scale-image md:col-span-7 [direction:ltr]">
+            <div class="relative overflow-hidden aspect-[5/4]">
+              <Image
+                src={lounge.image}
+                alt={lounge.alt}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(min-width:768px) 58vw, 100vw"
+                quality={80}
+                format="webp"
+                loading="lazy"
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div class="md:col-span-5 [direction:ltr]">
+            <span class="reveal reveal--fade-up font-body text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-coffee-light">
+              {lounge.number} &middot; Lounge
+            </span>
+            <h3 class="reveal reveal--fade-up mt-4 font-display text-display-sm text-forest text-balance" style="--reveal-delay:100ms;">
+              {lounge.name}
+            </h3>
+            <p class="reveal reveal--fade-up mt-2 font-display italic text-xl text-coffee" style="--reveal-delay:150ms;">
+              {lounge.tagline}
+            </p>
+            <p class="reveal reveal--fade-up mt-6 prose-editorial" style="--reveal-delay:250ms;">{lounge.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
