@@ -1,0 +1,60 @@
+---
+// Inline SVG of the Mtalii tent + mountain motif, derived from the official logo.
+// Designed for crisp rendering at every size; colours from the brand palette.
+interface Props {
+  /** Pixel size (square). Default 56. */
+  size?: number;
+  /** Override fill colours. */
+  tent?: string;
+  green?: string;
+  /** Accessible label; omit for purely decorative use. */
+  label?: string;
+  class?: string;
+}
+const { size = 56, tent = '#E4C084', green = '#186030', label, class: className = '' } = Astro.props;
+const ariaProps = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' };
+---
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 120 120"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  class={className}
+  {...ariaProps}
+>
+  <!-- Side mountains -->
+  <path
+    d="M8 92 L34 50 L48 70 L40 92 Z"
+    fill={green}
+    opacity="0.85"
+  />
+  <path
+    d="M112 92 L86 50 L72 70 L80 92 Z"
+    fill={green}
+    opacity="0.85"
+  />
+  <!-- Tent body (sand) -->
+  <path
+    d="M60 18 L92 92 L28 92 Z"
+    fill={tent}
+  />
+  <!-- Tent green roof line -->
+  <path
+    d="M60 18 L92 92 L83 92 L60 32 L37 92 L28 92 Z"
+    fill={green}
+  />
+  <!-- Door opening -->
+  <path
+    d="M60 48 L70 92 L50 92 Z"
+    fill={green}
+    opacity="0.18"
+  />
+  <!-- Finial / sun -->
+  <circle cx="68" cy="22" r="5" fill={tent} />
+  <!-- Guy ropes -->
+  <path d="M28 92 L18 100" stroke={green} stroke-width="2.4" stroke-linecap="round" />
+  <path d="M92 92 L102 100" stroke={green} stroke-width="2.4" stroke-linecap="round" />
+  <path d="M18 100 L24 100" stroke={green} stroke-width="2.4" stroke-linecap="round" />
+  <path d="M102 100 L96 100" stroke={green} stroke-width="2.4" stroke-linecap="round" />
+</svg>

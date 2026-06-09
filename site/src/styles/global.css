@@ -1,0 +1,198 @@
+@import '@fontsource/fraunces/400.css';
+@import '@fontsource/fraunces/500.css';
+@import '@fontsource/fraunces/600.css';
+@import '@fontsource/fraunces/400-italic.css';
+@import '@fontsource/fraunces/500-italic.css';
+@import '@fontsource/mulish/300.css';
+@import '@fontsource/mulish/400.css';
+@import '@fontsource/mulish/500.css';
+@import '@fontsource/mulish/600.css';
+@import '@fontsource/mulish/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --color-forest: #186030;
+    --color-forest-deep: #0F4423;
+    --color-coffee: #603C0C;
+    --color-coffee-light: #7A4E1B;
+    --color-sand: #E4C084;
+    --color-cream: #FBF5EC;
+    --color-mist: #F4EEE3;
+    --color-ink: #241C12;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-cream text-ink font-body antialiased;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  ::selection {
+    background-color: rgba(228, 192, 132, 0.55);
+    color: var(--color-ink);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Editorial body paragraphs */
+  .prose-editorial p {
+    font-size: 1.075rem;
+    line-height: 1.78;
+    color: #3D3325;
+    max-width: 60ch;
+  }
+  .prose-editorial p + p { margin-top: 1.25em; }
+}
+
+@layer components {
+  .hairline {
+    @apply block h-px w-full bg-gradient-to-r from-transparent via-coffee/25 to-transparent;
+  }
+  .hairline-sand {
+    @apply block h-px w-full bg-gradient-to-r from-transparent via-sand/50 to-transparent;
+  }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+}
+
+@layer utilities {
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.11 0 0 0 0 0.07 0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+}
+
+/* Reveal animations */
+.reveal {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 1100ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+.reveal--fade-up { transform: translateY(28px); }
+.reveal--fade { transform: none; }
+.reveal--scale-image { transform: scale(1.05); }
+.reveal.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+.reveal--scale-image.is-visible { transform: scale(1); }
+
+/* Parallax hero image holder */
+.hero-bg {
+  will-change: transform;
+}
+
+/* Hero ambient video — invisible until it has buffered enough to play */
+.hero-ambient {
+  pointer-events: none;
+}
+.hero-ambient.is-playing {
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-ambient { display: none; }
+}
+
+/* Click-to-play video lightbox */
+.video-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(10, 22, 14, 0.88);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.video-lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.video-lightbox__frame {
+  position: relative;
+  max-height: 90vh;
+  max-width: 96vw;
+  display: flex;
+}
+.video-lightbox__video {
+  max-height: 90vh;
+  max-width: 96vw;
+  height: auto;
+  width: auto;
+  background: #000;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+}
+.video-lightbox__close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 245, 236, 0.35);
+  background: rgba(251, 245, 236, 0.06);
+  color: #FBF5EC;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.video-lightbox__close:hover {
+  background: #E4C084;
+  color: #241C12;
+  border-color: #E4C084;
+}
+.video-lightbox__close:focus-visible {
+  outline: 2px solid #E4C084;
+  outline-offset: 3px;
+}
+
+/* Subtle floating scroll cue */
+.scroll-cue {
+  animation: scroll-cue 2.4s ease-in-out infinite;
+}
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* Reduced motion — quiet everything */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .scroll-cue { animation: none; }
+  .hero-bg { transform: none !important; }
+}

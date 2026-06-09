@@ -1,0 +1,63 @@
+---
+/**
+ * Click-to-play video tile. Renders a poster image; on click, swaps to an inline
+ * <video> with controls and autoplay. Designed for the "Film" / reels strip.
+ *
+ * Sources live under /video/ (public/video/) — i.e. URLs, not src/assets imports,
+ * because Astro's image pipeline doesn't process MP4 binaries.
+ */
+interface Props {
+  /** Poster image URL (e.g. "/video/trip.jpg"). */
+  poster: string;
+  /** Video URL (e.g. "/video/trip.mp4"). */
+  src: string;
+  /** Accessible label spoken by screen readers and shown on the play button. */
+  label: string;
+  /** Optional eyebrow shown on the tile (e.g. "01 · The Journey"). */
+  kicker?: string;
+  /** Aspect ratio of the tile — defaults to 9/16 for vertical reels. */
+  aspect?: '9/16' | '16/9' | '4/5' | '1/1';
+  class?: string;
+}
+
+const { poster, src, label, kicker, aspect = '9/16', class: className = '' } = Astro.props;
+
+const aspectClass: Record<string, string> = {
+  '9/16': 'aspect-[9/16]',
+  '16/9': 'aspect-video',
+  '4/5': 'aspect-[4/5]',
+  '1/1': 'aspect-square',
+};
+---
+<figure class={`group relative isolate overflow-hidden bg-forest-deep ${aspectClass[aspect]} ${className}`}>
+  <img
+    src={poster}
+    alt=""
+    loading="lazy"
+    decoding="async"
+    class="video-tile__poster absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]"
+  />
+  <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/65 via-ink/10 to-transparent transition-opacity duration-500 group-hover:opacity-90"></span>
+
+  {kicker && (
+    <span class="absolute left-5 top-5 z-10 text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-sand/90">
+      {kicker}
+    </span>
+  )}
+
+  <figcaption class="absolute inset-x-5 bottom-5 z-10 flex items-end justify-between gap-4 text-cream">
+    <span class="font-display text-xl md:text-2xl leading-tight text-balance">{label}</span>
+    <button
+      type="button"
+      class="video-tile__play inline-flex h-12 w-12 flex-none items-center justify-center rounded-full border border-cream/40 bg-cream/10 backdrop-blur-sm transition-all duration-500 ease-editorial group-hover:border-sand group-hover:bg-sand group-hover:text-ink"
+      aria-label={`Play ${label}`}
+      data-video-src={src}
+      data-video-poster={poster}
+      data-video-label={label}
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 1.5v11l9-5.5-9-5.5z" fill="currentColor" />
+      </svg>
+    </button>
+  </figcaption>
+</figure>

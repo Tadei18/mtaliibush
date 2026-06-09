@@ -1,0 +1,20 @@
+---
+interface Props {
+  /** Optional tone — coffee on cream, sand on dark. */
+  tone?: 'coffee' | 'sand' | 'forest';
+  /** Treat as decorative ornament only — no role. */
+  as?: 'span' | 'p';
+  class?: string;
+}
+const { tone = 'coffee', as: Tag = 'span', class: className = '' } = Astro.props;
+const toneClass =
+  tone === 'sand' ? 'text-sand' : tone === 'forest' ? 'text-forest' : 'text-coffee-light';
+---
+<Tag
+  class={`inline-flex items-center gap-3 text-[0.72rem] uppercase font-body font-semibold ${toneClass} ${className}`}
+  style="letter-spacing:0.28em;"
+>
+  <span class="block h-px w-8 bg-current opacity-50"></span>
+  <slot />
+  <span class="block h-px w-8 bg-current opacity-50"></span>
+</Tag>

@@ -1,0 +1,54 @@
+---
+interface Props {
+  /** Background palette token. */
+  tone?: 'cream' | 'mist' | 'forest' | 'ink' | 'transparent';
+  /** Vertical rhythm. */
+  spacing?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Optional anchor id. */
+  id?: string;
+  /** Container width. */
+  width?: 'narrow' | 'prose' | 'wide' | 'full';
+  /** Skip the internal container (caller controls layout). */
+  bleed?: boolean;
+  class?: string;
+}
+const {
+  tone = 'cream',
+  spacing = 'lg',
+  id,
+  width = 'wide',
+  bleed = false,
+  class: className = '',
+} = Astro.props;
+
+const toneClass: Record<string, string> = {
+  cream: 'bg-cream text-ink',
+  mist: 'bg-mist text-ink',
+  forest: 'bg-forest-deep text-cream',
+  ink: 'bg-ink text-cream',
+  transparent: 'text-ink',
+};
+
+const spacingClass: Record<string, string> = {
+  sm: 'py-14 md:py-20',
+  md: 'py-20 md:py-28',
+  lg: 'py-24 md:py-36',
+  xl: 'py-32 md:py-48',
+};
+
+const widthClass: Record<string, string> = {
+  narrow: 'max-w-narrow',
+  prose: 'max-w-prose',
+  wide: 'max-w-wide',
+  full: 'max-w-none',
+};
+---
+<section id={id} class={`relative ${toneClass[tone]} ${spacingClass[spacing]} ${className}`}>
+  {bleed ? (
+    <slot />
+  ) : (
+    <div class={`mx-auto px-6 md:px-10 ${widthClass[width]}`}>
+      <slot />
+    </div>
+  )}
+</section>

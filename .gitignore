@@ -1,0 +1,21 @@
+# Dependencies & build output
+node_modules/
+.astro/
+dist/
+.output/
+.vercel/
+.netlify/
+# Env & logs
+.env
+.env.*
+*.log
+# OS junk
+.DS_Store
+Thumbs.db
+# Raw source video — too big for GitHub (keep local / use a CDN in prod)
+Reels/
+# Temp extraction folders from the zip-wrapped logo & booklet
+_logo/
+_booklet/
+# Claude Code harness state
+.claude/

@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import logoColor from '../assets/brand/mtalii-logo-color.png';
+import logoWhite from '../assets/brand/mtalii-logo-white.png';
+
+interface Props {
+  /** 'light' over dark backgrounds (uses white lockup); 'dark' on cream (uses full-colour lockup). */
+  variant?: 'light' | 'dark';
+  /** Pixel height of the rendered lockup. Default 56. */
+  size?: number;
+  /** Eager-load — set true for above-the-fold uses (hero, header top). */
+  eager?: boolean;
+  /** Optional aria-label override. */
+  label?: string;
+  class?: string;
+}
+
+const {
+  variant = 'dark',
+  size = 56,
+  eager = false,
+  label = 'Mtalii Bush Camps — home',
+  class: className = '',
+} = Astro.props;
+
+const src = variant === 'light' ? logoWhite : logoColor;
+// Native aspect ratio of the lockup is ~1014x741 = 1.369
+const width = Math.round(size * 1.369);
+---
+<a href="/" aria-label={label} class={`group inline-flex items-center ${className}`}>
+  <Image
+    src={src}
+    alt="Mtalii Bush Camps"
+    width={width}
+    height={size}
+    densities={[1, 2]}
+    quality={92}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : 'auto'}
+    class="block h-auto w-auto"
+    style={`height:${size}px; width:auto;`}
+  />
+</a>

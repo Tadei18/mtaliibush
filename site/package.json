@@ -1,0 +1,27 @@
+{
+  "name": "mtalii-bush-camps",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "videos:compress": "node scripts/compress-videos.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.1.10",
+    "sharp": "^0.34.1"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^6.0.0",
+    "@fontsource/fraunces": "^5.1.0",
+    "@fontsource/mulish": "^5.1.0",
+    "lenis": "^1.1.20",
+    "gsap": "^3.12.5",
+    "tailwindcss": "^3.4.17"
+  }
+}

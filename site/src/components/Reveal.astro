@@ -1,0 +1,18 @@
+---
+interface Props {
+  /** Delay in ms before the reveal animation starts. */
+  delay?: number;
+  /** Reveal kind. */
+  variant?: 'fade-up' | 'fade' | 'scale-image';
+  /** Tag to render. */
+  as?: string;
+  class?: string;
+}
+const { delay = 0, variant = 'fade-up', as: Tag = 'div', class: className = '' } = Astro.props;
+---
+<Tag
+  class={`reveal reveal--${variant} ${className}`}
+  style={delay ? `--reveal-delay:${delay}ms` : undefined}
+>
+  <slot />
+</Tag>

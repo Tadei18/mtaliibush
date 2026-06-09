@@ -1,0 +1,191 @@
+---
+import Logo from './Logo.astro';
+import CTAButton from './CTAButton.astro';
+
+const nav = [
+  { href: '/stay', label: 'Stay' },
+  { href: '/dine', label: 'Dine' },
+  { href: '/experiences', label: 'Experiences' },
+  { href: '/events', label: 'Events' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+<header
+  id="site-header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-editorial"
+  data-state="top"
+>
+  <div class="mx-auto flex max-w-wide items-center justify-between px-6 md:px-10 py-5">
+    <div class="site-header__logo relative">
+      <span class="logo-swap logo-swap--light" data-when="top">
+        <Logo variant="light" size={44} eager />
+      </span>
+      <span class="logo-swap logo-swap--dark" data-when="scrolled" aria-hidden="true">
+        <Logo variant="dark" size={44} eager />
+      </span>
+    </div>
+
+    <nav class="hidden lg:flex items-center gap-9" aria-label="Primary">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class="group relative font-body text-[0.78rem] uppercase tracking-[0.22em] text-cream/90 hover:text-cream transition-colors"
+        >
+          <span>{item.label}</span>
+          <span class="absolute -bottom-1 left-0 h-px w-0 bg-sand transition-all duration-500 ease-editorial group-hover:w-full"></span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="hidden lg:block">
+      <CTAButton href="/contact" variant="primary" tone="dark">Enquire</CTAButton>
+    </div>
+
+    <button
+      type="button"
+      id="menu-toggle"
+      aria-label="Open menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+      class="lg:hidden relative z-50 flex h-11 w-11 items-center justify-center text-cream"
+    >
+      <span class="sr-only">Menu</span>
+      <span class="menu-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile overlay menu -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 bg-forest-deep text-cream pointer-events-none opacity-0 transition-opacity duration-500 ease-editorial"
+  aria-hidden="true"
+>
+  <div class="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(228,192,132,0.15),transparent_60%)]"></div>
+  <nav class="relative h-full flex flex-col items-center justify-center gap-7 px-6 text-center" aria-label="Mobile">
+    {nav.map((item, i) => (
+      <a
+        href={item.href}
+        class="mobile-menu-link font-display text-5xl tracking-tight text-cream transition-colors hover:text-sand"
+        style={`--i:${i}`}
+      >
+        {item.label}
+      </a>
+    ))}
+    <div class="mt-6"><CTAButton href="/contact" variant="primary" tone="dark">Enquire</CTAButton></div>
+  </nav>
+</div>
+
+<style is:global>
+  /* Three-bar hamburger */
+  .menu-bars {
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 14px;
+  }
+  .menu-bars span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease, top 0.4s ease;
+  }
+  .menu-bars span:nth-child(1) { top: 0; }
+  .menu-bars span:nth-child(2) { top: 6.5px; }
+  .menu-bars span:nth-child(3) { top: 13px; }
+  [data-menu-open="true"] .menu-bars span:nth-child(1) { top: 6.5px; transform: rotate(45deg); }
+  [data-menu-open="true"] .menu-bars span:nth-child(2) { opacity: 0; }
+  [data-menu-open="true"] .menu-bars span:nth-child(3) { top: 6.5px; transform: rotate(-45deg); }
+
+  /* Header chrome states */
+  #site-header[data-state="top"] {
+    background: linear-gradient(to bottom, rgba(15, 68, 35, 0.45) 0%, rgba(15, 68, 35, 0) 100%);
+  }
+  #site-header[data-state="scrolled"] {
+    background: rgba(251, 245, 236, 0.92);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px -22px rgba(36, 28, 18, 0.25);
+  }
+  #site-header[data-state="scrolled"] nav a {
+    color: #241C12;
+  }
+  #site-header[data-state="scrolled"] #menu-toggle { color: #186030; }
+
+  /* Logo cross-fade between top (white lockup) and scrolled (colour lockup) */
+  .site-header__logo {
+    display: inline-block;
+    line-height: 0;
+  }
+  .logo-swap {
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    line-height: 0;
+  }
+  .logo-swap--dark {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #site-header[data-state="scrolled"] .logo-swap--light {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #site-header[data-state="scrolled"] .logo-swap--dark {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Mobile menu open */
+  body[data-menu-open="true"] #mobile-menu {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  body[data-menu-open="true"] { overflow: hidden; }
+  .mobile-menu-link {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: calc(var(--i) * 60ms + 200ms);
+  }
+  body[data-menu-open="true"] .mobile-menu-link { opacity: 1; transform: translateY(0); }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('menu-toggle');
+
+  const updateHeaderState = () => {
+    if (!header) return;
+    const scrolled = window.scrollY > 60;
+    header.setAttribute('data-state', scrolled ? 'scrolled' : 'top');
+  };
+  updateHeaderState();
+  window.addEventListener('scroll', updateHeaderState, { passive: true });
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = document.body.getAttribute('data-menu-open') === 'true';
+    const next = !isOpen;
+    document.body.setAttribute('data-menu-open', String(next));
+    toggle.setAttribute('aria-expanded', String(next));
+    toggle.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
+    const menu = document.getElementById('mobile-menu');
+    menu?.setAttribute('aria-hidden', String(!next));
+  });
+
+  // Close on link click
+  document.querySelectorAll('.mobile-menu-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      document.body.setAttribute('data-menu-open', 'false');
+      toggle?.setAttribute('aria-expanded', 'false');
+      document.getElementById('mobile-menu')?.setAttribute('aria-hidden', 'true');
+    });
+  });
+</script>
