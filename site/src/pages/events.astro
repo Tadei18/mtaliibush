@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Events from '../components/sections/Events.astro';
+import Kicker from '../components/Kicker.astro';
+import CTAButton from '../components/CTAButton.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
+import heroImage from '../assets/events/event-gathering.jpg';
+
+const retreatBeats = [
+  {
+    title: 'Quiet ground for big thinking',
+    body:
+      'Boardrooms framed by the mountain. Breakout spaces under canvas. Lawns that turn into open-floor sessions when the room runs out of ideas.',
+  },
+  {
+    title: 'Days designed end-to-end',
+    body:
+      'Our hospitality team plans your delegate flow — arrivals, dining, breakouts, evening unwind — so you can stay focused on the conversation.',
+  },
+  {
+    title: 'After-hours, on purpose',
+    body:
+      'Bonfire dinners, sundowner sessions, archery and quad biking — the kind of evenings that bond a team better than another slide deck.',
+  },
+];
+---
+<BaseLayout
+  title="Meetings & Events — Conferences, retreats & weddings at Mtalii Bush Camps"
+  description="Three distinct venues plus a 1,000-guest camping arena, set in the foothills of Mt. Kenya — for conferences, retreats, weddings and festivals."
+>
+  <PageHero
+    image={heroImage}
+    alt="A large gathering on the central lawn at Mtalii"
+    kicker="Gather & Grow"
+    title="Conferences, retreats &amp; gatherings, held by the mountain."
+    tagline="From 15-seat boardrooms to a 1,000-guest camping arena — a setting for every kind of coming-together."
+    crumb="Events"
+  />
+
+  <Events />
+
+  <!-- Corporate retreats angle -->
+  <section class="relative bg-mist py-24 md:py-36">
+    <div class="mx-auto max-w-wide px-6 md:px-10">
+      <header class="max-w-3xl mb-16">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Corporate Retreats</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Time away that pays its way back.
+        </h2>
+        <p class="reveal reveal--fade-up mt-7 prose-editorial" style="--reveal-delay:200ms;">
+          Mtalii is built for the kind of retreat where teams arrive a little tense and leave with
+          a list of decisions and a few in-jokes &mdash; held together by the mountain, the morning
+          air, and unhurried evenings.
+        </p>
+      </header>
+
+      <ul class="grid gap-y-12 md:grid-cols-3 md:gap-x-12">
+        {retreatBeats.map((beat, i) => (
+          <li class="reveal reveal--fade-up border-t border-coffee/20 pt-7" style={`--reveal-delay:${i * 100}ms;`}>
+            <span class="font-body text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-coffee-light">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="mt-4 font-display text-2xl text-forest">{beat.title}</h3>
+            <p class="mt-4 font-body text-ink/75 leading-relaxed">{beat.body}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="reveal reveal--fade-up mt-16" style="--reveal-delay:400ms;">
+        <CTAButton href="/contact" variant="primary" tone="cream">Plan Your Retreat</CTAButton>
+      </div>
+    </div>
+  </section>
+
+  <FinalCTA />
+</BaseLayout>

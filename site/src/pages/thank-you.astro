@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTAButton from '../components/CTAButton.astro';
+import Kicker from '../components/Kicker.astro';
+import TentMotif from '../components/TentMotif.astro';
+---
+<BaseLayout
+  title="Thank you — Mtalii Bush Camps"
+  description="Your enquiry has been received. We'll reply within one business day."
+  noIndex
+>
+  <section class="relative bg-cream min-h-[80svh] flex items-center justify-center py-32 md:py-40">
+    <div class="mx-auto max-w-2xl px-6 md:px-10 text-center">
+      <div class="reveal reveal--fade flex justify-center"><TentMotif size={56} tone="coffee" /></div>
+      <div class="reveal reveal--fade-up mt-6"><Kicker tone="coffee">Enquiry Received</Kicker></div>
+      <h1 class="reveal reveal--fade-up mt-8 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+        Thank you &mdash; karibu sana.
+      </h1>
+      <p class="reveal reveal--fade-up mt-7 font-display italic text-2xl text-coffee leading-snug text-balance" style="--reveal-delay:200ms;">
+        Your note is with us. We&rsquo;ll reply within one business day, usually sooner.
+      </p>
+      <p class="reveal reveal--fade-up mt-7 font-body text-ink/70 leading-relaxed" style="--reveal-delay:280ms;">
+        While you wait, you&rsquo;re welcome to wander &mdash; have a look at the tented villages,
+        the restaurants, or what&rsquo;s nearby.
+      </p>
+      <div class="reveal reveal--fade-up mt-12 flex flex-col sm:flex-row gap-4 justify-center" style="--reveal-delay:360ms;">
+        <CTAButton href="/stay" variant="primary" tone="cream">See the Tents</CTAButton>
+        <CTAButton href="/" variant="outline" tone="cream">Back to the Camp</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

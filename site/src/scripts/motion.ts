@@ -202,3 +202,89 @@ if (playButtons.length) {
     });
   });
 }
+
+// Image lightbox — gallery tiles open their full-resolution image
+const galleryImages = document.querySelectorAll<HTMLImageElement>('img[data-zoom-src]');
+if (galleryImages.length) {
+  let imgDialog: HTMLDivElement | null = null;
+  let lightboxImg: HTMLImageElement | null = null;
+  let previouslyFocusedImg: HTMLElement | null = null;
+
+  const ensureImgDialog = () => {
+    if (imgDialog) return imgDialog;
+    imgDialog = document.createElement('div');
+    imgDialog.className = 'image-lightbox';
+    imgDialog.setAttribute('role', 'dialog');
+    imgDialog.setAttribute('aria-modal', 'true');
+    imgDialog.setAttribute('aria-label', 'Image viewer');
+    imgDialog.innerHTML = `
+      <button type="button" class="image-lightbox__close" aria-label="Close image">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <figure class="image-lightbox__frame">
+        <img class="image-lightbox__img" alt="" />
+        <figcaption class="image-lightbox__caption"></figcaption>
+      </figure>
+    `;
+    document.body.appendChild(imgDialog);
+    lightboxImg = imgDialog.querySelector<HTMLImageElement>('.image-lightbox__img');
+    const caption = imgDialog.querySelector<HTMLElement>('.image-lightbox__caption');
+
+    const close = () => {
+      if (!imgDialog) return;
+      imgDialog.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (lightboxImg) {
+        lightboxImg.removeAttribute('src');
+        lightboxImg.alt = '';
+      }
+      if (caption) caption.textContent = '';
+      previouslyFocusedImg?.focus();
+    };
+
+    imgDialog.querySelector('.image-lightbox__close')?.addEventListener('click', close);
+    imgDialog.addEventListener('click', (e) => {
+      if (e.target === imgDialog) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && imgDialog?.classList.contains('is-open')) close();
+    });
+
+    return imgDialog;
+  };
+
+  galleryImages.forEach((img) => {
+    const tile = img.closest('.gallery-tile') as HTMLElement | null;
+    const trigger = tile ?? img;
+    trigger.setAttribute('tabindex', '0');
+    trigger.setAttribute('role', 'button');
+    trigger.setAttribute('aria-label', `View larger: ${img.dataset.zoomAlt ?? ''}`);
+
+    const open = () => {
+      const src = img.dataset.zoomSrc;
+      const alt = img.dataset.zoomAlt ?? '';
+      if (!src || !lightboxImg) {
+        ensureImgDialog();
+        if (!lightboxImg) return;
+      }
+      const d = ensureImgDialog();
+      if (!lightboxImg) return;
+      lightboxImg.src = src!;
+      lightboxImg.alt = alt;
+      const cap = d.querySelector<HTMLElement>('.image-lightbox__caption');
+      if (cap) cap.textContent = alt;
+      previouslyFocusedImg = document.activeElement as HTMLElement;
+      d.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      d.querySelector<HTMLButtonElement>('.image-lightbox__close')?.focus();
+    };
+
+    trigger.addEventListener('click', open);
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
+}

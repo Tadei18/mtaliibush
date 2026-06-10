@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Dining from '../components/sections/Dining.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
+import heroImage from '../assets/dining/outdoor-dining.jpg';
+---
+<BaseLayout
+  title="Dine — Five restaurants at Mtalii Bush Camps, Nanyuki"
+  description="Five tables, five conversations with the wild — Mwamba, the Italian Steakhouse, Mwituni Bush Restaurant, Globetrotters Street Kitchen, and the Cowboy BBQ & Smoke House."
+>
+  <PageHero
+    image={heroImage}
+    alt="Outdoor dining under a canopy of trees at Mtalii"
+    kicker="Taste the Wild"
+    title="Five tables, five very different conversations."
+    tagline="From a continental buffet with Mt. Kenya views to a bush dinner under the stars."
+    crumb="Dine"
+  />
+  <Dining />
+  <FinalCTA />
+</BaseLayout>

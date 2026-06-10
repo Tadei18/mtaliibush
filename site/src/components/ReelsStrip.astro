@@ -1,0 +1,56 @@
+---
+import Kicker from './Kicker.astro';
+import VideoPoster from './VideoPoster.astro';
+
+/**
+ * Horizontal-scrolling strip of the 5 web-compressed reels. Each tile is a
+ * VideoPoster — click-to-play opens the lightbox player in motion.ts.
+ */
+const reels = [
+  { slug: 'trip',   kicker: '01 · The Journey',    label: 'The 4×4 road to Mtalii',           },
+  { slug: 'rooms',  kicker: '02 · The Tents',      label: 'Inside a Mtalii tented suite',     },
+  { slug: 'mtalii', kicker: '03 · The Camp',       label: 'A morning at the camp',            },
+  { slug: 'cath',   kicker: '04 · Around the Fire',label: 'Evenings at the bonfire',          },
+  { slug: 'models', kicker: '05 · The Guests',     label: 'A weekend in the bush',            },
+];
+---
+<section id="film" class="relative bg-ink text-cream py-24 md:py-36 overflow-hidden">
+  <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_15%_15%,rgba(228,192,132,0.10),transparent_65%)]"></span>
+
+  <div class="relative mx-auto max-w-wide px-6 md:px-10">
+    <header class="flex items-end justify-between gap-8 mb-12 md:mb-16">
+      <div class="max-w-2xl">
+        <div class="reveal reveal--fade-up"><Kicker tone="sand">Mtalii on Film</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-md md:text-display-lg text-cream text-balance" style="--reveal-delay:100ms;">
+          Five short reels &mdash; press play.
+        </h2>
+      </div>
+      <p class="reveal reveal--fade-up hidden md:block font-body text-sm text-cream/55 max-w-xs" style="--reveal-delay:200ms;">
+        Tap a tile to open. Audio is intentionally muted &mdash; the wind, fire, and conversation
+        are best heard in person.
+      </p>
+    </header>
+
+    <!-- Horizontal scroll on small screens; flex row on md+ -->
+    <div class="reveal reveal--fade-up -mx-6 md:mx-0 overflow-x-auto md:overflow-visible scroll-smooth snap-x snap-mandatory" style="--reveal-delay:300ms;">
+      <ul class="flex gap-5 md:gap-6 px-6 md:px-0">
+        {reels.map((reel) => (
+          <li class="snap-start flex-none w-[78vw] sm:w-[58vw] md:w-auto md:flex-1">
+            <VideoPoster
+              poster={`/video/${reel.slug}.jpg`}
+              src={`/video/${reel.slug}.mp4`}
+              label={reel.label}
+              kicker={reel.kicker}
+              aspect="9/16"
+              class="border border-cream/10"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <p class="reveal reveal--fade-up md:hidden mt-6 font-body text-sm text-cream/55" style="--reveal-delay:400ms;">
+      Swipe horizontally to see all five. Audio is intentionally muted.
+    </p>
+  </div>
+</section>

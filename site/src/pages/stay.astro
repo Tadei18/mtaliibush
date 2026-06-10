@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import TentedVillages from '../components/sections/TentedVillages.astro';
+import PoolGardens from '../components/sections/PoolGardens.astro';
+import Lounges from '../components/sections/Lounges.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
+import heroImage from '../assets/accommodation/tent-exterior.jpg';
+---
+<BaseLayout
+  title="Stay — Mtalii Bush Camps tented villages at the foothills of Mt. Kenya"
+  description="Three themed tented villages — Nelion, Lenana, and Batian — designed to blend authentic bush charm with luxurious comfort. King-size beds, outdoor soaking tubs, rainforest showers."
+>
+  <PageHero
+    image={heroImage}
+    alt="Mtalii tented suite exterior at golden hour"
+    kicker="Stay With Us"
+    title="A tent under canvas. A village beneath the mountain."
+    tagline="Three villages — Nelion, Lenana, Batian — set among acacia gardens and lit by solar lanterns after dusk."
+    crumb="Stay"
+  />
+  <TentedVillages />
+  <PoolGardens />
+  <Lounges />
+  <FinalCTA />
+</BaseLayout>

@@ -1,0 +1,38 @@
+---
+/**
+ * Google Maps iframe centred on Nanyuki Airstrip.
+ * The default URL points to a public Maps embed; for a custom API-key embed
+ * with branding, replace `embedSrc` with your Maps Embed API URL.
+ */
+interface Props {
+  /** Aspect ratio for the map frame. */
+  aspect?: '16/9' | '4/3' | '1/1';
+  /** Override the default location query. */
+  query?: string;
+  class?: string;
+}
+
+const {
+  aspect = '16/9',
+  query = 'Nanyuki Airstrip, Nanyuki, Kenya',
+  class: className = '',
+} = Astro.props;
+
+const embedSrc = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+
+const aspectClass: Record<string, string> = {
+  '16/9': 'aspect-video',
+  '4/3': 'aspect-[4/3]',
+  '1/1': 'aspect-square',
+};
+---
+<div class={`relative overflow-hidden ${aspectClass[aspect]} ${className}`}>
+  <iframe
+    title={`Map of ${query}`}
+    src={embedSrc}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    class="absolute inset-0 h-full w-full border-0 grayscale-[20%] contrast-[1.05]"
+    allowfullscreen
+  ></iframe>
+</div>

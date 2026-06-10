@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+
+interface GalleryItem {
+  image: ImageMetadata;
+  alt: string;
+}
+interface Props {
+  items: GalleryItem[];
+  /** Columns at md+ — defaults to 3. */
+  columns?: 2 | 3 | 4;
+}
+
+const { items, columns = 3 } = Astro.props;
+const colClass: Record<number, string> = {
+  2: 'sm:columns-2',
+  3: 'sm:columns-2 lg:columns-3',
+  4: 'sm:columns-2 md:columns-3 lg:columns-4',
+};
+---
+<div class={`columns-1 ${colClass[columns]} gap-4 md:gap-6 [column-fill:_balance]`}>
+  {items.map((item) => (
+    <figure class="gallery-tile reveal reveal--fade-up mb-4 md:mb-6 break-inside-avoid relative overflow-hidden bg-mist group cursor-zoom-in">
+      <Image
+        src={item.image}
+        alt={item.alt}
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+        quality={80}
+        format="webp"
+        loading="lazy"
+        class="block w-full h-auto transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]"
+        data-zoom-src={item.image.src}
+        data-zoom-alt={item.alt}
+      />
+      <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+      <span class="pointer-events-none absolute left-4 bottom-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-cream/15 backdrop-blur-sm text-cream border border-cream/35 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </figure>
+  ))}
+</div>

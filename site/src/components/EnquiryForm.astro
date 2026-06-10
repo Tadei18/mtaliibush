@@ -1,0 +1,166 @@
+---
+/**
+ * Enquiry form — pre-wired for Netlify Forms.
+ *
+ * To activate on Netlify: no change needed — Netlify auto-detects forms marked
+ * with the `data-netlify` attribute. To use Formspree instead, set
+ * `action` to your endpoint and remove the `data-netlify` + hidden form-name.
+ */
+import CTAButton from './CTAButton.astro';
+
+const interests = [
+  'Stay',
+  'Meetings & Events',
+  'Spa & Wellness',
+  'Dining',
+  'Honeymoon / Special Occasion',
+  'Other',
+];
+---
+<form
+  name="mtalii-enquiry"
+  method="POST"
+  data-netlify="true"
+  data-netlify-honeypot="bot-field"
+  action="/thank-you"
+  class="grid gap-7"
+>
+  <!-- TODO: form endpoint — Netlify Forms auto-detects this. Swap to Formspree by
+       changing the `action` to your endpoint URL and removing the data-netlify*
+       attrs + the two hidden inputs below. -->
+  <input type="hidden" name="form-name" value="mtalii-enquiry" />
+  <p class="hidden">
+    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+  </p>
+
+  <div class="grid gap-7 md:grid-cols-2">
+    <label class="block">
+      <span class="enquiry-label">Full Name</span>
+      <input
+        type="text"
+        name="name"
+        required
+        autocomplete="name"
+        class="enquiry-input"
+        placeholder="Jane Wanjiku"
+      />
+    </label>
+    <label class="block">
+      <span class="enquiry-label">Email</span>
+      <input
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        class="enquiry-input"
+        placeholder="you@example.com"
+      />
+    </label>
+  </div>
+
+  <div class="grid gap-7 md:grid-cols-2">
+    <label class="block">
+      <span class="enquiry-label">Phone (optional)</span>
+      <input
+        type="tel"
+        name="phone"
+        autocomplete="tel"
+        class="enquiry-input"
+        placeholder="+254 …"
+      />
+    </label>
+    <label class="block">
+      <span class="enquiry-label">Number of Guests</span>
+      <input
+        type="number"
+        name="guests"
+        min="1"
+        max="500"
+        class="enquiry-input"
+        placeholder="2"
+      />
+    </label>
+  </div>
+
+  <div class="grid gap-7 md:grid-cols-2">
+    <label class="block">
+      <span class="enquiry-label">Check-in</span>
+      <input type="date" name="check-in" class="enquiry-input" />
+    </label>
+    <label class="block">
+      <span class="enquiry-label">Check-out</span>
+      <input type="date" name="check-out" class="enquiry-input" />
+    </label>
+  </div>
+
+  <label class="block">
+    <span class="enquiry-label">I&rsquo;m interested in</span>
+    <select name="interest" class="enquiry-input" required>
+      <option value="" disabled selected>Choose one…</option>
+      {interests.map((i) => <option value={i}>{i}</option>)}
+    </select>
+  </label>
+
+  <label class="block">
+    <span class="enquiry-label">Tell us about your trip</span>
+    <textarea
+      name="message"
+      rows="5"
+      class="enquiry-input enquiry-input--textarea"
+      placeholder="A weekend escape, a corporate retreat, a wedding under the stars…"
+    ></textarea>
+  </label>
+
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 pt-2">
+    <p class="font-body text-sm text-ink/60 max-w-md">
+      We&rsquo;ll reply within one business day. Your details are used only to plan your stay.
+    </p>
+    <CTAButton as="button" variant="primary" tone="cream">Send Enquiry</CTAButton>
+  </div>
+</form>
+
+<style is:global>
+  .enquiry-label {
+    display: block;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: #7A4E1B;
+    margin-bottom: 0.625rem;
+  }
+  .enquiry-input {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(96, 60, 12, 0.25);
+    padding: 0.625rem 0;
+    font-family: 'Mulish', sans-serif;
+    font-size: 1.025rem;
+    color: #241C12;
+    transition: border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .enquiry-input::placeholder { color: rgba(36, 28, 18, 0.35); }
+  .enquiry-input:focus {
+    outline: none;
+    border-bottom-color: #186030;
+  }
+  .enquiry-input--textarea {
+    border: 1px solid rgba(96, 60, 12, 0.25);
+    padding: 0.875rem 1rem;
+    resize: vertical;
+    min-height: 140px;
+  }
+  .enquiry-input--textarea:focus {
+    border-color: #186030;
+  }
+  select.enquiry-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1l5 5 5-5' stroke='%23603C0C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+    padding-right: 1.5rem;
+  }
+</style>
