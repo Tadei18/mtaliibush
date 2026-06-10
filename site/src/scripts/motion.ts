@@ -66,38 +66,7 @@ if (hero && !prefersReducedMotion) {
   onScroll();
 }
 
-// Hero ambient video — <source> is embedded directly in Hero.astro so autoplay
-// fires without JS. This block just fades it in once it can play and pauses
-// it when scrolled out of view to save battery / bandwidth.
-const ambient = document.getElementById('hero-ambient') as HTMLVideoElement | null;
-if (ambient && !prefersReducedMotion) {
-  const reveal = () => {
-    ambient.classList.add('is-playing');
-    ambient.play().catch(() => {
-      // Autoplay blocked — the poster + background photo stay in place silently.
-      ambient.classList.remove('is-playing');
-    });
-  };
-
-  if (ambient.readyState >= 3 /* HAVE_FUTURE_DATA */) {
-    reveal();
-  } else {
-    ambient.addEventListener('canplay', reveal, { once: true });
-  }
-
-  if ('IntersectionObserver' in window) {
-    const playObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) ambient.play().catch(() => {});
-          else ambient.pause();
-        }
-      },
-      { threshold: 0.05 },
-    );
-    playObserver.observe(ambient);
-  }
-}
+// Hero slideshow drives itself from an inline script in Hero.astro.
 
 // Click-to-play reels lightbox — minimal, accessible
 const playButtons = document.querySelectorAll<HTMLButtonElement>('.video-tile__play');

@@ -1,54 +1,50 @@
 ---
 import { Image } from 'astro:assets';
-import heroImage from '../assets/hero/hero-mt-kenya.jpg';
+import slide1 from '../assets/hero/hero-mt-kenya.jpg';
+import slide2 from '../assets/hero/slide-2.jpg';
+import slide3 from '../assets/hero/slide-3.jpg';
+import slide4 from '../assets/hero/slide-4.jpg';
 import CTAButton from './CTAButton.astro';
 
-// Hero ambient video — web-compressed from Reels/IMG_0227.MP4. Lives in public/video/
-// so it ships as a plain static asset (Astro's image pipeline doesn't process MP4).
-// The <source> below is embedded directly so autoplay works without JS.
-const ambientSrc = '/video/hero.mp4';
-const ambientPoster = '/video/hero-poster.jpg';
+// Four-slide ambient hero — crossfade + Ken Burns. First slide is the LCP
+// (preloaded + eager); the rest lazy-load. All four share the same scrim so
+// the headline + subline read identically on every frame.
+const slides = [
+  { image: slide1, alt: 'Golden-hour view of Mtalii Bush Camps tents with Mount Kenya rising in the distance' },
+  { image: slide2, alt: 'Tented dining structures set in the gardens at Mtalii Bush Camps' },
+  { image: slide3, alt: 'The guitar-shaped infinity pool with Mount Kenya in the distance' },
+  { image: slide4, alt: 'The Mtalii VVIP lounge interior — plush sofas and curated wine moments' },
+];
 ---
 <section
   id="hero"
   class="relative h-[100svh] min-h-[640px] overflow-hidden bg-forest-deep text-cream"
   data-hero-parallax
 >
-  <!-- Background photograph: covers the full viewport with subtle zoom + parallax.
-       Acts as the poster fallback before the ambient video buffers. -->
-  <div class="hero-bg absolute inset-0 z-0 will-change-transform">
-    <Image
-      src={heroImage}
-      alt="Golden-hour view of Mtalii Bush Camps tents with Mount Kenya rising in the distance"
-      widths={[960, 1440, 1920, 2400]}
-      sizes="100vw"
-      quality={82}
-      format="webp"
-      loading="eager"
-      fetchpriority="high"
-      class="absolute inset-0 h-[112%] w-full object-cover animate-subtle-zoom"
-    />
+  <!-- Slideshow stack — four absolutely-positioned slides with subtle parallax via hero-bg -->
+  <div class="hero-bg absolute inset-0 z-0 will-change-transform" data-hero-slideshow>
+    {slides.map((slide, i) => (
+      <div
+        class="hero-slide absolute inset-0"
+        data-slide-index={i}
+        aria-hidden={i === 0 ? 'false' : 'true'}
+      >
+        <Image
+          src={slide.image}
+          alt={slide.alt}
+          widths={[960, 1440, 1920, 2400]}
+          sizes="100vw"
+          quality={82}
+          format="webp"
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : 'auto'}
+          class="hero-slide__img absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+    ))}
   </div>
 
-  <!-- Ambient video — sits above the photo, fades in once it can play.
-       <source> is embedded directly so autoplay works without JS. The
-       prefers-reduced-motion CSS guard in global.css hides this entirely
-       for users who request reduced motion. -->
-  <video
-    id="hero-ambient"
-    class="hero-ambient absolute inset-0 z-[1] h-full w-full object-cover opacity-0 transition-opacity duration-[1200ms] ease-editorial"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="metadata"
-    poster={ambientPoster}
-    aria-hidden="true"
-  >
-    <source src={ambientSrc} type="video/mp4" />
-  </video>
-
-  <!-- Editorial gradient overlays -->
+  <!-- Editorial gradient overlays — consistent across all slides for text legibility -->
   <div class="absolute inset-0 z-10 bg-[radial-gradient(120%_80%_at_50%_120%,rgba(15,68,35,0.65),rgba(15,68,35,0.15)_45%,transparent_75%)]"></div>
   <div class="absolute inset-0 z-10 bg-gradient-to-b from-forest-deep/55 via-transparent to-forest-deep/40"></div>
   <div class="absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-forest-deep/70 to-transparent"></div>
@@ -98,3 +94,76 @@ const ambientPoster = '/video/hero-poster.jpg';
     <span class="scroll-cue mx-auto block h-12 w-px bg-gradient-to-b from-cream/80 to-transparent"></span>
   </a>
 </section>
+
+<style is:global>
+  /* Hero crossfade + Ken Burns */
+  .hero-slide {
+    opacity: 0;
+    transition: opacity 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .hero-slide.is-active {
+    opacity: 1;
+  }
+  .hero-slide .hero-slide__img {
+    transform: scale(1.0);
+    transition: transform 1400ms ease-out;
+    will-change: transform;
+  }
+  .hero-slide.is-active .hero-slide__img {
+    transform: scale(1.08);
+    transition: transform 7500ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide,
+    .hero-slide .hero-slide__img {
+      transition: none !important;
+      transform: none !important;
+    }
+    .hero-slide { opacity: 0; }
+    .hero-slide[data-slide-index="0"] { opacity: 1; }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.querySelector<HTMLElement>('[data-hero-slideshow]');
+  if (root) {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('.hero-slide'));
+    if (slides.length) {
+      // Mark slide 0 as active immediately so the Ken Burns starts on first paint
+      slides[0].classList.add('is-active');
+
+      if (!prefersReducedMotion && slides.length > 1) {
+        let index = 0;
+        const advance = () => {
+          slides[index].classList.remove('is-active');
+          slides[index].setAttribute('aria-hidden', 'true');
+          index = (index + 1) % slides.length;
+          slides[index].classList.add('is-active');
+          slides[index].setAttribute('aria-hidden', 'false');
+        };
+
+        let timer = window.setInterval(advance, 6000);
+
+        // Pause when the hero scrolls out of view — saves work, picks up where it left off
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) {
+                  if (timer === 0) timer = window.setInterval(advance, 6000);
+                } else {
+                  if (timer !== 0) { clearInterval(timer); timer = 0; }
+                }
+              }
+            },
+            { threshold: 0.05 },
+          );
+          io.observe(root);
+        }
+      }
+    }
+  }
+</script>

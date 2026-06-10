@@ -106,17 +106,6 @@
   will-change: transform;
 }
 
-/* Hero ambient video — invisible until it has buffered enough to play */
-.hero-ambient {
-  pointer-events: none;
-}
-.hero-ambient.is-playing {
-  opacity: 0.55;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-ambient { display: none; }
-}
-
 /* Click-to-play video lightbox */
 .video-lightbox {
   position: fixed;
