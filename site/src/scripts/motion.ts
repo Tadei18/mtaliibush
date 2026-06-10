@@ -66,73 +66,36 @@ if (hero && !prefersReducedMotion) {
   onScroll();
 }
 
-// Hero ambient video — lazy attach the source only when:
-//  · the user hasn't requested reduced motion
-//  · they're on a fast enough connection (Save-Data off, downlink > 1.5 Mbps if known)
-//  · the hero is still in view
-type NetInfo = { saveData?: boolean; downlink?: number; effectiveType?: string };
+// Hero ambient video — <source> is embedded directly in Hero.astro so autoplay
+// fires without JS. This block just fades it in once it can play and pauses
+// it when scrolled out of view to save battery / bandwidth.
 const ambient = document.getElementById('hero-ambient') as HTMLVideoElement | null;
-if (ambient) {
-  const src = ambient.dataset.ambientSrc;
-  const conn = (navigator as Navigator & { connection?: NetInfo }).connection;
-  const onSlow = conn?.saveData === true ||
-    (typeof conn?.downlink === 'number' && conn.downlink < 1.5) ||
-    conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g';
+if (ambient && !prefersReducedMotion) {
+  const reveal = () => {
+    ambient.classList.add('is-playing');
+    ambient.play().catch(() => {
+      // Autoplay blocked — the poster + background photo stay in place silently.
+      ambient.classList.remove('is-playing');
+    });
+  };
 
-  if (src && !prefersReducedMotion && !onSlow) {
-    const start = () => {
-      if (ambient.dataset.loaded === 'true') return;
-      ambient.dataset.loaded = 'true';
-      const source = document.createElement('source');
-      source.src = src;
-      source.type = 'video/mp4';
-      ambient.appendChild(source);
-      ambient.load();
-      ambient.addEventListener(
-        'canplay',
-        () => {
-          ambient.classList.add('is-playing');
-          ambient.play().catch(() => {
-            // Autoplay blocked — leave the photograph in place silently.
-            ambient.classList.remove('is-playing');
-          });
-        },
-        { once: true },
-      );
-    };
+  if (ambient.readyState >= 3 /* HAVE_FUTURE_DATA */) {
+    reveal();
+  } else {
+    ambient.addEventListener('canplay', reveal, { once: true });
+  }
 
-    // Defer until the hero is visible (it almost always is, but covers the back-button case)
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              start();
-              io.disconnect();
-              return;
-            }
-          }
-        },
-        { threshold: 0.15 },
-      );
-      io.observe(ambient);
-    } else {
-      start();
-    }
-
-    // Pause when the hero scrolls out — saves battery and bandwidth
-    if ('IntersectionObserver' in window) {
-      const playObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) ambient.play().catch(() => {});
-            else ambient.pause();
-          }
-        },
-        { threshold: 0.05 },
-      );
-      playObserver.observe(ambient);
-    }
+  if ('IntersectionObserver' in window) {
+    const playObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) ambient.play().catch(() => {});
+          else ambient.pause();
+        }
+      },
+      { threshold: 0.05 },
+    );
+    playObserver.observe(ambient);
   }
 }
 

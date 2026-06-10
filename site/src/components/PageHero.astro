@@ -18,7 +18,7 @@ interface Props {
 }
 const { image, alt, kicker, title, tagline, crumb } = Astro.props;
 ---
-<section class="relative isolate overflow-hidden bg-forest-deep text-cream h-[72svh] min-h-[520px] max-h-[760px]" data-hero-parallax>
+<section class="relative isolate overflow-hidden bg-forest-deep text-cream min-h-[72svh] md:min-h-[640px]" data-hero-parallax>
   <div class="hero-bg absolute inset-0 z-0 will-change-transform">
     <Image
       src={image}
@@ -37,7 +37,7 @@ const { image, alt, kicker, title, tagline, crumb } = Astro.props;
   <span class="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-forest-deep/75 to-transparent"></span>
   <span class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-forest-deep/85 via-forest-deep/35 to-transparent"></span>
 
-  <div class="relative z-20 flex h-full items-end pb-16 md:pb-24">
+  <div class="relative z-20 flex min-h-[72svh] md:min-h-[640px] flex-col justify-end pt-28 md:pt-36 pb-14 md:pb-20">
     <div class="mx-auto w-full max-w-wide px-6 md:px-10">
       {crumb && (
         <p class="reveal reveal--fade-up font-body text-[0.66rem] uppercase tracking-[0.32em] text-cream/65">
@@ -49,7 +49,7 @@ const { image, alt, kicker, title, tagline, crumb } = Astro.props;
       <div class="reveal reveal--fade-up mt-5" style="--reveal-delay:120ms;">
         <Kicker tone="sand">{kicker}</Kicker>
       </div>
-      <h1 class="reveal reveal--fade-up mt-7 font-display text-display-lg md:text-display-xl text-cream text-balance max-w-4xl" style="--reveal-delay:240ms;">
+      <h1 class="reveal reveal--fade-up mt-6 md:mt-7 font-display text-display-md md:text-display-lg text-cream text-balance max-w-4xl" style="--reveal-delay:240ms;">
         {title}
       </h1>
       {tagline && (

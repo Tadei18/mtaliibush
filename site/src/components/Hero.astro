@@ -3,12 +3,11 @@ import { Image } from 'astro:assets';
 import heroImage from '../assets/hero/hero-mt-kenya.jpg';
 import CTAButton from './CTAButton.astro';
 
-// Hero ambient video — web-compressed from Reels/IMG_0227.MP4 via the same ffmpeg
-// pipeline used for the other clips (scripts/compress-videos.mjs settings).
-// The <video> element is the gatekeeper for actual playback (lazy via
-// IntersectionObserver + reduced-motion guard).
-const ambientSrc = '/video/hero-cinematic.mp4';
-const ambientPoster = '/video/hero-cinematic.jpg';
+// Hero ambient video — web-compressed from Reels/IMG_0227.MP4. Lives in public/video/
+// so it ships as a plain static asset (Astro's image pipeline doesn't process MP4).
+// The <source> below is embedded directly so autoplay works without JS.
+const ambientSrc = '/video/hero.mp4';
+const ambientPoster = '/video/hero-poster.jpg';
 ---
 <section
   id="hero"
@@ -32,7 +31,9 @@ const ambientPoster = '/video/hero-cinematic.jpg';
   </div>
 
   <!-- Ambient video — sits above the photo, fades in once it can play.
-       Hidden until JS opts it in: respects prefers-reduced-motion + slow connections. -->
+       <source> is embedded directly so autoplay works without JS. The
+       prefers-reduced-motion CSS guard in global.css hides this entirely
+       for users who request reduced motion. -->
   <video
     id="hero-ambient"
     class="hero-ambient absolute inset-0 z-[1] h-full w-full object-cover opacity-0 transition-opacity duration-[1200ms] ease-editorial"
@@ -40,11 +41,12 @@ const ambientPoster = '/video/hero-cinematic.jpg';
     muted
     loop
     playsinline
-    preload="none"
+    preload="metadata"
     poster={ambientPoster}
-    data-ambient-src={ambientSrc}
     aria-hidden="true"
-  ></video>
+  >
+    <source src={ambientSrc} type="video/mp4" />
+  </video>
 
   <!-- Editorial gradient overlays -->
   <div class="absolute inset-0 z-10 bg-[radial-gradient(120%_80%_at_50%_120%,rgba(15,68,35,0.65),rgba(15,68,35,0.15)_45%,transparent_75%)]"></div>
