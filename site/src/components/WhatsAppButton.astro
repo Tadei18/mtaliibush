@@ -1,0 +1,129 @@
+---
+const number = '254718045869';
+const message = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
+const href = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+---
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="whatsapp-fab"
+  aria-label="Chat with us on WhatsApp"
+>
+  <span class="whatsapp-fab__pulse" aria-hidden="true"></span>
+  <span class="whatsapp-fab__inner">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+      <path d="M16.001 3.2c-7.072 0-12.8 5.728-12.8 12.8 0 2.256.6 4.464 1.736 6.4l-1.832 6.688 6.864-1.8c1.872 1.024 3.984 1.56 6.04 1.56h.008c7.064 0 12.792-5.728 12.792-12.8 0-3.416-1.328-6.624-3.744-9.04-2.416-2.416-5.624-3.744-9.064-3.808zm0 23.36c-1.832 0-3.624-.496-5.184-1.424l-.368-.224-3.832 1.008 1.024-3.736-.24-.384c-1.024-1.632-1.56-3.512-1.56-5.432 0-5.648 4.6-10.248 10.16-10.248 2.728 0 5.288 1.064 7.208 2.992 1.928 1.92 2.992 4.48 2.992 7.208 0 5.648-4.6 10.24-10.2 10.24zm5.592-7.672c-.304-.152-1.808-.896-2.088-.992-.28-.104-.488-.152-.696.152-.208.304-.792.992-.976 1.2-.176.208-.36.232-.664.08-1.808-.904-2.992-1.616-4.184-3.664-.32-.552.32-.512.912-1.704.104-.208.048-.384-.024-.536-.072-.152-.696-1.672-.952-2.288-.248-.6-.504-.52-.696-.528-.176-.008-.384-.008-.592-.008-.208 0-.536.072-.816.384-.28.304-1.072 1.048-1.072 2.56 0 1.512 1.096 2.96 1.248 3.168.152.208 2.16 3.296 5.232 4.624.728.312 1.296.504 1.736.648.728.232 1.392.2 1.92.12.584-.088 1.808-.736 2.064-1.448.256-.712.256-1.32.176-1.448-.072-.128-.272-.2-.576-.352z"/>
+    </svg>
+  </span>
+  <span class="whatsapp-fab__label">Chat with us</span>
+</a>
+
+<style is:global>
+  .whatsapp-fab {
+    position: fixed;
+    z-index: 90; /* below lightboxes (100) and overlay menu (40-50), above all content */
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0 0.875rem 0 0;
+    border-radius: 999px;
+    background: transparent;
+    text-decoration: none;
+    color: #FBF5EC;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+  }
+  @media (min-width: 768px) {
+    .whatsapp-fab {
+      right: max(1.5rem, env(safe-area-inset-right));
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+  }
+  .whatsapp-fab__inner {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background: #25D366; /* Official WhatsApp green */
+    color: #FFFFFF;
+    box-shadow: 0 14px 30px -10px rgba(37, 211, 102, 0.55), 0 4px 12px -4px rgba(0, 0, 0, 0.25);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    animation: wa-bob 4.2s ease-in-out infinite;
+  }
+  .whatsapp-fab__label {
+    position: relative;
+    z-index: 2;
+    display: none;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #FBF5EC;
+    background: #128C7E; /* WhatsApp dark teal */
+    padding: 0 0.875rem 0 1.125rem;
+    margin-left: -1.25rem;
+    border-radius: 0 999px 999px 0;
+    height: 44px;
+    line-height: 44px;
+    box-shadow: 0 12px 24px -10px rgba(18, 140, 126, 0.45);
+    transition: background 0.4s ease;
+  }
+  @media (min-width: 1024px) {
+    .whatsapp-fab__label { display: inline-flex; }
+  }
+  .whatsapp-fab__pulse {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background: #25D366;
+    opacity: 0.45;
+    animation: wa-pulse 2.4s ease-out infinite;
+  }
+  .whatsapp-fab:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+  .whatsapp-fab:hover .whatsapp-fab__inner {
+    background: #128C7E;
+  }
+  .whatsapp-fab:hover .whatsapp-fab__label {
+    background: #075E54;
+  }
+  .whatsapp-fab:focus-visible {
+    outline: 2px solid #E4C084;
+    outline-offset: 4px;
+  }
+  .whatsapp-fab:focus-visible .whatsapp-fab__inner {
+    box-shadow: 0 14px 30px -10px rgba(37, 211, 102, 0.65), 0 0 0 3px rgba(228, 192, 132, 0.4);
+  }
+
+  @keyframes wa-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes wa-pulse {
+    0% { transform: scale(1); opacity: 0.45; }
+    80% { transform: scale(1.85); opacity: 0; }
+    100% { transform: scale(1.85); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whatsapp-fab__inner,
+    .whatsapp-fab__pulse {
+      animation: none !important;
+    }
+    .whatsapp-fab__pulse { display: none; }
+    .whatsapp-fab:hover { transform: none; }
+  }
+</style>

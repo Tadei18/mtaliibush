@@ -1,0 +1,15 @@
+---
+import Slideshow from '../Slideshow.astro';
+import slide01 from '../../assets/story/slide-01.jpg';
+import slide02 from '../../assets/story/slide-02.jpg';
+import slide03 from '../../assets/story/slide-03.jpg';
+import slide04 from '../../assets/story/slide-04.jpg';
+
+const slides = [
+  { image: slide01, alt: 'A moment from life at Mtalii Bush Camps', caption: 'Mornings begin slow — light over the mountain, then coffee on the lawn.' },
+  { image: slide02, alt: 'A moment from life at Mtalii Bush Camps', caption: 'Long lunches under the trees, the kind that drift into afternoons.' },
+  { image: slide03, alt: 'A moment from life at Mtalii Bush Camps', caption: 'Evenings shared around the fire, the night sky overhead.' },
+  { image: slide04, alt: 'A moment from life at Mtalii Bush Camps', caption: 'The road home — for now.' },
+];
+---
+<Slideshow slides={slides} kicker="Moments at Mtalii" interval={5000} tone="mist" aspect="16/9" />

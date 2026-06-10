@@ -1,0 +1,383 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from './Kicker.astro';
+
+interface Slide {
+  image: ImageMetadata;
+  alt: string;
+  caption?: string;
+}
+interface Props {
+  slides: Slide[];
+  /** Optional eyebrow shown above the frame. */
+  kicker?: string;
+  /** Auto-advance interval in milliseconds. */
+  interval?: number;
+  /** Tonal background — 'cream' or 'mist'. */
+  tone?: 'cream' | 'mist';
+  /** Aspect ratio of the frame. */
+  aspect?: '16/9' | '3/2' | '4/3' | '21/9';
+}
+const { slides, kicker, interval = 5000, tone = 'mist', aspect = '16/9' } = Astro.props;
+
+const toneClass = tone === 'mist' ? 'bg-mist' : 'bg-cream';
+const aspectClass: Record<string, string> = {
+  '16/9': 'aspect-video',
+  '3/2': 'aspect-[3/2]',
+  '4/3': 'aspect-[4/3]',
+  '21/9': 'aspect-[21/9]',
+};
+---
+<section class={`relative ${toneClass} py-20 md:py-28`}>
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    {kicker && (
+      <div class="reveal reveal--fade-up flex justify-center mb-8 md:mb-12">
+        <Kicker tone="coffee">{kicker}</Kicker>
+      </div>
+    )}
+
+    <div
+      class="slideshow group relative isolate overflow-hidden shadow-soft"
+      data-slideshow
+      data-slideshow-interval={interval}
+      role="region"
+      aria-label="Mtalii slideshow"
+      aria-roledescription="carousel"
+      tabindex="0"
+    >
+      <div class={`relative ${aspectClass[aspect]} bg-forest-deep`}>
+        {slides.map((slide, i) => (
+          <figure
+            class="slideshow__slide absolute inset-0"
+            data-index={i}
+            aria-hidden={i === 0 ? 'false' : 'true'}
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${slides.length}`}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.alt}
+              widths={[720, 1080, 1440, 1920]}
+              sizes="(min-width: 1024px) 90vw, 100vw"
+              quality={82}
+              format="webp"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+              class="slideshow__img absolute inset-0 h-full w-full object-cover"
+            />
+            <span class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/55 via-ink/10 to-transparent"></span>
+            {slide.caption && (
+              <figcaption class="absolute inset-x-0 bottom-0 px-6 py-6 md:px-10 md:py-10 text-cream font-display italic text-xl md:text-2xl text-balance">
+                {slide.caption}
+              </figcaption>
+            )}
+          </figure>
+        ))}
+      </div>
+
+      <!-- Prev / Next buttons -->
+      <button type="button" class="slideshow__nav slideshow__nav--prev" data-slideshow-prev aria-label="Previous slide">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M11 3L5 9l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" class="slideshow__nav slideshow__nav--next" data-slideshow-next aria-label="Next slide">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M7 3l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Progress bar — only animates during auto-advance -->
+      <span class="slideshow__progress" aria-hidden="true"></span>
+    </div>
+
+    <!-- Dots -->
+    <div class="slideshow__dots mt-8 flex items-center justify-center gap-3" role="tablist" aria-label="Slideshow controls">
+      {slides.map((_, i) => (
+        <button
+          type="button"
+          class="slideshow__dot"
+          role="tab"
+          aria-label={`Go to slide ${i + 1}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-slideshow-dot={i}
+        ></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .slideshow {
+    border: 1px solid rgba(96, 60, 12, 0.12);
+  }
+  .slideshow__slide {
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .slideshow__slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* Ken Burns: slow zoom while a slide is active */
+  .slideshow__slide.is-active .slideshow__img {
+    transform: scale(1.08);
+    transition: transform 7s ease-out;
+  }
+  .slideshow__slide .slideshow__img {
+    transform: scale(1.0);
+    transition: transform 1.2s ease-out;
+  }
+
+  /* Prev / next nav buttons */
+  .slideshow__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(251, 245, 236, 0.7);
+    color: #186030;
+    border: 1px solid rgba(228, 192, 132, 0.6);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+  }
+  .slideshow:hover .slideshow__nav,
+  .slideshow:focus-within .slideshow__nav {
+    opacity: 1;
+  }
+  .slideshow__nav:hover {
+    background: #E4C084;
+    color: #241C12;
+    border-color: #E4C084;
+  }
+  .slideshow__nav:focus-visible {
+    outline: 2px solid #E4C084;
+    outline-offset: 3px;
+    opacity: 1;
+  }
+  .slideshow__nav--prev { left: 1rem; }
+  .slideshow__nav--next { right: 1rem; }
+  @media (min-width: 768px) {
+    .slideshow__nav { width: 52px; height: 52px; }
+    .slideshow__nav--prev { left: 1.5rem; }
+    .slideshow__nav--next { right: 1.5rem; }
+  }
+  @media (hover: none) {
+    .slideshow__nav { opacity: 1; }
+  }
+
+  /* Progress bar */
+  .slideshow__progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(to right, transparent, #E4C084 30%, #E4C084);
+    z-index: 5;
+    transition: width linear;
+  }
+
+  /* Dots */
+  .slideshow__dot {
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: rgba(96, 60, 12, 0.2);
+    border: 0;
+    cursor: pointer;
+    transition: background 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .slideshow__dot[aria-selected="true"] {
+    background: #E4C084;
+    width: 44px;
+  }
+  .slideshow__dot:hover {
+    background: #603C0C;
+  }
+  .slideshow__dot[aria-selected="true"]:hover {
+    background: #E4C084;
+  }
+  .slideshow__dot:focus-visible {
+    outline: 2px solid #186030;
+    outline-offset: 6px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .slideshow__slide,
+    .slideshow__slide .slideshow__img {
+      transition: opacity 0.001ms !important;
+      transform: none !important;
+    }
+    .slideshow__progress { display: none; }
+  }
+</style>
+
+<script>
+  type SlideshowState = {
+    root: HTMLElement;
+    slides: HTMLElement[];
+    dots: HTMLButtonElement[];
+    progress: HTMLElement | null;
+    index: number;
+    timer: number | null;
+    interval: number;
+    paused: boolean;
+  };
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const setActive = (state: SlideshowState, next: number) => {
+    const total = state.slides.length;
+    const idx = ((next % total) + total) % total;
+    state.slides.forEach((slide, i) => {
+      const active = i === idx;
+      slide.classList.toggle('is-active', active);
+      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+    state.dots.forEach((dot, i) => {
+      dot.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    state.index = idx;
+    restartProgress(state);
+  };
+
+  const restartProgress = (state: SlideshowState) => {
+    if (!state.progress || prefersReducedMotion || state.paused) return;
+    state.progress.style.transition = 'none';
+    state.progress.style.width = '0%';
+    // Force a reflow so the next transition takes effect
+    void state.progress.offsetWidth;
+    state.progress.style.transition = `width ${state.interval}ms linear`;
+    state.progress.style.width = '100%';
+  };
+
+  const start = (state: SlideshowState) => {
+    if (prefersReducedMotion || state.paused) return;
+    stop(state);
+    state.timer = window.setInterval(() => setActive(state, state.index + 1), state.interval);
+    restartProgress(state);
+  };
+
+  const stop = (state: SlideshowState) => {
+    if (state.timer !== null) {
+      clearInterval(state.timer);
+      state.timer = null;
+    }
+    if (state.progress) {
+      const computed = getComputedStyle(state.progress);
+      state.progress.style.transition = 'none';
+      state.progress.style.width = computed.width;
+    }
+  };
+
+  const initSlideshow = (root: HTMLElement) => {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('.slideshow__slide'));
+    const dots = Array.from(root.parentElement?.querySelectorAll<HTMLButtonElement>('.slideshow__dot') ?? []);
+    if (!slides.length) return;
+    const progress = root.querySelector<HTMLElement>('.slideshow__progress');
+    const interval = parseInt(root.dataset.slideshowInterval ?? '5000', 10);
+
+    const state: SlideshowState = {
+      root,
+      slides,
+      dots,
+      progress,
+      index: 0,
+      timer: null,
+      interval,
+      paused: false,
+    };
+
+    setActive(state, 0);
+
+    // Auto-advance
+    start(state);
+
+    // Pause on hover (and on touch interaction)
+    const pause = () => { state.paused = true; stop(state); };
+    const resume = () => { state.paused = false; start(state); };
+    root.addEventListener('mouseenter', pause);
+    root.addEventListener('mouseleave', resume);
+    root.addEventListener('focusin', pause);
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) resume();
+    });
+
+    // Pause when the slideshow is not in view
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            if (!state.paused) start(state);
+          } else {
+            stop(state);
+          }
+        }
+      }, { threshold: 0.25 });
+      io.observe(root);
+    }
+
+    // Prev / next
+    root.querySelector('[data-slideshow-prev]')?.addEventListener('click', () => {
+      setActive(state, state.index - 1);
+      if (!state.paused) start(state);
+    });
+    root.querySelector('[data-slideshow-next]')?.addEventListener('click', () => {
+      setActive(state, state.index + 1);
+      if (!state.paused) start(state);
+    });
+
+    // Dots
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        setActive(state, i);
+        if (!state.paused) start(state);
+      });
+    });
+
+    // Keyboard navigation (when the slideshow region has focus)
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); setActive(state, state.index - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); setActive(state, state.index + 1); }
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let trackingTouch = false;
+    root.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      trackingTouch = true;
+      pause();
+    }, { passive: true });
+    root.addEventListener('touchend', (e) => {
+      if (!trackingTouch) return;
+      trackingTouch = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      // Horizontal swipes only
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) setActive(state, state.index + 1);
+        else setActive(state, state.index - 1);
+      }
+      state.paused = false;
+      start(state);
+    }, { passive: true });
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-slideshow]').forEach(initSlideshow);
+</script>

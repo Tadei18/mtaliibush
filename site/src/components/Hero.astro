@@ -1,22 +1,22 @@
 ---
 import { Image } from 'astro:assets';
 import heroImage from '../assets/hero/hero-mt-kenya.jpg';
-import heroAmbientPoster from '../assets/hero/hero-mt-kenya.jpg';
-import logoWhite from '../assets/brand/mtalii-logo-white.png';
 import CTAButton from './CTAButton.astro';
 
-// Hero ambient video — web-compressed from Reels/cath_1.mp4 via scripts/compress-videos.mjs.
-// The <video> element is the gatekeeper for actual playback (lazy via IntersectionObserver
-// + reduced-motion guard).
-const ambientSrc = '/video/cath.mp4';
-const ambientPoster = '/video/cath.jpg';
+// Hero ambient video — web-compressed from Reels/IMG_0227.MP4 via the same ffmpeg
+// pipeline used for the other clips (scripts/compress-videos.mjs settings).
+// The <video> element is the gatekeeper for actual playback (lazy via
+// IntersectionObserver + reduced-motion guard).
+const ambientSrc = '/video/hero-cinematic.mp4';
+const ambientPoster = '/video/hero-cinematic.jpg';
 ---
 <section
   id="hero"
   class="relative h-[100svh] min-h-[640px] overflow-hidden bg-forest-deep text-cream"
   data-hero-parallax
 >
-  <!-- Background photograph: covers the full viewport with subtle zoom + parallax -->
+  <!-- Background photograph: covers the full viewport with subtle zoom + parallax.
+       Acts as the poster fallback before the ambient video buffers. -->
   <div class="hero-bg absolute inset-0 z-0 will-change-transform">
     <Image
       src={heroImage}
@@ -63,21 +63,18 @@ const ambientPoster = '/video/cath.jpg';
       Nanyuki &middot; Mt. Kenya &middot; Kenya
     </p>
 
-    <div class="reveal reveal--fade mt-8" style="--reveal-delay:350ms;" aria-hidden="true">
-      <Image
-        src={logoWhite}
-        alt=""
-        widths={[360, 540, 720]}
-        sizes="(min-width: 768px) 540px, 70vw"
-        quality={92}
-        loading="eager"
-        fetchpriority="high"
-        class="mx-auto h-auto w-[18rem] md:w-[28rem] lg:w-[34rem]"
-      />
-    </div>
+    <p
+      class="reveal reveal--fade-up mt-10 md:mt-12 font-body uppercase tracking-[0.36em] text-[0.78rem] md:text-[0.86rem] text-cream/90"
+      style="--reveal-delay:400ms;"
+      aria-hidden="true"
+    >
+      Where Adventure Meets Purpose<br class="sm:hidden" />
+      <span class="hidden sm:inline">&nbsp;at the Foothills of Majesty</span>
+      <span class="sm:hidden">at the Foothills of Majesty</span>
+    </p>
 
     <p
-      class="reveal reveal--fade-up mt-10 max-w-2xl font-display italic text-xl md:text-3xl text-cream/95 leading-snug text-balance"
+      class="reveal reveal--fade-up mt-8 md:mt-10 max-w-2xl font-display italic text-xl md:text-3xl text-cream/95 leading-snug text-balance"
       style="--reveal-delay:600ms;"
     >
       A boutique tented retreat where the wilderness meets fine dining, and strangers become friends around the fire.
