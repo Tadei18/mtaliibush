@@ -8,6 +8,7 @@ const href = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
   target="_blank"
   rel="noopener noreferrer"
   class="whatsapp-fab"
+  data-state="hidden"
   aria-label="Chat with us on WhatsApp"
 >
   <span class="whatsapp-fab__pulse" aria-hidden="true"></span>
@@ -33,7 +34,19 @@ const href = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     background: transparent;
     text-decoration: none;
     color: #FBF5EC;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, filter 0.4s ease;
+  }
+  /* Hidden while the hero (and its enquiry bar) is in view, so the FAB never
+     collides with the bar's Check Availability button. Revealed on scroll. */
+  .whatsapp-fab[data-state="hidden"] {
+    opacity: 0;
+    transform: translateY(24px);
+    pointer-events: none;
+  }
+  .whatsapp-fab[data-state="shown"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
   @media (min-width: 768px) {
     .whatsapp-fab {
@@ -127,3 +140,17 @@ const href = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     .whatsapp-fab:hover { transform: none; }
   }
 </style>
+
+<script>
+  // Reveal the FAB once past the hero, so it never overlaps the hero enquiry bar.
+  const fab = document.querySelector<HTMLElement>('.whatsapp-fab');
+  if (fab) {
+    const update = () => {
+      const past = window.scrollY > window.innerHeight * 0.6;
+      fab.setAttribute('data-state', past ? 'shown' : 'hidden');
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+  }
+</script>
