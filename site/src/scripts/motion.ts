@@ -220,3 +220,44 @@ if (galleryImages.length) {
     });
   });
 }
+
+// Count-up numbers — animate capacity badges / stats from 0 when scrolled into view
+const counters = document.querySelectorAll<HTMLElement>('[data-count-to]');
+if (counters.length) {
+  const format = (n: number) => n.toLocaleString('en-US');
+
+  const animateCount = (el: HTMLElement) => {
+    const target = parseInt(el.dataset.countTo ?? '0', 10);
+    if (!Number.isFinite(target)) return;
+    if (prefersReducedMotion) {
+      el.textContent = format(target);
+      return;
+    }
+    const duration = 1400;
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      el.textContent = format(Math.round(target * eased));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target as HTMLElement);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 },
+    );
+    counters.forEach((c) => io.observe(c));
+  } else {
+    counters.forEach(animateCount);
+  }
+}

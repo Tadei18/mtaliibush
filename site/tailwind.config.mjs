@@ -51,9 +51,17 @@ export default {
         narrow: '48rem',
         wide: '88rem',
       },
+      borderRadius: {
+        // Consistent radius scale for cards & surfaces
+        card: '1.125rem',
+        feature: '1.5rem',
+      },
       boxShadow: {
         soft: '0 30px 60px -30px rgba(36, 28, 18, 0.25)',
         card: '0 18px 40px -22px rgba(36, 28, 18, 0.35)',
+        // Layered, softer surface elevation used across the modernised cards
+        lift: '0 2px 6px -2px rgba(36, 28, 18, 0.12), 0 18px 40px -24px rgba(36, 28, 18, 0.45)',
+        bar: '0 24px 60px -28px rgba(15, 68, 35, 0.55)',
       },
       transitionTimingFunction: {
         editorial: 'cubic-bezier(0.22, 1, 0.36, 1)',

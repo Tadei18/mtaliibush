@@ -1,0 +1,109 @@
+---
+import Kicker from '../Kicker.astro';
+import TentMotif from '../TentMotif.astro';
+
+/* ────────────────────────────────────────────────────────────────────────
+ * GUEST REVIEWS — currently HIDDEN.
+ *
+ * We do not invent reviews. This slider stays switched OFF until real,
+ * attributable guest quotes are supplied.
+ *
+ * TODO: add real Google / TripAdvisor reviews, then flip SHOW_REVIEWS to true.
+ * Each review object shape:
+ *   { quote: string, name: string, source: string, location?: string }
+ * Example (DO NOT ship until verified against the real source):
+ *   { quote: 'A magical few days under canvas…', name: 'A. Guest',
+ *     source: 'Google', location: 'Nairobi, KE' }
+ * ──────────────────────────────────────────────────────────────────────── */
+const SHOW_REVIEWS = false;
+
+const reviews: { quote: string; name: string; source: string; location?: string }[] = [
+  // TODO: populate with real, attributable reviews only.
+];
+
+const visible = SHOW_REVIEWS && reviews.length > 0;
+---
+{visible && (
+  <section id="reviews" class="relative bg-mist py-24 md:py-32 scroll-mt-24">
+    <div class="mx-auto max-w-4xl px-6 md:px-10 text-center">
+      <div class="reveal reveal--fade flex justify-center">
+        <TentMotif size={40} tone="coffee" />
+      </div>
+      <div class="reveal reveal--fade-up mt-6 flex justify-center"><Kicker tone="coffee">Guest Stories</Kicker></div>
+
+      <div
+        class="testimonial-slider reveal reveal--fade-up mt-10"
+        data-testimonial-slider
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Guest reviews"
+        tabindex="0"
+      >
+        {reviews.map((r, i) => (
+          <figure
+            class="testimonial-slide"
+            data-index={i}
+            aria-hidden={i === 0 ? 'false' : 'true'}
+          >
+            <blockquote class="font-display italic text-2xl md:text-3xl text-forest leading-snug text-balance">
+              &ldquo;{r.quote}&rdquo;
+            </blockquote>
+            <figcaption class="mt-8 font-body">
+              <span class="block text-base font-semibold uppercase tracking-[0.2em] text-coffee">{r.name}</span>
+              <span class="mt-1 block text-[0.72rem] uppercase tracking-[0.22em] text-coffee-light/80">
+                {r.location ? `${r.location} · ` : ''}via {r.source}
+              </span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="testimonial-dots mt-10 flex items-center justify-center gap-3" role="tablist" aria-label="Review controls">
+        {reviews.map((_, i) => (
+          <button type="button" class="testimonial-dot" role="tab" aria-label={`Go to review ${i + 1}`} aria-selected={i === 0 ? 'true' : 'false'} data-testimonial-dot={i}></button>
+        ))}
+      </div>
+    </div>
+
+    <style>
+      .testimonial-slide { display: none; }
+      .testimonial-slide.is-active { display: block; animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+      .testimonial-dot { width: 28px; height: 2px; background: rgba(96, 60, 12, 0.2); border: 0; cursor: pointer; transition: background 0.4s, width 0.4s; }
+      .testimonial-dot[aria-selected='true'] { background: #E4C084; width: 44px; }
+      .testimonial-dot:focus-visible { outline: 2px solid #186030; outline-offset: 6px; }
+      @media (prefers-reduced-motion: reduce) { .testimonial-slide.is-active { animation: none; } }
+    </style>
+
+    <script>
+      const root = document.querySelector<HTMLElement>('[data-testimonial-slider]');
+      if (root) {
+        const slides = Array.from(root.querySelectorAll<HTMLElement>('.testimonial-slide'));
+        const dots = Array.from(root.parentElement?.querySelectorAll<HTMLButtonElement>('.testimonial-dot') ?? []);
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let index = 0;
+        let timer = 0;
+
+        const show = (n: number) => {
+          index = ((n % slides.length) + slides.length) % slides.length;
+          slides.forEach((s, i) => {
+            s.classList.toggle('is-active', i === index);
+            s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+          });
+          dots.forEach((d, i) => d.setAttribute('aria-selected', i === index ? 'true' : 'false'));
+        };
+        const start = () => { if (!prefersReduced && slides.length > 1) timer = window.setInterval(() => show(index + 1), 6500); };
+        const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+
+        show(0);
+        start();
+        dots.forEach((d, i) => d.addEventListener('click', () => { show(i); stop(); start(); }));
+        root.addEventListener('mouseenter', stop);
+        root.addEventListener('mouseleave', start);
+        root.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') { show(index - 1); stop(); start(); }
+          if (e.key === 'ArrowRight') { show(index + 1); stop(); start(); }
+        });
+      }
+    </script>
+  </section>
+)}

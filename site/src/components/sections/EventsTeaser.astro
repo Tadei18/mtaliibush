@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import CTAButton from '../CTAButton.astro';
+import eventGathering from '../../assets/events/event-gathering.jpg';
+
+const venues = [
+  { name: 'Mau Mau Conference Hall', count: 500, prefix: 'Up to ', suffix: '', sub: 'Theatre, banquet & gala' },
+  { name: 'Uhuru Boardroom', display: '15–20', sub: 'Executive boardroom' },
+  { name: 'Mzalendo Hall', count: 100, prefix: 'Up to ', suffix: '', sub: 'Conferences & functions' },
+  { name: 'Mitini Camping Arena', count: 1000, prefix: 'Up to ', suffix: '', sub: 'Festivals beneath the mountain' },
+];
+---
+<section id="events" class="relative isolate overflow-hidden bg-forest-deep text-cream py-24 md:py-32 scroll-mt-24">
+  <Image
+    src={eventGathering}
+    alt=""
+    aria-hidden="true"
+    widths={[960, 1440, 1920]}
+    sizes="100vw"
+    quality={72}
+    format="webp"
+    loading="lazy"
+    class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25"
+  />
+  <span class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/90 via-forest-deep/85 to-forest-deep"></span>
+
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="mb-14 md:mb-16 grid gap-8 md:grid-cols-12 md:items-end">
+      <div class="md:col-span-8">
+        <div class="reveal reveal--fade-up"><Kicker tone="sand">Gather & Grow</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-lg text-cream text-balance" style="--reveal-delay:100ms;">
+          Meetings, events &amp; team building &mdash; held by the mountain.
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:text-right">
+        <div class="reveal reveal--fade-up md:flex md:justify-end" style="--reveal-delay:150ms;">
+          <CTAButton href="/events" variant="primary" tone="dark">Explore venues</CTAButton>
+        </div>
+      </div>
+    </header>
+
+    <ul class="grid grid-cols-2 gap-px overflow-hidden rounded-card bg-cream/15 lg:grid-cols-4">
+      {venues.map((v, i) => (
+        <li class="reveal reveal--fade-up bg-forest-deep p-7 md:p-8" style={`--reveal-delay:${(i % 4) * 80}ms;`}>
+          <p class="font-display text-4xl md:text-5xl text-sand leading-none">
+            {v.count !== undefined ? (
+              <span>{v.prefix}<span data-count-to={v.count}>0</span>{v.suffix}</span>
+            ) : (
+              <span>{v.display}</span>
+            )}
+          </p>
+          <p class="mt-1 font-body text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-cream/60">Guests</p>
+          <h3 class="mt-5 font-display text-xl text-cream leading-snug">{v.name}</h3>
+          <p class="mt-1.5 font-body text-sm text-cream/70">{v.sub}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

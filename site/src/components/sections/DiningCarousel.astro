@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import CTAButton from '../CTAButton.astro';
+import tentedDining from '../../assets/dining/tented-dining.jpg';
+import mtKenyaTerrace from '../../assets/dining/mt-kenya-terrace.jpg';
+import bushDinner from '../../assets/dining/bush-dinner.jpg';
+import outdoorDining from '../../assets/dining/outdoor-dining.jpg';
+import safariTable from '../../assets/dining/safari-table.jpg';
+
+const restaurants = [
+  { image: tentedDining, alt: 'Mwamba Restaurant — tented dining surrounded by gardens', number: '01', name: 'Mwamba Restaurant', hook: 'Continental buffet with Mt. Kenya views.' },
+  { image: mtKenyaTerrace, alt: 'Italian Restaurant & Steakhouse — country-side charm and culinary fire', number: '02', name: 'Italian Restaurant & Steakhouse', hook: 'Country-side charm, culinary fire.' },
+  { image: bushDinner, alt: 'Mwituni Bush Restaurant — open-air dining under the stars', number: '03', name: 'Mwituni — The Bush Restaurant', hook: 'Where wilderness meets fine dining.' },
+  { image: outdoorDining, alt: 'Globetrotters Street Kitchen — global street food under canvas', number: '04', name: 'Globetrotters Street Kitchen', hook: 'The streets of the world, on one plate.' },
+  { image: safariTable, alt: 'Cowboy Barbecue & Smoke House — poolside grill and smoke pit', number: '05', name: 'Cowboy Barbecue & Smoke House', hook: 'Where fire meets flavour, poolside.' },
+];
+---
+<section id="dine" class="relative bg-mist py-24 md:py-32 scroll-mt-24">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="mb-12 md:mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div class="max-w-2xl">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Five tables, five conversations with the wild.
+        </h2>
+      </div>
+      <!-- Carousel controls (desktop) -->
+      <div class="reveal reveal--fade hidden md:flex items-center gap-3" style="--reveal-delay:150ms;">
+        <button type="button" class="dine-nav" data-dine-prev aria-label="Previous restaurants">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3L5 9l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="dine-nav" data-dine-next aria-label="More restaurants">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 3l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Horizontal snap track — bleeds to the right edge, aligned left to the container -->
+  <div class="dine-track-wrap">
+    <ul class="dine-track" data-dine-track role="list">
+      {restaurants.map((r) => (
+        <li class="dine-card group">
+          <a href="/dine" class="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-forest focus-visible:outline-offset-4">
+            <div class="relative aspect-[3/4] overflow-hidden rounded-card bg-forest-deep">
+              <Image
+                src={r.image}
+                alt={r.alt}
+                widths={[400, 600, 800]}
+                sizes="(min-width: 768px) 24rem, 80vw"
+                quality={80}
+                format="webp"
+                loading="lazy"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.05]"
+              />
+              <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent"></span>
+              <span class="absolute left-5 top-5 font-body text-[0.62rem] font-semibold uppercase tracking-[0.32em] text-cream/80">{r.number}</span>
+              <div class="absolute inset-x-5 bottom-5">
+                <h3 class="font-display text-2xl text-cream leading-tight">{r.name}</h3>
+                <p class="mt-1.5 font-display italic text-sand text-base leading-snug">{r.hook}</p>
+                <span class="mt-3 inline-flex items-center gap-2 font-body text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-cream/85">
+                  Discover
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true" class="transition-transform duration-500 ease-editorial group-hover:translate-x-1"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <div class="reveal reveal--fade-up mt-12 flex justify-center" style="--reveal-delay:120ms;">
+      <CTAButton href="/dine" variant="outline" tone="cream">Explore all dining</CTAButton>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dine-track-wrap { width: 100%; }
+  .dine-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 1.5rem;
+    scrollbar-width: none;
+  }
+  .dine-track::-webkit-scrollbar { display: none; }
+  @media (min-width: 768px) {
+    .dine-track { padding-left: max(2.5rem, calc((100vw - 88rem) / 2 + 2.5rem)); padding-right: 2.5rem; gap: 1.5rem; }
+  }
+  .dine-card {
+    flex: 0 0 auto;
+    width: 78vw;
+    max-width: 22rem;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 768px) { .dine-card { width: 22rem; } }
+
+  .dine-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid rgba(96, 60, 12, 0.25);
+    background: transparent;
+    color: #186030;
+    cursor: pointer;
+    transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  }
+  .dine-nav:hover { background: #186030; color: #FBF5EC; border-color: #186030; }
+  .dine-nav:focus-visible { outline: 2px solid #E4C084; outline-offset: 3px; }
+</style>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-dine-track]');
+  if (track) {
+    const card = track.querySelector<HTMLElement>('.dine-card');
+    const step = () => (card ? card.offsetWidth + 24 : track.clientWidth * 0.8);
+    document.querySelector('[data-dine-prev]')?.addEventListener('click', () => {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    });
+    document.querySelector('[data-dine-next]')?.addEventListener('click', () => {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    });
+  }
+</script>

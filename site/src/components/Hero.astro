@@ -5,6 +5,7 @@ import slide2 from '../assets/hero/slide-2.jpg';
 import slide3 from '../assets/hero/slide-3.jpg';
 import slide4 from '../assets/hero/slide-4.jpg';
 import CTAButton from './CTAButton.astro';
+import EnquiryBar from './EnquiryBar.astro';
 
 // Four-slide ambient hero — crossfade + Ken Burns. First slide is the LCP
 // (preloaded + eager); the rest lazy-load. All four share the same scrim so
@@ -50,7 +51,7 @@ const slides = [
   <div class="absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-forest-deep/70 to-transparent"></div>
 
   <!-- Foreground content -->
-  <div class="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
+  <div class="relative z-20 flex h-full flex-col items-center justify-center px-6 pb-28 sm:pb-32 lg:pb-36 text-center">
     <h1 class="sr-only">Mtalii Bush Camps — luxury tented safari camp at the foothills of Mount Kenya</h1>
 
     <p
@@ -78,21 +79,13 @@ const slides = [
       A boutique tented retreat where the wilderness meets fine dining, and strangers become friends around the fire.
     </p>
 
-    <div class="reveal reveal--fade-up mt-12 flex flex-col sm:flex-row items-center gap-4" style="--reveal-delay:800ms;">
-      <CTAButton href="/contact" variant="primary" tone="dark">Plan Your Stay</CTAButton>
-      <CTAButton href="#story" variant="outline" tone="dark">Explore the Camp</CTAButton>
+    <div class="reveal reveal--fade-up mt-11 flex flex-col sm:flex-row items-center gap-4" style="--reveal-delay:800ms;">
+      <CTAButton href="#welcome" variant="outline" tone="dark">Explore the Camp</CTAButton>
     </div>
   </div>
 
-  <!-- Scroll cue -->
-  <a
-    href="#story"
-    aria-label="Scroll to story"
-    class="absolute bottom-8 left-1/2 z-30 -translate-x-1/2 text-cream/80 hover:text-sand transition-colors"
-  >
-    <span class="block font-body uppercase tracking-[0.32em] text-[0.62rem] mb-3 text-center">Scroll</span>
-    <span class="scroll-cue mx-auto block h-12 w-px bg-gradient-to-b from-cream/80 to-transparent"></span>
-  </a>
+  <!-- Booking-first enquiry bar, pinned to the foot of the hero -->
+  <EnquiryBar />
 </section>
 
 <style is:global>

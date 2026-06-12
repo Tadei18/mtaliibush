@@ -1,0 +1,66 @@
+---
+/**
+ * Slim trust strip directly under the hero — scannable, factual, confidence-
+ * building. Every item is drawn from existing site copy (no invented claims).
+ */
+const facts = [
+  { icon: 'pin', label: 'Nanyuki, Mt. Kenya foothills' },
+  { icon: 'plane', label: 'Opposite Nanyuki Airstrip' },
+  { icon: 'tent', label: '3 tented villages' },
+  { icon: 'fork', label: '5 restaurants' },
+  { icon: 'spa', label: 'Spa & eco-gym' },
+  { icon: 'users', label: 'Events up to 1,000 guests' },
+];
+
+const ICONS: Record<string, string> = {
+  pin: '<path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
+  plane: '<path d="M3 12l18-7-7 18-2.5-7.5L3 12z"/>',
+  tent: '<path d="M12 4L3 20h18L12 4z"/><path d="M12 9v11"/>',
+  fork: '<path d="M6 3v7a2 2 0 0 0 4 0V3M8 12v9M18 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4v9"/>',
+  spa: '<path d="M12 21V11"/><path d="M12 11c-2.5-3.5-6-3.2-6-.6 0 2.5 3.4 5 6 5.8 2.6-.8 6-3.3 6-5.8 0-2.6-3.5-2.9-6 .6z"/>',
+  users: '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6M17.5 20a5.5 5.5 0 0 0-3-4.9"/>',
+};
+---
+<section aria-label="Camp at a glance" class="relative bg-forest-deep text-cream">
+  <span class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sand/40 to-transparent"></span>
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <ul class="quick-facts flex gap-0 overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-6 md:overflow-visible">
+      {facts.map((fact) => (
+        <li class="quick-facts__item flex flex-none items-center gap-3 py-5 md:py-6 pr-7 md:pr-0 md:justify-center md:px-4">
+          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full border border-sand/35 text-sand">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[fact.icon]} />
+          </span>
+          <span class="whitespace-nowrap font-body text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-cream/90 md:whitespace-normal md:text-center">
+            {fact.label}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Hairline separators between facts on the desktop grid */
+  @media (min-width: 768px) {
+    .quick-facts__item { position: relative; }
+    .quick-facts__item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 1.75rem;
+      background: rgba(228, 192, 132, 0.22);
+    }
+    /* No separator at the start of each row (3-up layout) */
+    .quick-facts__item:nth-child(3n + 1)::before { display: none; }
+  }
+  @media (min-width: 1024px) {
+    /* 6-up layout — only the very first item starts a row */
+    .quick-facts__item:nth-child(3n + 1)::before { display: block; }
+    .quick-facts__item:first-child::before { display: none; }
+  }
+  .quick-facts { scrollbar-width: none; }
+  .quick-facts::-webkit-scrollbar { display: none; }
+</style>
