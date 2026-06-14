@@ -1,0 +1,283 @@
+---
+/**
+ * Booking-first enquiry bar — overlaid at the foot of the hero.
+ *
+ * We have no live booking engine, so "Check Availability" routes to /contact
+ * with the chosen values passed as query params (checkin, checkout, guests),
+ * which the EnquiryForm reads and pre-fills.
+ *
+ * Desktop: a horizontal glass/cream card — three shrinkable date/guest fields
+ * plus the submit button. The fields use minmax(0,1fr) + min-width:0 so they
+ * can shrink below their native intrinsic size (date inputs are wide), and the
+ * form is flex-wrap so the button drops to a second row before anything clips.
+ * The whole bar is centred and capped at min(60rem, 100% - 2rem) so it can
+ * never exceed the viewport, at any width or zoom.
+ * Mobile: collapses to a single "Check Availability" pill that expands the
+ * same fields in a sheet above it.
+ */
+---
+<div class="enquiry-bar" data-enquiry-bar>
+  <!-- Mobile trigger — single pill that toggles the field sheet -->
+  <button
+    type="button"
+    class="enquiry-bar__trigger"
+    aria-expanded="false"
+    aria-controls="enquiry-fields"
+    data-enquiry-trigger
+  >
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="4.5" width="18" height="16" rx="2" /><path d="M3 9h18M8 2.5v4M16 2.5v4" />
+    </svg>
+    Check Availability
+  </button>
+
+  <form
+    id="enquiry-fields"
+    class="enquiry-bar__form"
+    action="/contact"
+    method="get"
+    data-enquiry-form
+  >
+    <div class="enquiry-bar__fields">
+      <div class="enquiry-bar__field">
+        <label class="enquiry-bar__label" for="eb-checkin">Check&#8209;in</label>
+        <input type="date" id="eb-checkin" name="checkin" class="enquiry-bar__input" data-eb-checkin />
+      </div>
+
+      <div class="enquiry-bar__field">
+        <label class="enquiry-bar__label" for="eb-checkout">Check&#8209;out</label>
+        <input type="date" id="eb-checkout" name="checkout" class="enquiry-bar__input" data-eb-checkout />
+      </div>
+
+      <div class="enquiry-bar__field">
+        <label class="enquiry-bar__label" for="eb-guests">Guests</label>
+        <input type="number" id="eb-guests" name="guests" min="1" max="1000" inputmode="numeric" placeholder="2" class="enquiry-bar__input" />
+      </div>
+    </div>
+
+    <button type="submit" class="enquiry-bar__submit">
+      <span>Check Availability</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<style is:global>
+  .enquiry-bar {
+    position: absolute;
+    /* Centre via auto margins (NOT translateX) so the reveal's transform
+       on this same element can't clobber the horizontal centring. */
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    bottom: clamp(1.25rem, 4vh, 2.75rem);
+    z-index: 30;
+    /* Hard-capped — never wider than the viewport minus side padding */
+    width: min(60rem, calc(100% - 2rem));
+    /* Fade in on load — NOT via the scroll IntersectionObserver, which would
+       leave the bar invisible at the foot of an unscrolled hero (it sits in
+       the observer's bottom rootMargin exclusion zone). */
+    opacity: 0;
+    animation: eb-fade-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+  }
+  @keyframes eb-fade-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .enquiry-bar { animation: none; opacity: 1; transform: none; }
+  }
+
+  /* The cream/glass card — visual styling applies in both layouts */
+  .enquiry-bar__form {
+    display: none; /* shown per-breakpoint below */
+    background: rgba(251, 245, 236, 0.9);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    border: 1px solid rgba(228, 192, 132, 0.55);
+    box-shadow: 0 24px 60px -28px rgba(15, 68, 35, 0.55);
+  }
+  @media (min-width: 1024px) {
+    .enquiry-bar__form {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 999px;
+    }
+  }
+
+  /* Field group — grows to fill the bar, shrinks to nothing before clipping */
+  .enquiry-bar__fields {
+    flex: 1 1 22rem;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .enquiry-bar__field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0; /* allow the column to shrink */
+    padding: 0.5rem 1.25rem;
+  }
+  .enquiry-bar__field + .enquiry-bar__field {
+    border-left: 1px solid rgba(96, 60, 12, 0.18);
+  }
+  .enquiry-bar__label {
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: #7A4E1B;
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+  }
+  .enquiry-bar__input {
+    width: 100%;
+    min-width: 0; /* critical: let native date inputs shrink inside the grid */
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #241C12;
+    line-height: 1.3;
+  }
+  .enquiry-bar__input::placeholder { color: rgba(36, 28, 18, 0.4); font-weight: 500; }
+  .enquiry-bar__input:focus { outline: none; }
+  .enquiry-bar__input:focus-visible { outline: 2px solid #186030; outline-offset: 4px; border-radius: 4px; }
+  /* Native date controls — keep the calendar picker reachable, tidy the text */
+  .enquiry-bar__input[type='date'] { min-height: 1.3rem; color-scheme: light; }
+
+  .enquiry-bar__submit {
+    flex: 0 0 auto; /* always visible; wraps to its own row before clipping */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: #E4C084;
+    color: #241C12;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .enquiry-bar__submit svg { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+  .enquiry-bar__submit:hover { background: #C9A461; }
+  .enquiry-bar__submit:hover svg { transform: translateX(3px); }
+  .enquiry-bar__submit:focus-visible { outline: 2px solid #FBF5EC; outline-offset: 3px; }
+
+  /* Mobile pill trigger */
+  .enquiry-bar__trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 1.05rem 1.5rem;
+    border: 1px solid rgba(228, 192, 132, 0.6);
+    border-radius: 999px;
+    background: rgba(251, 245, 236, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #186030;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    box-shadow: 0 20px 45px -24px rgba(15, 68, 35, 0.6);
+  }
+  .enquiry-bar__trigger:focus-visible { outline: 2px solid #E4C084; outline-offset: 3px; }
+  /* Trigger is mobile/tablet only — the full bar takes over at lg.
+     Controlled here (not via Tailwind lg:hidden) so component styles can't
+     override the utility in the cascade. */
+  @media (min-width: 1024px) {
+    .enquiry-bar__trigger { display: none; }
+  }
+
+  /* Mobile expanded sheet (below lg) */
+  @media (max-width: 1023.98px) {
+    .enquiry-bar[data-open='true'] .enquiry-bar__form {
+      display: block;
+      margin-bottom: 0.75rem;
+      padding: 1rem 1.25rem 1.25rem;
+      border-radius: 1.25rem;
+    }
+    .enquiry-bar[data-open='true'] .enquiry-bar__fields {
+      grid-template-columns: 1fr;
+    }
+    .enquiry-bar[data-open='true'] .enquiry-bar__field {
+      padding: 0.65rem 0;
+      border-left: 0;
+    }
+    .enquiry-bar[data-open='true'] .enquiry-bar__field + .enquiry-bar__field {
+      border-top: 1px solid rgba(96, 60, 12, 0.14);
+    }
+    .enquiry-bar__submit {
+      width: 100%;
+      margin-top: 0.85rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .enquiry-bar__submit, .enquiry-bar__submit svg { transition: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-enquiry-bar]');
+  if (root) {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-enquiry-trigger]');
+    const form = root.querySelector<HTMLFormElement>('[data-enquiry-form]');
+    const checkin = root.querySelector<HTMLInputElement>('[data-eb-checkin]');
+    const checkout = root.querySelector<HTMLInputElement>('[data-eb-checkout]');
+
+    // Sensible date floors — can't check in before today; check-out after check-in
+    const today = new Date().toISOString().split('T')[0];
+    if (checkin) checkin.min = today;
+    if (checkout) checkout.min = today;
+    checkin?.addEventListener('change', () => {
+      if (checkout && checkin.value) {
+        checkout.min = checkin.value;
+        if (checkout.value && checkout.value < checkin.value) checkout.value = checkin.value;
+      }
+    });
+
+    // Mobile expand / collapse
+    trigger?.addEventListener('click', () => {
+      const open = root.getAttribute('data-open') === 'true';
+      root.setAttribute('data-open', String(!open));
+      trigger.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Build a clean /contact URL — drop empty params so we never pass blanks
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const params = new URLSearchParams();
+      const fd = new FormData(form);
+      for (const [key, value] of fd.entries()) {
+        const v = String(value).trim();
+        if (v) params.set(key, v);
+      }
+      const qs = params.toString();
+      window.location.href = qs ? `/contact?${qs}` : '/contact';
+    });
+  }
+</script>

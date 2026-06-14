@@ -164,3 +164,23 @@ const interests = [
     padding-right: 1.5rem;
   }
 </style>
+
+<script>
+  // Pre-fill from the homepage enquiry bar (/contact?checkin=…&checkout=…&guests=…).
+  const params = new URLSearchParams(window.location.search);
+  if ([...params.keys()].length) {
+    const form = document.querySelector<HTMLFormElement>('form[name="mtalii-enquiry"]');
+    const setField = (selector: string, value: string | null) => {
+      if (!value) return;
+      const el = form?.querySelector<HTMLInputElement | HTMLSelectElement>(selector);
+      if (el) el.value = value;
+    };
+    setField('input[name="check-in"]', params.get('checkin'));
+    setField('input[name="check-out"]', params.get('checkout'));
+    setField('input[name="guests"]', params.get('guests'));
+    // Arriving from the booking bar implies a stay enquiry — default the interest.
+    if (params.has('checkin') || params.has('checkout') || params.has('guests')) {
+      setField('select[name="interest"]', 'Stay');
+    }
+  }
+</script>

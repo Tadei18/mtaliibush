@@ -1,0 +1,85 @@
+---
+import Kicker from '../Kicker.astro';
+import CTAButton from '../CTAButton.astro';
+import AccommodationCard from '../AccommodationCard.astro';
+import tentExterior from '../../assets/accommodation/tent-exterior.jpg';
+import tentHottub from '../../assets/accommodation/tent-with-hottub.jpg';
+import tentInterior from '../../assets/accommodation/tent-interior.jpg';
+
+// Each tented village shares the same considered tent appointments — themed
+// after Mt. Kenya's three highest peaks. Feature chips reflect the true,
+// every-tent inclusions (king/twin beds, outdoor tub, rainforest shower, deck).
+const chips = [
+  { icon: 'bed', label: 'King / Twin' },
+  { icon: 'bath', label: 'Outdoor tub' },
+  { icon: 'shower', label: 'Rainforest shower' },
+  { icon: 'deck', label: 'Private deck' },
+];
+
+const villages = [
+  {
+    image: tentExterior,
+    alt: 'Safari tented suite exterior at golden hour',
+    number: '01',
+    name: 'Nelion',
+    subtitle: 'The Watchman',
+    body:
+      'Spacious safari-style suites that open to the bush and the mountain beyond — authentic canvas charm wrapped around plush, hand-finished comfort.',
+  },
+  {
+    image: tentHottub,
+    alt: 'Private deck with an outdoor soaking tub at a Mtalii tented suite',
+    number: '02',
+    name: 'Lenana',
+    subtitle: 'The Companion',
+    body:
+      'A private deck and a star-lit soaking tub, cocooned by canvas and bush garden. Paths glow under solar lanterns as evening falls.',
+  },
+  {
+    image: tentInterior,
+    alt: 'Tented suite interior with a king bed and lantern-lit canvas',
+    number: '03',
+    name: 'Batian',
+    subtitle: 'The Elder',
+    body:
+      'Lantern-lit interiors gathered around a shared bonfire pit — the heart of the village, where stories, roasted treats and quiet stargazing begin.',
+  },
+];
+---
+<section id="stay" class="relative bg-cream py-24 md:py-32 scroll-mt-24">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="mb-14 md:mb-20 grid gap-8 md:grid-cols-12 md:items-end">
+      <div class="md:col-span-8">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Stay With Us</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Three villages, named for the peaks that hold them.
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:text-right">
+        <p class="reveal reveal--fade-up font-body text-ink/70 leading-relaxed md:ml-auto md:max-w-xs" style="--reveal-delay:150ms;">
+          Nelion, Lenana and Batian &mdash; each tented village blends authentic bush charm with
+          luxurious comfort.
+        </p>
+      </div>
+    </header>
+
+    <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+      {villages.map((v) => (
+        <AccommodationCard
+          image={v.image}
+          alt={v.alt}
+          number={v.number}
+          name={v.name}
+          subtitle={v.subtitle}
+          chips={chips}
+        >
+          {v.body}
+        </AccommodationCard>
+      ))}
+    </div>
+
+    <div class="reveal reveal--fade-up mt-12 flex justify-center" style="--reveal-delay:120ms;">
+      <CTAButton href="/stay" variant="outline" tone="cream">View all accommodation</CTAButton>
+    </div>
+  </div>
+</section>

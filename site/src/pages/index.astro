@@ -1,36 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import Story from '../components/sections/Story.astro';
-import StoryMoments from '../components/sections/StoryMoments.astro';
-import DirectorsMessage from '../components/sections/DirectorsMessage.astro';
-import TentedVillages from '../components/sections/TentedVillages.astro';
-import Dining from '../components/sections/Dining.astro';
-import Lounges from '../components/sections/Lounges.astro';
-import PoolGardens from '../components/sections/PoolGardens.astro';
-import Experiences from '../components/sections/Experiences.astro';
-import Spa from '../components/sections/Spa.astro';
-import Events from '../components/sections/Events.astro';
-import Nearby from '../components/sections/Nearby.astro';
-import Team from '../components/sections/Team.astro';
+import QuickFacts from '../components/sections/QuickFacts.astro';
+import Welcome from '../components/sections/Welcome.astro';
+import StaySection from '../components/sections/StaySection.astro';
+import DiningCarousel from '../components/sections/DiningCarousel.astro';
+import Amenities from '../components/sections/Amenities.astro';
+import EventsTeaser from '../components/sections/EventsTeaser.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import LocationSection from '../components/sections/LocationSection.astro';
 import FinalCTA from '../components/sections/FinalCTA.astro';
 ---
 <BaseLayout
   title="Mtalii Bush Camps — Luxury tented safari camp at the foothills of Mt. Kenya"
-  description="A boutique tented safari retreat at the foothills of Mount Kenya in Nanyuki. Luxurious tented suites, fine dining, spa wellness, and unforgettable bush experiences."
+  description="A boutique tented safari retreat at the foothills of Mount Kenya in Nanyuki. Luxurious tented suites, five restaurants, spa wellness, conferencing, and unforgettable bush experiences."
 >
+  <!-- 1 · Booking-first hero -->
   <Hero />
-  <Story />
-  <StoryMoments />
-  <DirectorsMessage />
-  <TentedVillages />
-  <Dining />
-  <Lounges />
-  <PoolGardens />
-  <Experiences />
-  <Spa />
-  <Events />
-  <Nearby />
-  <Team />
+  <!-- 2 · Quick-facts trust strip -->
+  <QuickFacts />
+  <!-- 3 · Welcome / Our Story intro + Moments slideshow -->
+  <Welcome />
+  <!-- 4 · Stay With Us — accommodation cards -->
+  <StaySection />
+  <!-- 5 · Dining showcase carousel -->
+  <DiningCarousel />
+  <!-- 6 · Amenities & facilities + signature pool -->
+  <Amenities />
+  <!-- 7 · Events & conferencing teaser -->
+  <EventsTeaser />
+  <!-- 8 · Guest reviews (hidden until real reviews are supplied) -->
+  <Testimonials />
+  <!-- 9 · Location & getting here -->
+  <LocationSection />
+  <!-- 10 · Final CTA + footer (footer in layout) -->
   <FinalCTA />
 </BaseLayout>

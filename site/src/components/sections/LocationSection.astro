@@ -1,0 +1,83 @@
+---
+import Kicker from '../Kicker.astro';
+import MapEmbed from '../MapEmbed.astro';
+
+// Distances pulled verbatim from existing "Beyond the Camp" copy — no invented figures.
+const distances = [
+  { name: 'Ol Pejeta Conservancy', time: '20 min' },
+  { name: 'Ol Jogi Wildlife Conservancy', time: '40 min' },
+  { name: 'Ngare Ndare Forest', time: '1 hr' },
+  { name: 'Lewa Wildlife Conservancy', time: '1 hr 15' },
+];
+
+const ways = [
+  {
+    icon: 'road',
+    title: 'By road',
+    body: 'Drive north from Nairobi to Nanyuki — the camp sits opposite the airstrip, on the Mt. Kenya side of town.',
+  },
+  {
+    icon: 'plane',
+    title: 'By air',
+    body: 'Scheduled and charter flights land at Nanyuki Airstrip, directly across the road — scenic flights over Mt. Kenya and Laikipia depart from there too.',
+  },
+];
+
+const ICONS: Record<string, string> = {
+  road: '<path d="M4 21l3-18M20 21l-3-18M12 4v2M12 10v2M12 16v2"/>',
+  plane: '<path d="M3 12l18-7-7 18-2.5-7.5L3 12z"/>',
+};
+---
+<section id="location" class="relative bg-cream py-24 md:py-32 scroll-mt-24">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <div class="grid gap-12 md:gap-16 lg:grid-cols-12">
+      <!-- Left: getting here -->
+      <div class="lg:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Location & Getting Here</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-md text-forest text-balance" style="--reveal-delay:100ms;">
+          Nanyuki, at the foothills of Mt. Kenya.
+        </h2>
+
+        <p class="reveal reveal--fade-up mt-6 inline-flex items-center gap-2 rounded-full border border-coffee/20 bg-mist px-4 py-2 font-body text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-coffee" style="--reveal-delay:160ms;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
+          Opposite Nanyuki Airstrip
+        </p>
+
+        <!-- Ways to arrive -->
+        <ul class="mt-9 space-y-7">
+          {ways.map((w, i) => (
+            <li class="reveal reveal--fade-up flex gap-4" style={`--reveal-delay:${200 + i * 80}ms;`}>
+              <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border border-coffee/25 text-forest">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[w.icon]} />
+              </span>
+              <div>
+                <h3 class="font-display text-xl text-forest">{w.title}</h3>
+                <p class="mt-1.5 font-body text-ink/75 leading-relaxed max-w-md">{w.body}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Distance chips -->
+        <div class="reveal reveal--fade-up mt-10" style="--reveal-delay:360ms;">
+          <p class="font-body text-[0.66rem] font-semibold uppercase tracking-[0.28em] text-coffee-light mb-4">Nearby, by road</p>
+          <ul class="flex flex-wrap gap-2.5">
+            {distances.map((d) => (
+              <li class="inline-flex items-center gap-2 rounded-full border border-coffee/15 bg-cream px-4 py-2">
+                <span class="font-body text-[0.78rem] font-semibold text-forest">{d.name}</span>
+                <span class="font-body text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-coffee-light">{d.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right: map -->
+      <div class="lg:col-span-7">
+        <div class="reveal reveal--fade-up overflow-hidden rounded-feature border border-coffee/12 shadow-lift" style="--reveal-delay:150ms;">
+          <MapEmbed aspect="4/3" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
