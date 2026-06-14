@@ -1,0 +1,243 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from './Kicker.astro';
+
+/**
+ * Cinematic "panoramic 3D" hero — two full-bleed slides looping (~6s each)
+ * with a 1s 3D push transition between them. Each slide layers three nested
+ * transforms so nothing fights:
+ *   .phero__slide  — the 3D crossfade/push transition (rendered in the stage's
+ *                    perspective)
+ *   .phero__depth  — subtle pointer / device-orientation parallax (translate +
+ *                    rotateX/Y), driven by CSS vars updated in rAF
+ *   .phero__pan    — a slow horizontal panoramic pan + gentle Ken Burns scale,
+ *                    on an over-sized image so edges never reveal
+ *
+ * These are NOT 360° panoramas, so no sphere viewer — just an over-wide image
+ * drifting for a sweeping, dimensional feel.
+ *
+ * Copy is overlaid bottom-anchored with the same header clearance as PageHero
+ * (pt-28 md:pt-36) so the headline never clips under the fixed header.
+ * prefers-reduced-motion → static first image, no pan / parallax / transition.
+ */
+interface Props {
+  image1: ImageMetadata;
+  alt1: string;
+  image2: ImageMetadata;
+  alt2: string;
+  kicker: string;
+  title: string;
+  tagline?: string;
+  crumb?: string;
+}
+const { image1, alt1, image2, alt2, kicker, title, tagline, crumb } = Astro.props;
+
+const slides = [
+  { image: image1, alt: alt1 },
+  { image: image2, alt: alt2 },
+];
+---
+<section
+  class="phero relative isolate overflow-hidden bg-forest-deep text-cream min-h-[78svh] md:min-h-[680px]"
+  data-parallax-hero
+>
+  <!-- Perspective stage -->
+  <div class="phero__stage absolute inset-0 z-0">
+    {slides.map((slide, i) => (
+      <div class={`phero__slide${i === 0 ? ' is-active' : ''}`} data-slide-index={i} aria-hidden={i === 0 ? 'false' : 'true'}>
+        <div class="phero__depth">
+          <div class="phero__pan" style={i === 1 ? '--pan-delay:-11s' : ''}>
+            <Image
+              src={slide.image}
+              alt={slide.alt}
+              widths={[1280, 1920, 2560]}
+              sizes="130vw"
+              quality={82}
+              format="webp"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+              class="phero__img"
+            />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Scrims for text contrast -->
+  <span class="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(100%_70%_at_50%_100%,rgba(15,68,35,0.65),transparent_70%)]"></span>
+  <span class="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-forest-deep/75 to-transparent"></span>
+  <span class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-forest-deep/85 via-forest-deep/35 to-transparent"></span>
+
+  <!-- Foreground copy (bottom-anchored, clears the fixed header via pt-28/36) -->
+  <div class="relative z-20 flex min-h-[78svh] md:min-h-[680px] flex-col justify-end pt-28 md:pt-36 pb-14 md:pb-20">
+    <div class="mx-auto w-full max-w-wide px-6 md:px-10">
+      {crumb && (
+        <p class="reveal reveal--fade-up font-body text-[0.66rem] uppercase tracking-[0.32em] text-cream/65">
+          <a href="/" class="hover:text-sand transition-colors">Mtalii Bush Camps</a>
+          <span aria-hidden="true" class="mx-3 opacity-60">/</span>
+          <span class="text-sand">{crumb}</span>
+        </p>
+      )}
+      <div class="reveal reveal--fade-up mt-5" style="--reveal-delay:120ms;">
+        <Kicker tone="sand">{kicker}</Kicker>
+      </div>
+      <h1 class="reveal reveal--fade-up mt-6 md:mt-7 font-display text-display-md md:text-display-lg text-cream text-balance max-w-4xl" style="--reveal-delay:240ms;">
+        {title}
+      </h1>
+      {tagline && (
+        <p class="reveal reveal--fade-up mt-6 max-w-2xl font-display italic text-xl md:text-2xl text-cream/90 leading-snug text-balance" style="--reveal-delay:360ms;">
+          {tagline}
+        </p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .phero__stage {
+    perspective: 1500px;
+    perspective-origin: 50% 45%;
+  }
+  .phero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 1;
+    transform: translateZ(-150px) rotateY(7deg) scale(1.05);
+    transform-style: preserve-3d;
+    transition: opacity 1s ease, transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+  }
+  .phero__slide.is-active {
+    opacity: 1;
+    z-index: 2;
+    transform: translateZ(0) rotateY(0deg) scale(1);
+  }
+
+  /* Pointer / orientation parallax — small, elegant; CSS vars set in rAF */
+  .phero__depth {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform:
+      translate3d(var(--phero-tx, 0px), var(--phero-ty, 0px), 0)
+      rotateX(var(--phero-ry, 0deg))
+      rotateY(var(--phero-rx, 0deg));
+    transition: transform 0.4s ease-out;
+    will-change: transform;
+  }
+
+  /* Slow panoramic pan + Ken Burns on an over-sized image */
+  .phero__pan {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    will-change: transform;
+    animation: phero-pan 22s ease-in-out var(--pan-delay, 0s) infinite alternate;
+  }
+  .phero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @keyframes phero-pan {
+    0%   { transform: translate3d(-2.6%, 0.6%, 0) scale(1.02); }
+    100% { transform: translate3d(2.6%, -1.4%, 0) scale(1.08); }
+  }
+
+  /* Reduced motion — static first image, no movement of any kind */
+  @media (prefers-reduced-motion: reduce) {
+    .phero__slide {
+      transition: none;
+      transform: none;
+      opacity: 0;
+    }
+    .phero__slide[data-slide-index='0'] { opacity: 1; }
+    .phero__depth { transition: none; transform: none; }
+    .phero__pan { animation: none; transform: none; }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hero = document.querySelector<HTMLElement>('[data-parallax-hero]');
+
+  if (hero) {
+    const stage = hero.querySelector<HTMLElement>('.phero__stage');
+    const slides = Array.from(hero.querySelectorAll<HTMLElement>('.phero__slide'));
+
+    // ── Slide loop with the 3D push transition ──────────────────────────
+    if (!prefersReducedMotion && slides.length > 1) {
+      let index = 0;
+      let timer = 0;
+      const advance = () => {
+        slides[index].classList.remove('is-active');
+        slides[index].setAttribute('aria-hidden', 'true');
+        index = (index + 1) % slides.length;
+        slides[index].classList.add('is-active');
+        slides[index].setAttribute('aria-hidden', 'false');
+      };
+      const start = () => { if (!timer) timer = window.setInterval(advance, 6000); };
+      const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+      start();
+
+      // Pause when offscreen — saves work, resumes seamlessly
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          for (const e of entries) e.isIntersecting ? start() : stop();
+        }, { threshold: 0.05 }).observe(hero);
+      }
+    }
+
+    // ── Subtle pointer / orientation parallax (rAF-throttled) ───────────
+    if (!prefersReducedMotion) {
+      const MAX_T = 14; // px translate
+      const MAX_R = 2.6; // deg rotate
+      let targetX = 0, targetY = 0; // -1..1
+      let curX = 0, curY = 0;
+      let raf = 0;
+
+      const render = () => {
+        // Ease toward the target for buttery motion
+        curX += (targetX - curX) * 0.08;
+        curY += (targetY - curY) * 0.08;
+        hero.style.setProperty('--phero-tx', `${(-curX * MAX_T).toFixed(2)}px`);
+        hero.style.setProperty('--phero-ty', `${(-curY * MAX_T).toFixed(2)}px`);
+        hero.style.setProperty('--phero-rx', `${(curX * MAX_R).toFixed(2)}deg`);
+        hero.style.setProperty('--phero-ry', `${(-curY * MAX_R).toFixed(2)}deg`);
+        if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) {
+          raf = requestAnimationFrame(render);
+        } else {
+          raf = 0;
+        }
+      };
+      const schedule = () => { if (!raf) raf = requestAnimationFrame(render); };
+
+      // Mouse (fine pointers only)
+      if (window.matchMedia('(pointer: fine)').matches) {
+        hero.addEventListener('pointermove', (e) => {
+          const r = hero.getBoundingClientRect();
+          targetX = ((e.clientX - r.left) / r.width) * 2 - 1;
+          targetY = ((e.clientY - r.top) / r.height) * 2 - 1;
+          schedule();
+        });
+        hero.addEventListener('pointerleave', () => { targetX = 0; targetY = 0; schedule(); });
+      }
+
+      // Gentle device-orientation tilt on touch (no permission prompt — just
+      // listens; fires on devices that allow it without a gesture).
+      if (window.matchMedia('(pointer: coarse)').matches && 'DeviceOrientationEvent' in window) {
+        window.addEventListener('deviceorientation', (e) => {
+          if (e.gamma == null || e.beta == null) return;
+          targetX = Math.max(-1, Math.min(1, e.gamma / 30)); // left-right tilt
+          targetY = Math.max(-1, Math.min(1, (e.beta - 45) / 30)); // front-back
+          schedule();
+        }, { passive: true });
+      }
+    }
+  }
+</script>
