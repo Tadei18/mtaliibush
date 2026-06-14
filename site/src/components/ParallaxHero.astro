@@ -29,12 +29,23 @@ interface Props {
   title: string;
   tagline?: string;
   crumb?: string;
+  /**
+   * Per-slide framing. 'cover' fills the hero (with pan + Ken Burns); 'contain'
+   * shows the whole composition (for images that shouldn't be cropped), backed
+   * by a softly blurred fill so there are no hard edges, with a gentler pan and
+   * minimal scale.
+   */
+  fit1?: 'cover' | 'contain';
+  fit2?: 'cover' | 'contain';
 }
-const { image1, alt1, image2, alt2, kicker, title, tagline, crumb } = Astro.props;
+const {
+  image1, alt1, image2, alt2, kicker, title, tagline, crumb,
+  fit1 = 'cover', fit2 = 'cover',
+} = Astro.props;
 
 const slides = [
-  { image: image1, alt: alt1 },
-  { image: image2, alt: alt2 },
+  { image: image1, alt: alt1, fit: fit1 },
+  { image: image2, alt: alt2, fit: fit2 },
 ];
 ---
 <section
@@ -44,19 +55,33 @@ const slides = [
   <!-- Perspective stage -->
   <div class="phero__stage absolute inset-0 z-0">
     {slides.map((slide, i) => (
-      <div class={`phero__slide${i === 0 ? ' is-active' : ''}`} data-slide-index={i} aria-hidden={i === 0 ? 'false' : 'true'}>
+      <div class={`phero__slide${i === 0 ? ' is-active' : ''}`} data-slide-index={i} data-fit={slide.fit} aria-hidden={i === 0 ? 'false' : 'true'}>
         <div class="phero__depth">
+          {slide.fit === 'contain' && (
+            <div class="phero__fill" aria-hidden="true">
+              <Image
+                src={slide.image}
+                alt=""
+                widths={[640, 960, 1280]}
+                sizes="100vw"
+                quality={45}
+                format="webp"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                class="phero__fill-img"
+              />
+            </div>
+          )}
           <div class="phero__pan" style={i === 1 ? '--pan-delay:-11s' : ''}>
             <Image
               src={slide.image}
               alt={slide.alt}
               widths={[1280, 1920, 2560]}
-              sizes="130vw"
+              sizes={slide.fit === 'contain' ? '100vw' : '130vw'}
               quality={82}
               format="webp"
               loading={i === 0 ? 'eager' : 'lazy'}
               fetchpriority={i === 0 ? 'high' : 'auto'}
-              class="phero__img"
+              class={`phero__img${slide.fit === 'contain' ? ' phero__img--contain' : ''}`}
             />
           </div>
         </div>
@@ -149,6 +174,36 @@ const slides = [
     100% { transform: translate3d(2.6%, -1.4%, 0) scale(1.08); }
   }
 
+  /* ── 'contain' slides — show the whole composition, no tight crop ─────── */
+  /* Softly blurred backdrop fills the letterbox so there are no hard edges */
+  .phero__fill {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .phero__fill-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.2);
+    filter: blur(34px) saturate(1.05) brightness(0.7);
+  }
+  /* Near-full frame: no over-size, gentle pan, minimal Ken Burns */
+  .phero__slide[data-fit='contain'] .phero__pan {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    animation: phero-pan-contain 26s ease-in-out var(--pan-delay, 0s) infinite alternate;
+  }
+  .phero__img--contain { object-fit: contain; }
+  @keyframes phero-pan-contain {
+    0%   { transform: translate3d(-1.1%, 0, 0) scale(1.0); }
+    100% { transform: translate3d(1.1%, 0, 0) scale(1.02); }
+  }
+
   /* Reduced motion — static first image, no movement of any kind */
   @media (prefers-reduced-motion: reduce) {
     .phero__slide {
@@ -159,6 +214,7 @@ const slides = [
     .phero__slide[data-slide-index='0'] { opacity: 1; }
     .phero__depth { transition: none; transform: none; }
     .phero__pan { animation: none; transform: none; }
+    .phero__fill-img { filter: blur(34px) saturate(1.05) brightness(0.7); }
   }
 </style>
 
