@@ -2,9 +2,9 @@
 import Kicker from '../Kicker.astro';
 import CTAButton from '../CTAButton.astro';
 import AccommodationCard from '../AccommodationCard.astro';
-import tentExterior from '../../assets/accommodation/tent-exterior.jpg';
-import tentHottub from '../../assets/accommodation/tent-with-hottub.jpg';
-import tentInterior from '../../assets/accommodation/tent-interior.jpg';
+import nelionGoldenHour from '../../assets/accommodation/nelion-golden-hour.jpg';
+import lenanaTerrace from '../../assets/accommodation/lenana-terrace.jpg';
+import batianDeck from '../../assets/accommodation/tent-with-hottub.jpg';
 
 // Each tented village shares the same considered tent appointments — themed
 // after Mt. Kenya's three highest peaks. Feature chips reflect the true,
@@ -18,8 +18,8 @@ const chips = [
 
 const villages = [
   {
-    image: tentExterior,
-    alt: 'Safari tented suite exterior at golden hour',
+    image: nelionGoldenHour,
+    alt: 'Mtalii tented suites in golden-hour light with Mount Kenya rising beyond',
     number: '01',
     name: 'Nelion',
     subtitle: 'The Watchman',
@@ -27,8 +27,8 @@ const villages = [
       'Spacious safari-style suites that open to the bush and the mountain beyond — authentic canvas charm wrapped around plush, hand-finished comfort.',
   },
   {
-    image: tentHottub,
-    alt: 'Private deck with an outdoor soaking tub at a Mtalii tented suite',
+    image: lenanaTerrace,
+    alt: 'Garden terrace and lawn seating at Mtalii looking out toward Mount Kenya',
     number: '02',
     name: 'Lenana',
     subtitle: 'The Companion',
@@ -36,13 +36,13 @@ const villages = [
       'A private deck and a star-lit soaking tub, cocooned by canvas and bush garden. Paths glow under solar lanterns as evening falls.',
   },
   {
-    image: tentInterior,
-    alt: 'Tented suite interior with a king bed and lantern-lit canvas',
+    image: batianDeck,
+    alt: 'A Mtalii tented suite with a private deck and outdoor soaking tub, framed by bush garden',
     number: '03',
     name: 'Batian',
     subtitle: 'The Elder',
     body:
-      'Lantern-lit interiors gathered around a shared bonfire pit — the heart of the village, where stories, roasted treats and quiet stargazing begin.',
+      'A private deck wrapped in canvas and bush garden — the heart of the village, gathered around a shared bonfire pit where stories, roasted treats and quiet stargazing begin.',
   },
 ];
 ---
