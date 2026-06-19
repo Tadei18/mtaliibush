@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import Kicker from '../Kicker.astro';
+import TentMotif from '../TentMotif.astro';
+import CTAButton from '../CTAButton.astro';
+import spaMtKenya from '../../assets/spa/spa-mtkenya.jpg';
+---
+<section id="spa-teaser" class="relative bg-cream py-24 md:py-32 scroll-mt-24">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <div class="grid items-center gap-12 md:gap-16 lg:grid-cols-12">
+      <!-- Feature image -->
+      <div class="reveal reveal--scale-image lg:col-span-7">
+        <div class="relative overflow-hidden rounded-feature aspect-[16/10] shadow-lift">
+          <Image
+            src={spaMtKenya}
+            alt="A tented spa treatment room at Casadra Spa overlooking Mount Kenya"
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 1024px) 58vw, 100vw"
+            quality={82}
+            format="webp"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+          <span class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-ink/20 via-transparent to-transparent"></span>
+        </div>
+      </div>
+
+      <!-- Copy -->
+      <div class="lg:col-span-5">
+        <div class="reveal reveal--fade-up flex items-center gap-3">
+          <TentMotif tone="coffee" size={30} />
+          <Kicker tone="coffee">Restore & Renew</Kicker>
+        </div>
+        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-md text-forest text-balance" style="--reveal-delay:100ms;">
+          Casadra Spa &amp; Wellness.
+        </h2>
+        <p class="reveal reveal--fade-up mt-7 prose-editorial" style="--reveal-delay:200ms;">
+          A sanctuary of balance where nature meets wellness &mdash; therapeutic spa treatments, an
+          eco-gym studio, guided fitness sessions and holistic therapies, framed by the quiet majesty
+          of Mt.&nbsp;Kenya.
+        </p>
+        <div class="reveal reveal--fade-up mt-9" style="--reveal-delay:300ms;">
+          <CTAButton href="/experiences#spa" variant="outline" tone="cream">Explore the spa</CTAButton>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

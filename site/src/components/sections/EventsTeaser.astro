@@ -3,6 +3,19 @@ import { Image } from 'astro:assets';
 import Kicker from '../Kicker.astro';
 import CTAButton from '../CTAButton.astro';
 import eventGathering from '../../assets/events/event-gathering.jpg';
+import conf1 from '../../assets/events/conference-1.jpg';
+import conf2 from '../../assets/events/conference-2.jpg';
+import conf3 from '../../assets/events/conference-3.jpg';
+import conf4 from '../../assets/events/conference-4.jpg';
+import conf5 from '../../assets/events/conference-5.jpg';
+
+const conferences = [
+  { image: conf1, alt: 'An elegant boardroom set for an executive meeting at Mtalii Bush Camps' },
+  { image: conf2, alt: 'A conference hall arranged for a corporate gathering at Mtalii' },
+  { image: conf3, alt: 'A meeting space at Mtalii dressed for a workshop or seminar' },
+  { image: conf4, alt: 'Delegates gathered for a team session at Mtalii Bush Camps' },
+  { image: conf5, alt: 'An event setup beneath the mountain at Mtalii Bush Camps' },
+];
 
 const venues = [
   { name: 'Mau Mau Conference Hall', count: 500, prefix: 'Up to ', suffix: '', sub: 'Theatre, banquet & gala' },
@@ -39,6 +52,27 @@ const venues = [
         </div>
       </div>
     </header>
+
+    <!-- Conferencing image strip — lazy, consistent aspect, soft corners, subtle hover -->
+    <ul class="mb-12 md:mb-16 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-5">
+      {conferences.map((c, i) => (
+        <li class={`reveal reveal--scale-image group overflow-hidden rounded-card border border-sand/15 ${i === 4 ? 'col-span-2 sm:col-span-1' : ''}`} style={`--reveal-delay:${(i % 5) * 70}ms;`}>
+          <div class="relative aspect-[4/3] overflow-hidden bg-forest-dark">
+            <Image
+              src={c.image}
+              alt={c.alt}
+              widths={[320, 480, 640]}
+              sizes="(min-width: 1024px) 17vw, (min-width: 640px) 30vw, 45vw"
+              quality={78}
+              format="webp"
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1100ms] ease-editorial group-hover:scale-[1.06]"
+            />
+            <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/45 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+          </div>
+        </li>
+      ))}
+    </ul>
 
     <ul class="grid grid-cols-2 gap-px overflow-hidden rounded-card bg-cream/15 lg:grid-cols-4">
       {venues.map((v, i) => (

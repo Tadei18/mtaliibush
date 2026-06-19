@@ -10,7 +10,7 @@ import safariTable from '../../assets/dining/safari-table.jpg';
 
 const restaurants = [
   { image: tentedDining, alt: 'Mwamba Restaurant — tented dining surrounded by gardens', number: '01', name: 'Mwamba Restaurant', hook: 'Continental buffet with Mt. Kenya views.' },
-  { image: mtKenyaTerrace, alt: 'Italian Restaurant & Steakhouse — country-side charm and culinary fire', number: '02', name: 'Italian Restaurant & Steakhouse', hook: 'Country-side charm, culinary fire.' },
+  { image: mtKenyaTerrace, alt: 'Little Italy Meets Little Thailand — country-side charm and culinary fire', number: '02', name: 'Little Italy Meets Little Thailand', hook: 'Country-side charm, culinary fire.' },
   { image: bushDinner, alt: 'Mwituni Bush Restaurant — open-air dining under the stars', number: '03', name: 'Mwituni — The Bush Restaurant', hook: 'Where wilderness meets fine dining.' },
   { image: outdoorDining, alt: 'Globetrotters Street Kitchen — global street food under canvas', number: '04', name: 'Globetrotters Street Kitchen', hook: 'The streets of the world, on one plate.' },
   { image: safariTable, alt: 'Cowboy Barbecue & Smoke House — poolside grill and smoke pit', number: '05', name: 'Cowboy Barbecue & Smoke House', hook: 'Where fire meets flavour, poolside.' },
@@ -19,9 +19,9 @@ const restaurants = [
 <section id="dine" class="relative bg-mist py-24 md:py-32 scroll-mt-24">
   <div class="mx-auto max-w-wide px-6 md:px-10">
     <header class="mb-12 md:mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-      <div class="max-w-2xl">
+      <div class="min-w-0">
         <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
-        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+        <h2 class="dine-title reveal reveal--fade-up mt-6 font-display text-forest" style="--reveal-delay:100ms;">
           Five tables, five conversations with the wild.
         </h2>
       </div>
@@ -79,6 +79,16 @@ const restaurants = [
 </section>
 
 <style>
+  /* One line on large screens (where it fits); wraps gracefully below */
+  .dine-title {
+    font-size: clamp(1.85rem, 3.2vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 1024px) {
+    .dine-title { white-space: nowrap; }
+  }
+
   .dine-track-wrap { width: 100%; }
   .dine-track {
     display: flex;
@@ -89,7 +99,9 @@ const restaurants = [
     -webkit-overflow-scrolling: touch;
     padding: 0.5rem 1.5rem;
     scrollbar-width: none;
+    cursor: grab;
   }
+  .dine-track[data-dragging='true'] { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
   .dine-track::-webkit-scrollbar { display: none; }
   @media (min-width: 768px) {
     .dine-track { padding-left: max(2.5rem, calc((100vw - 88rem) / 2 + 2.5rem)); padding-right: 2.5rem; gap: 1.5rem; }
@@ -120,15 +132,70 @@ const restaurants = [
 </style>
 
 <script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const track = document.querySelector<HTMLElement>('[data-dine-track]');
   if (track) {
-    const card = track.querySelector<HTMLElement>('.dine-card');
-    const step = () => (card ? card.offsetWidth + 24 : track.clientWidth * 0.8);
-    document.querySelector('[data-dine-prev]')?.addEventListener('click', () => {
-      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    const firstCard = track.querySelector<HTMLElement>('.dine-card');
+    const step = () => (firstCard ? firstCard.offsetWidth + 24 : track.clientWidth * 0.8);
+    const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+
+    const prev = () => track.scrollBy({ left: -step(), behavior: 'smooth' });
+    const next = () => track.scrollBy({ left: step(), behavior: 'smooth' });
+    const advance = () => { atEnd() ? track.scrollTo({ left: 0, behavior: 'smooth' }) : next(); };
+
+    // ── Auto-advance (looping), pause on hover/focus/interaction ──────────
+    const INTERVAL = 4500;
+    let timer = 0;
+    let paused = false;
+    const start = () => { if (prefersReducedMotion || paused || timer) return; timer = window.setInterval(advance, INTERVAL); };
+    const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+    const pause = () => { paused = true; stop(); };
+    const resume = () => { paused = false; start(); };
+    // Brief settle after a manual nudge, then resume
+    let resumeTO = 0;
+    const bump = () => { stop(); if (resumeTO) clearTimeout(resumeTO); resumeTO = window.setTimeout(() => { if (!paused) start(); }, 2500); };
+
+    document.querySelector('[data-dine-prev]')?.addEventListener('click', () => { prev(); bump(); });
+    document.querySelector('[data-dine-next]')?.addEventListener('click', () => { next(); bump(); });
+
+    track.addEventListener('mouseenter', pause);
+    track.addEventListener('mouseleave', resume);
+    track.addEventListener('focusin', pause);
+    track.addEventListener('focusout', resume);
+
+    // Pause when offscreen — resumes seamlessly
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        for (const e of entries) e.isIntersecting ? start() : stop();
+      }, { threshold: 0.2 }).observe(track);
+    }
+
+    // ── Mouse drag-to-scroll (touch uses native scroll) ──────────────────
+    let down = false, startX = 0, startScroll = 0, moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') return;
+      down = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft;
+      track.setAttribute('data-dragging', 'true');
+      pause();
     });
-    document.querySelector('[data-dine-next]')?.addEventListener('click', () => {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
+    track.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startScroll - dx;
     });
+    const endDrag = () => {
+      if (!down) return;
+      down = false;
+      track.removeAttribute('data-dragging');
+      paused = false;
+      bump();
+    };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    // Suppress the card-link click if the pointer was dragged
+    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
+
+    start();
   }
 </script>
