@@ -1,0 +1,24 @@
+---
+/**
+ * Hidden static "enquiry" form — a guaranteed detection net for Netlify Forms.
+ *
+ * Netlify scans the built HTML at deploy time to register forms. The real
+ * enquiry form on /contact is already plain static HTML, but this hidden copy
+ * (rendered on the homepage, a different page so there's no same-page
+ * duplicate) ensures Netlify always registers the "enquiry" form — even if the
+ * real form ever became a hydrated/JS-only island. It is never shown to or
+ * submitted by users; field NAMES must match the real form exactly.
+ */
+---
+<form name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true">
+  <input type="hidden" name="form-name" value="enquiry" />
+  <input name="bot-field" tabindex="-1" autocomplete="off" />
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <input type="tel" name="phone" />
+  <input type="number" name="guests" />
+  <input type="date" name="check-in" />
+  <input type="date" name="check-out" />
+  <input type="text" name="interest" />
+  <textarea name="message"></textarea>
+</form>
