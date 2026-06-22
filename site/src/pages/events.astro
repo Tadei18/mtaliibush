@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Events from '../components/sections/Events.astro';
@@ -6,6 +7,9 @@ import Kicker from '../components/Kicker.astro';
 import CTAButton from '../components/CTAButton.astro';
 import FinalCTA from '../components/sections/FinalCTA.astro';
 import heroImage from '../assets/events/event-gathering.jpg';
+// Team-building imagery — kept here in its genuine corporate-retreat context.
+import corporateGroup from '../assets/events/corporate-group.jpg';
+import eventEnergy from '../assets/events/event-energy.jpg';
 
 const retreatBeats = [
   {
@@ -54,6 +58,16 @@ const retreatBeats = [
           air, and unhurried evenings.
         </p>
       </header>
+
+      <!-- Team-building imagery, in its genuine context -->
+      <div class="grid gap-4 md:gap-6 md:grid-cols-2 mb-16 md:mb-20">
+        <figure class="reveal reveal--scale-image group relative overflow-hidden rounded-card aspect-[3/2]">
+          <Image src={corporateGroup} alt="A corporate group gathered for a team-building retreat at Mtalii" widths={[480, 720, 960, 1280]} sizes="(min-width:768px) 46vw, 100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]" />
+        </figure>
+        <figure class="reveal reveal--scale-image group relative overflow-hidden rounded-card aspect-[3/2]" style="--reveal-delay:150ms;">
+          <Image src={eventEnergy} alt="A high-energy team-building activity on the open lawn at Mtalii" widths={[480, 720, 960, 1280]} sizes="(min-width:768px) 46vw, 100vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]" />
+        </figure>
+      </div>
 
       <ul class="grid gap-y-12 md:grid-cols-3 md:gap-x-12">
         {retreatBeats.map((beat, i) => (
