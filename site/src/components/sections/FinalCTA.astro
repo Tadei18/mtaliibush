@@ -5,8 +5,10 @@ import Kicker from '../Kicker.astro';
 import heroImage from '../../assets/hero/hero-mt-kenya.jpg';
 
 const email = 'marketing@mtaliibushcamps.com';
+const email2 = 'info@mtaliibushcamps.com';
 const phone1 = '+254 718 045 869';
 const phone2 = '+254 702 531 835';
+const phone3 = '+254 711 318 269';
 ---
 <section id="enquire" class="relative isolate overflow-hidden bg-forest-deep text-cream py-28 md:py-40">
   <!-- Background photo at low opacity -->
@@ -45,9 +47,11 @@ const phone2 = '+254 702 531 835';
       <div class="reveal reveal--fade-up">
         <p class="font-body uppercase tracking-[0.32em] text-[0.66rem] text-sand mb-4">Reach Us</p>
         <a href={`mailto:${email}`} class="block font-display text-2xl text-cream hover:text-sand transition-colors break-words">{email}</a>
+        <a href={`mailto:${email2}`} class="mt-1 block font-display text-2xl text-cream hover:text-sand transition-colors break-words">{email2}</a>
         <div class="mt-4 space-y-2 font-body text-cream/80">
           <a href={`tel:${phone1.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone1}</a>
           <a href={`tel:${phone2.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone2}</a>
+          <a href={`tel:${phone3.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone3}</a>
         </div>
       </div>
       <div class="reveal reveal--fade-up" style="--reveal-delay:120ms;">

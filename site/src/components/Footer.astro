@@ -4,7 +4,9 @@ import Logo from './Logo.astro';
 const year = new Date().getFullYear();
 const phone1 = '+254 718 045 869';
 const phone2 = '+254 702 531 835';
+const phone3 = '+254 711 318 269';
 const email = 'marketing@mtaliibushcamps.com';
+const email2 = 'info@mtaliibushcamps.com';
 ---
 <footer class="relative bg-forest-deep text-cream/90">
   <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sand/40 to-transparent"></div>
@@ -36,8 +38,12 @@ const email = 'marketing@mtaliibushcamps.com';
           <li>
             <a href={`mailto:${email}`} class="hover:text-sand transition-colors break-words">{email}</a>
           </li>
+          <li>
+            <a href={`mailto:${email2}`} class="hover:text-sand transition-colors break-words">{email2}</a>
+          </li>
           <li><a href={`tel:${phone1.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone1}</a></li>
           <li><a href={`tel:${phone2.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone2}</a></li>
+          <li><a href={`tel:${phone3.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone3}</a></li>
         </ul>
       </div>
 
