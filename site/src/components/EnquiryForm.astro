@@ -1,10 +1,12 @@
 ---
 /**
- * Enquiry form — pre-wired for Netlify Forms.
+ * Enquiry form — wired for Netlify Forms (form name: "enquiry").
  *
- * To activate on Netlify: no change needed — Netlify auto-detects forms marked
- * with the `data-netlify` attribute. To use Formspree instead, set
- * `action` to your endpoint and remove the `data-netlify` + hidden form-name.
+ * This renders as plain static HTML in the Astro build (no hydrated island),
+ * so Netlify's build bot detects the form and registers it. On submit it posts
+ * natively to Netlify, which captures the submission and redirects to the
+ * action (/thank-you). A hidden static fallback form named "enquiry" also lives
+ * in the homepage build as a guaranteed detection net. No secret keys needed.
  */
 import CTAButton from './CTAButton.astro';
 
@@ -18,19 +20,18 @@ const interests = [
 ];
 ---
 <form
-  name="mtalii-enquiry"
+  name="enquiry"
   method="POST"
   data-netlify="true"
-  data-netlify-honeypot="bot-field"
+  netlify-honeypot="bot-field"
   action="/thank-you"
   class="grid gap-7"
 >
-  <!-- TODO: form endpoint — Netlify Forms auto-detects this. Swap to Formspree by
-       changing the `action` to your endpoint URL and removing the data-netlify*
-       attrs + the two hidden inputs below. -->
-  <input type="hidden" name="form-name" value="mtalii-enquiry" />
-  <p class="hidden">
-    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+  <!-- Netlify Forms — auto-detected at build via the static markup below.
+       form-name must be the first field and match the form's name. -->
+  <input type="hidden" name="form-name" value="enquiry" />
+  <p class="hidden" aria-hidden="true">
+    <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
   </p>
 
   <div class="grid gap-7 md:grid-cols-2">
@@ -169,7 +170,7 @@ const interests = [
   // Pre-fill from the homepage enquiry bar (/contact?checkin=…&checkout=…&guests=…).
   const params = new URLSearchParams(window.location.search);
   if ([...params.keys()].length) {
-    const form = document.querySelector<HTMLFormElement>('form[name="mtalii-enquiry"]');
+    const form = document.querySelector<HTMLFormElement>('form[name="enquiry"]');
     const setField = (selector: string, value: string | null) => {
       if (!value) return;
       const el = form?.querySelector<HTMLInputElement | HTMLSelectElement>(selector);

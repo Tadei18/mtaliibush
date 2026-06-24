@@ -7,6 +7,7 @@ const nav = [
   { href: '/dine', label: 'Dine' },
   { href: '/experiences', label: 'Experiences' },
   { href: '/events', label: 'Events' },
+  { href: '/rates', label: 'Rates' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -34,7 +35,7 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
       </span>
     </div>
 
-    <nav class="hidden lg:flex items-center gap-9" aria-label="Primary">
+    <nav class="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary">
       {nav.map((item) => {
         const active = isActive(item.href);
         return (

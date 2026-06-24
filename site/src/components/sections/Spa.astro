@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Kicker from '../Kicker.astro';
-import spaDetail from '../../assets/spa/spa-detail.jpg';
-import wellness from '../../assets/spa/wellness-moment.jpg';
+// Same optimised file as the homepage spa band, so the two stay in sync.
+import spaMtKenya from '../../assets/spa/spa-mtkenya.jpg';
 
 const columns = [
   {
@@ -62,12 +62,18 @@ const columns = [
           eco-gym studio, guided fitness sessions and holistic therapies.
         </p>
       </div>
-      <div class="md:col-span-7 grid grid-cols-2 gap-4 md:gap-6">
-        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[3/4]">
-          <Image src={spaDetail} alt="A quiet wellness moment at Casadra Spa" widths={[480, 720, 960]} sizes="(min-width:768px) 32vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
-        </figure>
-        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[3/4] mt-12" style="--reveal-delay:150ms;">
-          <Image src={wellness} alt="Eco-gym studio and outdoor fitness at Casadra" widths={[480, 720, 960]} sizes="(min-width:768px) 32vw, 50vw" quality={80} format="webp" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+      <div class="md:col-span-7">
+        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[4/3] shadow-soft">
+          <Image
+            src={spaMtKenya}
+            alt="Casadra Spa & Wellness Centre at Mtalii Bush Camps, Mount Kenya in the background"
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width:768px) 58vw, 100vw"
+            quality={82}
+            format="webp"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
         </figure>
       </div>
     </header>

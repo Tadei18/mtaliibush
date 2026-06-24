@@ -10,7 +10,7 @@ import safariTable from '../../assets/dining/safari-table.jpg';
 
 const restaurants = [
   { image: tentedDining, alt: 'Mwamba Restaurant — tented dining surrounded by gardens', number: '01', name: 'Mwamba Restaurant', hook: 'Continental buffet with Mt. Kenya views.' },
-  { image: mtKenyaTerrace, alt: 'Italian Restaurant & Steakhouse — country-side charm and culinary fire', number: '02', name: 'Italian Restaurant & Steakhouse', hook: 'Country-side charm, culinary fire.' },
+  { image: mtKenyaTerrace, alt: 'Little Italy Meets Little Thailand — country-side charm and culinary fire', number: '02', name: 'Little Italy Meets Little Thailand', hook: 'Country-side charm, culinary fire.' },
   { image: bushDinner, alt: 'Mwituni Bush Restaurant — open-air dining under the stars', number: '03', name: 'Mwituni — The Bush Restaurant', hook: 'Where wilderness meets fine dining.' },
   { image: outdoorDining, alt: 'Globetrotters Street Kitchen — global street food under canvas', number: '04', name: 'Globetrotters Street Kitchen', hook: 'The streets of the world, on one plate.' },
   { image: safariTable, alt: 'Cowboy Barbecue & Smoke House — poolside grill and smoke pit', number: '05', name: 'Cowboy Barbecue & Smoke House', hook: 'Where fire meets flavour, poolside.' },
@@ -18,27 +18,18 @@ const restaurants = [
 ---
 <section id="dine" class="relative bg-mist py-24 md:py-32 scroll-mt-24">
   <div class="mx-auto max-w-wide px-6 md:px-10">
-    <header class="mb-12 md:mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-      <div class="max-w-2xl">
-        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
-        <h2 class="reveal reveal--fade-up mt-6 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
-          Five tables, five conversations with the wild.
-        </h2>
-      </div>
-      <!-- Carousel controls (desktop) -->
-      <div class="reveal reveal--fade hidden md:flex items-center gap-3" style="--reveal-delay:150ms;">
-        <button type="button" class="dine-nav" data-dine-prev aria-label="Previous restaurants">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3L5 9l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button type="button" class="dine-nav" data-dine-next aria-label="More restaurants">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 3l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
+    <header class="mb-12 md:mb-16 min-w-0">
+      <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
+      <h2 class="dine-title reveal reveal--fade-up mt-6 font-display text-forest" style="--reveal-delay:100ms;">
+        Five tables, five conversations with the wild.
+      </h2>
     </header>
   </div>
 
-  <!-- Horizontal snap track — bleeds to the right edge, aligned left to the container -->
-  <div class="dine-track-wrap">
+  <!-- Carousel: horizontal snap track + subtle overlay arrows -->
+  <div class="dine-carousel" data-dine-carousel>
+    <!-- Track bleeds to the right edge, aligned left to the container -->
+    <div class="dine-track-wrap">
     <ul class="dine-track" data-dine-track role="list">
       {restaurants.map((r) => (
         <li class="dine-card group">
@@ -69,6 +60,17 @@ const restaurants = [
         </li>
       ))}
     </ul>
+    </div>
+
+    <!-- Manual nav — subtle frosted arrows overlaying the card edges -->
+    <div class="dine-arrows">
+      <button type="button" class="dine-arrow dine-arrow--prev" data-dine-prev aria-label="Previous" disabled>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3L5 9l6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="dine-arrow dine-arrow--next" data-dine-next aria-label="Next">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 3l6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="mx-auto max-w-wide px-6 md:px-10">
@@ -79,6 +81,16 @@ const restaurants = [
 </section>
 
 <style>
+  /* One line on large screens (where it fits); wraps gracefully below */
+  .dine-title {
+    font-size: clamp(1.85rem, 3.2vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 1024px) {
+    .dine-title { white-space: nowrap; }
+  }
+
   .dine-track-wrap { width: 100%; }
   .dine-track {
     display: flex;
@@ -89,7 +101,9 @@ const restaurants = [
     -webkit-overflow-scrolling: touch;
     padding: 0.5rem 1.5rem;
     scrollbar-width: none;
+    cursor: grab;
   }
+  .dine-track[data-dragging='true'] { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
   .dine-track::-webkit-scrollbar { display: none; }
   @media (min-width: 768px) {
     .dine-track { padding-left: max(2.5rem, calc((100vw - 88rem) / 2 + 2.5rem)); padding-right: 2.5rem; gap: 1.5rem; }
@@ -102,33 +116,121 @@ const restaurants = [
   }
   @media (min-width: 768px) { .dine-card { width: 22rem; } }
 
-  .dine-nav {
+  /* ── Overlay arrows — quiet frosted glass over the card edges ────────── */
+  .dine-carousel { position: relative; }
+  .dine-arrows {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(88rem, 100%);
+    padding-inline: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none; /* let taps fall through to the cards */
+  }
+  @media (min-width: 768px) { .dine-arrows { padding-inline: 2.25rem; } }
+
+  .dine-arrow {
+    pointer-events: auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 46px;
+    width: 38px;
+    height: 38px;
     border-radius: 999px;
-    border: 1px solid rgba(96, 60, 12, 0.25);
-    background: transparent;
-    color: #186030;
+    color: #FBF5EC;
+    background: rgba(251, 245, 236, 0.16);
+    -webkit-backdrop-filter: blur(8px) saturate(1.1);
+    backdrop-filter: blur(8px) saturate(1.1);
+    border: 1px solid rgba(228, 192, 132, 0.55);
+    box-shadow: 0 6px 16px -10px rgba(15, 68, 35, 0.6);
     cursor: pointer;
-    transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    opacity: 0.4;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.4s ease, color 0.4s ease;
   }
-  .dine-nav:hover { background: #186030; color: #FBF5EC; border-color: #186030; }
-  .dine-nav:focus-visible { outline: 2px solid #E4C084; outline-offset: 3px; }
+  @media (min-width: 768px) { .dine-arrow { width: 46px; height: 46px; } }
+
+  /* Quietly raise visibility when the carousel is hovered/focused */
+  .dine-carousel:hover .dine-arrow:not(:disabled),
+  .dine-carousel:focus-within .dine-arrow:not(:disabled) { opacity: 0.8; }
+
+  /* Direct hover/focus on an arrow → solid cream button */
+  .dine-arrow:hover:not(:disabled) {
+    opacity: 1;
+    transform: scale(1.07);
+    background: rgba(251, 245, 236, 0.92);
+    color: #186030;
+  }
+  .dine-arrow:focus-visible {
+    opacity: 1;
+    outline: 2px solid #E4C084;
+    outline-offset: 3px;
+  }
+  .dine-arrow:disabled { opacity: 0.12; cursor: default; }
+
+  /* No hover (touch) → keep them faintly visible */
+  @media (hover: none) {
+    .dine-arrow:not(:disabled) { opacity: 0.55; }
+  }
 </style>
 
 <script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const track = document.querySelector<HTMLElement>('[data-dine-track]');
   if (track) {
-    const card = track.querySelector<HTMLElement>('.dine-card');
-    const step = () => (card ? card.offsetWidth + 24 : track.clientWidth * 0.8);
-    document.querySelector('[data-dine-prev]')?.addEventListener('click', () => {
-      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    const prevBtn = document.querySelector<HTMLButtonElement>('[data-dine-prev]');
+    const nextBtn = document.querySelector<HTMLButtonElement>('[data-dine-next]');
+    const cards = Array.from(track.querySelectorAll<HTMLElement>('.dine-card'));
+    const behavior: ScrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
+
+    // One-card step, measured from the gap between the first two cards
+    const step = () => (cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth * 0.8);
+    const atStart = () => track.scrollLeft <= 2;
+    const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+
+    // Disable arrows at the ends, dim them
+    const updateArrows = () => {
+      if (prevBtn) prevBtn.disabled = atStart();
+      if (nextBtn) nextBtn.disabled = atEnd();
+    };
+
+    prevBtn?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior }));
+    nextBtn?.addEventListener('click', () => track.scrollBy({ left: step(), behavior }));
+
+    // Keep arrow state in sync with scroll position (rAF-throttled) + resize
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; updateArrows(); });
+    }, { passive: true });
+    window.addEventListener('resize', updateArrows, { passive: true });
+    updateArrows();
+
+    // ── Mouse drag-to-scroll (touch uses native scroll) ──────────────────
+    let down = false, startX = 0, startScroll = 0, moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') return;
+      down = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft;
+      track.setAttribute('data-dragging', 'true');
     });
-    document.querySelector('[data-dine-next]')?.addEventListener('click', () => {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
+    track.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startScroll - dx;
     });
+    const endDrag = () => {
+      if (!down) return;
+      down = false;
+      track.removeAttribute('data-dragging');
+      updateArrows();
+    };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    // Suppress the card-link click if the pointer was dragged
+    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
   }
 </script>

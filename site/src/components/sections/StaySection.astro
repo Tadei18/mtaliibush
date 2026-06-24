@@ -3,8 +3,8 @@ import Kicker from '../Kicker.astro';
 import CTAButton from '../CTAButton.astro';
 import AccommodationCard from '../AccommodationCard.astro';
 import nelionGoldenHour from '../../assets/accommodation/nelion-golden-hour.jpg';
-import lenanaTerrace from '../../assets/accommodation/lenana-terrace.jpg';
-import batianDeck from '../../assets/accommodation/tent-with-hottub.jpg';
+import lenanaSuite from '../../assets/accommodation/lenana-suite.jpg';
+import batianJacuzzi from '../../assets/accommodation/batian-jacuzzi.jpg';
 
 // Each tented village shares the same considered tent appointments — themed
 // after Mt. Kenya's three highest peaks. Feature chips reflect the true,
@@ -27,22 +27,22 @@ const villages = [
       'Spacious safari-style suites that open to the bush and the mountain beyond — authentic canvas charm wrapped around plush, hand-finished comfort.',
   },
   {
-    image: lenanaTerrace,
-    alt: 'Garden terrace and lawn seating at Mtalii looking out toward Mount Kenya',
+    image: lenanaSuite,
+    alt: 'A luxury tented suite interior at Mtalii with a king bed dressed in rose petals and safari-style armchairs',
     number: '02',
     name: 'Lenana',
     subtitle: 'The Companion',
     body:
-      'A private deck and a star-lit soaking tub, cocooned by canvas and bush garden. Paths glow under solar lanterns as evening falls.',
+      'Plush, canvas-wrapped interiors — a hand-dressed king bed, safari armchairs and warm lantern light, cocooned by bush garden as evening falls.',
   },
   {
-    image: batianDeck,
-    alt: 'A Mtalii tented suite with a private deck and outdoor soaking tub, framed by bush garden',
+    image: batianJacuzzi,
+    alt: 'A private outdoor jacuzzi strewn with rose petals on the deck of a Mtalii tented suite',
     number: '03',
     name: 'Batian',
     subtitle: 'The Elder',
     body:
-      'A private deck wrapped in canvas and bush garden — the heart of the village, gathered around a shared bonfire pit where stories, roasted treats and quiet stargazing begin.',
+      'A private deck and a petal-strewn outdoor jacuzzi under the open sky — the heart of the village, gathered around a shared bonfire pit where stories and stargazing begin.',
   },
 ];
 ---
@@ -78,8 +78,9 @@ const villages = [
       ))}
     </div>
 
-    <div class="reveal reveal--fade-up mt-12 flex justify-center" style="--reveal-delay:120ms;">
+    <div class="reveal reveal--fade-up mt-12 flex flex-col sm:flex-row items-center justify-center gap-4" style="--reveal-delay:120ms;">
       <CTAButton href="/stay" variant="outline" tone="cream">View all accommodation</CTAButton>
+      <CTAButton href="/rates" variant="ghost" tone="cream">View rates</CTAButton>
     </div>
   </div>
 </section>

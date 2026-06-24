@@ -1,0 +1,388 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Kicker from '../components/Kicker.astro';
+import CTAButton from '../components/CTAButton.astro';
+import heroImage from '../assets/dining/tented-dining.jpg';
+
+const waNumber = '254718045869';
+const waHref = `https://wa.me/${waNumber}?text=${encodeURIComponent("Hello Mtalii Bush Camps, I'd like to enquire about rates and availability.")}`;
+
+const categories = ['Standard', 'Deluxe', 'Superior'] as const;
+const occupancies = [
+  { key: 'single', label: 'Single' },
+  { key: 'double', label: 'Double' },
+  { key: 'triple', label: 'Triple' },
+] as const;
+const meals = ['B&B', 'HB', 'FB'];
+
+const seasonRanges = {
+  low: '4 Jan – 30 Jun & 1 Oct – 30 Nov',
+  high: '1 Jul – 30 Sep & 1 Dec – 3 Jan',
+};
+
+// Authoritative rate data. [B&B, HB, FB] per occupancy.
+const rates = {
+  resident: {
+    low: {
+      Standard: { single: [12000, 13000, 15000], double: [16000, 18000, 20000], triple: [21000, 24000, 27000] },
+      Deluxe:   { single: [15000, 18000, 20000], double: [20000, 22000, 25000], triple: [25000, 28000, 30000] },
+      Superior: { single: [18000, 20000, 22000], double: [26000, 28000, 30000], triple: [30000, 33000, 36000] },
+    },
+    high: {
+      Standard: { single: [15000, 16500, 18800], double: [20000, 22500, 25000], triple: [26300, 30000, 33800] },
+      Deluxe:   { single: [18800, 22500, 25000], double: [25000, 27500, 31300], triple: [31300, 35000, 37500] },
+      Superior: { single: [22500, 25000, 27500], double: [32500, 35000, 37500], triple: [37500, 41300, 45000] },
+    },
+  },
+  nonResident: {
+    low: {
+      Standard: { single: [120, 130, 150], double: [160, 180, 200], triple: [210, 240, 270] },
+      Deluxe:   { single: [150, 180, 200], double: [200, 220, 250], triple: [250, 280, 300] },
+      Superior: { single: [180, 200, 220], double: [260, 280, 300], triple: [300, 330, 360] },
+    },
+    high: {
+      Standard: { single: [150, 170, 190], double: [200, 230, 250], triple: [260, 300, 340] },
+      Deluxe:   { single: [190, 230, 250], double: [250, 280, 300], triple: [300, 350, 380] },
+      Superior: { single: [230, 250, 280], double: [330, 350, 380], triple: [380, 410, 450] },
+    },
+  },
+} as const;
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+// Default server-rendered view: resident / low
+const def = rates.resident.low;
+
+const infoCards = [
+  {
+    title: 'Special Occasions',
+    note: 'Surcharge added to the room rate.',
+    items: [
+      'Honeymoon — KSH 8,000 / USD 80 per couple',
+      'Baby Moon — KSH 8,000 / USD 80 per room',
+      'Birthday — KSH 2,500 / USD 25 per person',
+      'Valentine — KSH 2,500 / USD 25 per person',
+      'Easter (3–6 Apr) — KSH 2,500 / USD 25 per person',
+      'Festive (24–26 Dec, 31 Dec–1 Jan) — KSH 3,000 / USD 30 per person',
+    ],
+  },
+  { title: 'Meals', items: ['Extra lunch — KSH 3,000 / USD 35', 'Lunch box — KSH 2,000 / USD 25'] },
+  {
+    title: 'Child Policy',
+    items: ['0–3 yrs — complimentary', '4–12 yrs — 50% of adult rate', '12 & above — adult rate', 'Own room — 75% of adult rate'],
+  },
+  { title: 'Tour Leader', items: ['KSH 8,000 / USD 80'] },
+  {
+    title: 'Check-in / Check-out',
+    items: ['Check-out — 10:00 am (EAT)', 'Check-in — confirm with reservations depending on meal plan'],
+  },
+  {
+    title: 'Cancellation',
+    items: [
+      'High season — 0–30 days 100% · 31–45 days 75% · 46–60 days 50%',
+      'Low season — 0–15 days 100% · 16–30 days 75% · 31–45 days 75%',
+    ],
+  },
+  {
+    title: 'Payment',
+    items: ['30% deposit on confirmation', 'Balance due 45 days prior (high season) / 15 days prior (low season) to arrival'],
+  },
+];
+---
+<BaseLayout
+  title="Rates & Seasons 2026 — Mtalii Bush Camps"
+  description="Resident (KSH) and non-resident (USD) rates for Mtalii Bush Camps tented suites — Standard, Deluxe and Superior, on Bed & Breakfast, Half Board and Full Board, by low and high season."
+>
+  <PageHero
+    image={heroImage}
+    alt="A tented dining structure in the gardens at Mtalii Bush Camps"
+    kicker="Rates & Seasons 2026"
+    title="Transparent rates, by season and stay."
+    tagline="Choose resident or non-resident pricing and your season — every rate is per room, inclusive of service charge and applicable taxes."
+    crumb="Rates"
+  />
+
+  <section class="relative bg-cream py-20 md:py-28">
+    <div class="mx-auto max-w-wide px-6 md:px-10" data-rates-root>
+      <!-- Controls -->
+      <div class="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+        <div class="flex flex-wrap gap-5">
+          <div>
+            <p class="mb-2 font-body text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-coffee-light">Guest type</p>
+            <div class="seg" role="group" aria-label="Guest type">
+              <button type="button" class="seg__btn is-active" data-aud="resident" aria-pressed="true">Resident <span class="seg__cur">KSH</span></button>
+              <button type="button" class="seg__btn" data-aud="nonResident" aria-pressed="false">Non-Resident <span class="seg__cur">USD</span></button>
+            </div>
+          </div>
+          <div>
+            <p class="mb-2 font-body text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-coffee-light">Season</p>
+            <div class="seg" role="group" aria-label="Season">
+              <button type="button" class="seg__btn is-active" data-season="low" aria-pressed="true">Low Season</button>
+              <button type="button" class="seg__btn" data-season="high" aria-pressed="false">High Season</button>
+            </div>
+          </div>
+        </div>
+        <p class="font-body text-sm text-ink/70 lg:text-right">
+          <span class="font-semibold text-forest" data-season-name>Low season</span> dates:<br class="hidden lg:block" />
+          <span data-season-range>{seasonRanges.low}</span>
+        </p>
+      </div>
+
+      <!-- Legend + currency note -->
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-body text-[0.74rem] text-ink/70">
+        <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-sand"></span><strong class="font-semibold text-coffee">B&amp;B</strong> Bed &amp; Breakfast</span>
+        <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-sand"></span><strong class="font-semibold text-coffee">HB</strong> Half Board</span>
+        <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-sand"></span><strong class="font-semibold text-coffee">FB</strong> Full Board</span>
+        <span class="ml-auto font-semibold uppercase tracking-[0.18em] text-forest">All rates in <span data-currency>KSH</span> · per room / night</span>
+      </div>
+
+      <!-- ── Desktop table ─────────────────────────────────────────────── -->
+      <div class="mt-8 hidden overflow-hidden rounded-feature border border-coffee/15 shadow-lift md:block">
+        <div class="overflow-x-auto">
+          <table class="rate-table w-full border-collapse text-left">
+            <thead>
+              <tr class="rate-table__group">
+                <th scope="col" rowspan="2" class="rate-table__cat-head">Room category</th>
+                {occupancies.map((o) => (
+                  <th scope="colgroup" colspan="3" class="rate-table__occ">{o.label}</th>
+                ))}
+              </tr>
+              <tr class="rate-table__meals">
+                {occupancies.map(() => meals.map((m) => <th scope="col" class="rate-table__meal">{m}</th>))}
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((cat) => (
+                <tr class="rate-table__row">
+                  <th scope="row" class="rate-table__cat">{cat}</th>
+                  {occupancies.map((o) =>
+                    meals.map((_, mi) => (
+                      <td class="rate-table__val">
+                        <span data-rate data-cat={cat} data-occ={o.key} data-meal={mi}>{fmt(def[cat][o.key][mi])}</span>
+                      </td>
+                    )),
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Mobile stacked cards ──────────────────────────────────────── -->
+      <div class="mt-8 grid gap-5 md:hidden">
+        {categories.map((cat) => (
+          <div class="overflow-hidden rounded-card border border-coffee/15 bg-white/60 shadow-lift">
+            <div class="bg-forest-deep px-5 py-4">
+              <h3 class="font-display text-2xl text-cream">{cat}</h3>
+            </div>
+            <div class="divide-y divide-coffee/10">
+              {occupancies.map((o) => (
+                <div class="px-5 py-4">
+                  <p class="mb-2 font-body text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-coffee-light">{o.label}</p>
+                  <dl class="grid grid-cols-3 gap-2 text-center">
+                    {meals.map((m, mi) => (
+                      <div class="rounded-lg bg-mist px-2 py-2.5">
+                        <dt class="font-body text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-coffee">{m}</dt>
+                        <dd class="mt-1 font-display text-lg text-forest"><span data-rate data-cat={cat} data-occ={o.key} data-meal={mi}>{fmt(def[cat][o.key][mi])}</span></dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Footnote -->
+      <p class="mt-7 max-w-3xl font-body text-sm leading-relaxed text-ink/60">
+        Rates are per room and include service charge and applicable taxes. Based on Bed &amp; Breakfast,
+        Half Board and Full Board. Special introductory rates, subject to revision.
+      </p>
+
+      <!-- Info cards -->
+      <div class="mt-16 md:mt-20">
+        <div class="reveal reveal--fade-up mb-10"><Kicker tone="coffee">Good to Know</Kicker></div>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {infoCards.map((card, i) => (
+            <div class="reveal reveal--fade-up flex flex-col rounded-card border border-coffee/12 bg-cream p-6 md:p-7 shadow-lift" style={`--reveal-delay:${(i % 3) * 80}ms;`}>
+              <h3 class="font-display text-xl text-forest">{card.title}</h3>
+              {card.note && <p class="mt-1 font-body text-[0.72rem] uppercase tracking-[0.16em] text-coffee-light">{card.note}</p>}
+              <ul class="mt-4 space-y-2.5">
+                {card.items.map((item) => (
+                  <li class="flex items-start gap-2.5 font-body text-sm leading-relaxed text-ink/75">
+                    <span class="mt-2 block h-px w-3 flex-none bg-sand"></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="relative isolate overflow-hidden bg-forest-deep text-cream py-20 md:py-28">
+    <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(228,192,132,0.12),transparent_70%)]"></span>
+    <div class="relative mx-auto max-w-wide px-6 md:px-10 text-center">
+      <div class="reveal reveal--fade-up flex justify-center"><Kicker tone="sand">Ready When You Are</Kicker></div>
+      <h2 class="reveal reveal--fade-up mt-6 font-display text-display-md text-cream text-balance mx-auto max-w-3xl" style="--reveal-delay:100ms;">
+        Found your season? Let&rsquo;s hold your tent.
+      </h2>
+      <div class="reveal reveal--fade-up mt-9 flex flex-col sm:flex-row items-center justify-center gap-4" style="--reveal-delay:200ms;">
+        <CTAButton href="/contact" variant="primary" tone="dark">Enquire to Book</CTAButton>
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-3 font-body font-semibold uppercase text-[0.72rem] tracking-[0.22em] px-7 py-4 border border-cream/40 text-cream transition-all duration-500 ease-editorial hover:border-cream hover:bg-cream hover:text-forest">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-12.36 7.36L3 21l2.14-5.64A8.38 8.38 0 1 1 21 11.5z"/></svg>
+          WhatsApp Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="rates-data" set:html={JSON.stringify(rates)}></script>
+</BaseLayout>
+
+<style is:global>
+  /* Segmented toggle */
+  .seg {
+    display: inline-flex;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: #F4EEE3;
+    border: 1px solid rgba(96, 60, 12, 0.18);
+  }
+  .seg__btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #6B4410;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .seg__btn .seg__cur { font-size: 0.62rem; opacity: 0.7; }
+  .seg__btn.is-active {
+    background: #186030;
+    color: #FBF5EC;
+    box-shadow: 0 10px 24px -14px rgba(15, 68, 35, 0.7);
+  }
+  .seg__btn:focus-visible { outline: 2px solid #186030; outline-offset: 2px; }
+
+  /* Rate table */
+  .rate-table { font-family: 'Mulish', sans-serif; }
+  .rate-table th, .rate-table td { padding: 0.85rem 1rem; }
+  .rate-table__group th { background: #0F4423; color: #FBF5EC; }
+  .rate-table__cat-head {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1rem;
+    vertical-align: bottom;
+    border-right: 1px solid rgba(251, 245, 236, 0.15);
+  }
+  .rate-table__occ {
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    border-left: 1px solid rgba(251, 245, 236, 0.15);
+  }
+  .rate-table__meals th { background: #186030; }
+  .rate-table__meal {
+    text-align: center;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #E4C084;
+  }
+  .rate-table__meal:nth-child(3n + 1) { border-left: 1px solid rgba(251, 245, 236, 0.18); }
+  .rate-table__row:nth-child(odd) { background: #FBF5EC; }
+  .rate-table__row:nth-child(even) { background: #F4EEE3; }
+  .rate-table__cat {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: #186030;
+    border-right: 1px solid rgba(96, 60, 12, 0.12);
+    white-space: nowrap;
+  }
+  .rate-table__val {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #241C12;
+    font-variant-numeric: tabular-nums;
+  }
+  .rate-table__val:nth-child(3n + 2) { border-left: 1px solid rgba(96, 60, 12, 0.12); }
+  .rate-table__row:hover { background: #EED5A4; }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-rates-root]');
+  const dataEl = document.getElementById('rates-data');
+  if (root && dataEl) {
+    type Rates = Record<string, Record<string, Record<string, Record<string, number[]>>>>;
+    const data: Rates = JSON.parse(dataEl.textContent || '{}');
+    const seasonRanges: Record<string, string> = {
+      low: '4 Jan – 30 Jun & 1 Oct – 30 Nov',
+      high: '1 Jul – 30 Sep & 1 Dec – 3 Jan',
+    };
+    const fmt = (n: number) => n.toLocaleString('en-US');
+
+    let audience = 'resident';
+    let season = 'low';
+
+    const render = () => {
+      root.querySelectorAll<HTMLElement>('[data-rate]').forEach((el) => {
+        const { cat, occ, meal } = el.dataset;
+        const v = data[audience]?.[season]?.[cat!]?.[occ!]?.[Number(meal)];
+        if (typeof v === 'number') el.textContent = fmt(v);
+      });
+      root.querySelectorAll<HTMLElement>('[data-currency]').forEach((el) => {
+        el.textContent = audience === 'resident' ? 'KSH' : 'USD';
+      });
+      root.querySelectorAll<HTMLElement>('[data-season-range]').forEach((el) => {
+        el.textContent = seasonRanges[season];
+      });
+      root.querySelectorAll<HTMLElement>('[data-season-name]').forEach((el) => {
+        el.textContent = season === 'low' ? 'Low season' : 'High season';
+      });
+    };
+
+    const setActive = (group: HTMLElement, btn: HTMLElement) => {
+      group.querySelectorAll<HTMLElement>('.seg__btn').forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+    };
+
+    root.querySelectorAll<HTMLElement>('[data-aud]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        audience = btn.dataset.aud!;
+        setActive(btn.parentElement as HTMLElement, btn);
+        render();
+      });
+    });
+    root.querySelectorAll<HTMLElement>('[data-season]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        season = btn.dataset.season!;
+        setActive(btn.parentElement as HTMLElement, btn);
+        render();
+      });
+    });
+  }
+</script>
