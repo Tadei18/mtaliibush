@@ -1,6 +1,6 @@
 # Mtalii Bush Camps — Marketing Website
 
-A premium, editorial marketing site for **Mtalii Bush Camps**, a luxury tented safari camp at the foothills of Mount Kenya in Nanyuki. Built with Astro + Tailwind CSS as a fully static site — host anywhere (Netlify, Cloudflare Pages, Vercel, GitHub Pages, S3+CloudFront, etc.).
+A premium, editorial marketing site for **Mtalii Bush Camps**, a luxury tented safari camp at the foothills of Mount Kenya in Nanyuki. Built with Astro + Tailwind CSS as a fully static site. It is deployed to **cPanel shared hosting** (`public_html`), with the enquiry form handled by a bundled PHP + SMTP script (`send-enquiry.php`).
 
 ## Tech
 
@@ -25,14 +25,47 @@ npm run build        # outputs to ./dist
 npm run preview      # preview the build locally
 ```
 
-## Deploy
+## Deploy to cPanel
 
-The `dist/` directory is a fully static site. Drag-and-drop deploy to:
+The site builds to fully static output (plain `.html` files — no SSR adapter). The
+enquiry form posts to a PHP handler (`send-enquiry.php`) that emails submissions to
+`info@mtaliibushcamps.com` over authenticated SMTP using PHPMailer (vendored into
+`public/vendor/phpmailer/`, so no Composer is needed on the server).
 
-- **Netlify** — connect repo or drop `dist/`. Forms work out of the box (see TODO below).
-- **Cloudflare Pages** — Framework preset: Astro. Build cmd: `npm run build`. Output: `dist`.
-- **Vercel** — Framework preset: Astro. Same build cmd & output.
-- **GitHub Pages** — push `dist/` to a `gh-pages` branch (a workflow can automate this).
+Deploy steps:
+
+1. **Build:**
+   ```bash
+   cd site
+   npm run build
+   ```
+2. **Upload** the *contents* of `site/dist/` into `public_html/` on the server
+   (so `index.html`, `send-enquiry.php`, the `vendor/` folder and
+   `mail-config.sample.php` all land at the web root).
+3. **Create the mail config on the server** (never committed — it holds the password):
+   ```bash
+   cd public_html
+   cp mail-config.sample.php mail-config.php
+   nano mail-config.php          # set SMTP_PASS to the mailbox password
+   chmod 600 mail-config.php      # owner-only, so it isn't world-readable
+   ```
+4. **Make sure the mailbox exists:** in cPanel → **Email Accounts**, confirm
+   `info@mtaliibushcamps.com` exists and you know its password (that's `SMTP_PASS`).
+5. **Test the form from the live domain** (SMTP won't work from `localhost`).
+
+**SMTP ports:** the config defaults to host `mail.mtaliibushcamps.com`, port **465**
+with `'ssl'`. If the host blocks outbound SMTP on 465, edit `mail-config.php` on the
+server and switch to port **587** with `'tls'`.
+
+> The real `mail-config.php` is gitignored — it must be created on the server by hand
+> and is **never** committed. Only `mail-config.sample.php` (placeholders) is in git.
+
+### Other static hosts
+
+Because the output is plain static HTML, it can also be served from Cloudflare Pages,
+Vercel, GitHub Pages, S3+CloudFront, etc. — but the enquiry form relies on PHP, so it
+will only send email on a PHP-capable host like cPanel. On a non-PHP host you'd need to
+swap the form endpoint for a hosted form service.
 
 ## Brand tokens
 
@@ -53,7 +86,8 @@ Sampled directly from the Mtalii logo. Defined in `tailwind.config.mjs`:
 
 ```
 site/
-├── public/                 # static, copied as-is (favicon, robots.txt)
+├── public/                 # copied as-is to the web root (favicon, robots.txt,
+│   │                       #   send-enquiry.php, vendor/phpmailer/, mail-config.sample.php)
 ├── src/
 │   ├── assets/             # source images, organised by section
 │   │   ├── hero/
@@ -128,7 +162,7 @@ The hero ambient loop is ~1 MB and lazy-loaded only when:
 
 ## TODO before launch
 
-- [ ] **Enquiry form endpoint.** `Contact` page will wire `<form method="POST" action="/__forms.html">` for Netlify Forms, or swap to Formspree. Search for `TODO: form endpoint`.
+- [x] **Enquiry form endpoint.** Wired to `send-enquiry.php` (PHP + SMTP via PHPMailer) — see the *Deploy to cPanel* section. Requires `mail-config.php` on the server.
 - [ ] **Social links.** Placeholders in `src/components/Footer.astro` — search for `TODO: Replace #`.
 - [ ] **Google Map embed.** Will go on the `Contact` page — embed an iframe centred on "Nanyuki Airstrip".
 - [ ] **Open Graph image.** Drop a `public/og-image.jpg` (1200×630) — a crop of the hero is ideal.

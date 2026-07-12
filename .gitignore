@@ -9,6 +9,9 @@ dist/
 .env
 .env.*
 *.log
+# Real SMTP credentials for the enquiry mail handler — upload manually to the
+# server, never commit. (mail-config.sample.php IS committed as the template.)
+site/public/mail-config.php
 # OS junk
 .DS_Store
 Thumbs.db

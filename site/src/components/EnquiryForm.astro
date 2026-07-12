@@ -1,14 +1,21 @@
 ---
 /**
- * Enquiry form — wired for Netlify Forms (form name: "enquiry").
+ * Enquiry form — posts to /send-enquiry.php (PHP + SMTP handler on cPanel).
  *
- * This renders as plain static HTML in the Astro build (no hydrated island),
- * so Netlify's build bot detects the form and registers it. On submit it posts
- * natively to Netlify, which captures the submission and redirects to the
- * action (/thank-you). A hidden static fallback form named "enquiry" also lives
- * in the homepage build as a guaranteed detection net. No secret keys needed.
+ * Progressive enhancement:
+ *   - The <form> has action="/send-enquiry.php" method="post" so it works as a
+ *     plain HTML POST even with JS disabled (the PHP handler returns JSON; a
+ *     no-JS browser would just show that JSON, but the submission still sends).
+ *   - With JS, we intercept submit, validate client-side, and post via fetch()
+ *     to show an inline success/error state without a page reload.
+ *
+ * A hidden "bot-field" honeypot traps spam bots (the PHP handler silently
+ * drops any submission where it is filled).
  */
-import CTAButton from './CTAButton.astro';
+
+// WhatsApp + email fallbacks shown if sending fails.
+const waNumber = '254718045869';
+const infoEmail = 'info@mtaliibushcamps.com';
 
 const interests = [
   'Stay',
@@ -20,19 +27,18 @@ const interests = [
 ];
 ---
 <form
-  name="enquiry"
-  method="POST"
-  data-netlify="true"
-  netlify-honeypot="bot-field"
-  action="/thank-you"
+  id="enquiry-form"
+  action="/send-enquiry.php"
+  method="post"
   class="grid gap-7"
 >
-  <!-- Netlify Forms — auto-detected at build via the static markup below.
-       form-name must be the first field and match the form's name. -->
-  <input type="hidden" name="form-name" value="enquiry" />
-  <p class="hidden" aria-hidden="true">
-    <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-  </p>
+  <!-- Honeypot: real users never see or fill this; bots often do. -->
+  <div class="enquiry-honeypot" aria-hidden="true">
+    <label>
+      Leave this field empty
+      <input type="text" name="bot-field" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
 
   <div class="grid gap-7 md:grid-cols-2">
     <label class="block">
@@ -44,7 +50,9 @@ const interests = [
         autocomplete="name"
         class="enquiry-input"
         placeholder="Jane Wanjiku"
+        aria-describedby="err-name"
       />
+      <span id="err-name" class="enquiry-error" hidden></span>
     </label>
     <label class="block">
       <span class="enquiry-label">Email</span>
@@ -55,7 +63,9 @@ const interests = [
         autocomplete="email"
         class="enquiry-input"
         placeholder="you@example.com"
+        aria-describedby="err-email"
       />
+      <span id="err-email" class="enquiry-error" hidden></span>
     </label>
   </div>
 
@@ -96,7 +106,7 @@ const interests = [
 
   <label class="block">
     <span class="enquiry-label">I&rsquo;m interested in</span>
-    <select name="interest" class="enquiry-input" required>
+    <select name="interest" class="enquiry-input">
       <option value="" disabled selected>Choose one…</option>
       {interests.map((i) => <option value={i}>{i}</option>)}
     </select>
@@ -107,16 +117,33 @@ const interests = [
     <textarea
       name="message"
       rows="5"
+      required
       class="enquiry-input enquiry-input--textarea"
       placeholder="A weekend escape, a corporate retreat, a wedding under the stars…"
+      aria-describedby="err-message"
     ></textarea>
+    <span id="err-message" class="enquiry-error" hidden></span>
   </label>
+
+  <!-- Form-level status (success / error) — announced to screen readers. -->
+  <div id="enquiry-status" class="enquiry-status" role="status" aria-live="polite" hidden></div>
 
   <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 pt-2">
     <p class="font-body text-sm text-ink/60 max-w-md">
       We&rsquo;ll reply within one business day. Your details are used only to plan your stay.
     </p>
-    <CTAButton as="button" variant="primary" tone="cream">Send Enquiry</CTAButton>
+    <button
+      id="enquiry-submit"
+      type="submit"
+      class="enquiry-submit group relative inline-flex items-center justify-center gap-3 font-body font-semibold uppercase text-[0.72rem] tracking-[0.22em] px-7 py-4 transition-all duration-500 ease-editorial will-change-transform bg-forest text-cream hover:bg-forest-deep hover:shadow-soft disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      <span class="enquiry-submit__label relative z-10">Send Enquiry</span>
+      <span class="relative z-10 inline-flex translate-x-0 transition-transform duration-500 ease-editorial group-hover:translate-x-1" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
   </div>
 </form>
 
@@ -164,24 +191,205 @@ const interests = [
     background-position: right 0.25rem center;
     padding-right: 1.5rem;
   }
+
+  /* Visually-hidden honeypot — kept out of the layout and off the a11y tree. */
+  .enquiry-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Field-level validation messages. */
+  .enquiry-error {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.8rem;
+    color: #B23A2E;
+  }
+  .enquiry-input[aria-invalid='true'] {
+    border-bottom-color: #B23A2E;
+  }
+  .enquiry-input--textarea[aria-invalid='true'] {
+    border-color: #B23A2E;
+  }
+
+  /* Form-level status panel. */
+  .enquiry-status {
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .enquiry-status--success {
+    background: rgba(24, 96, 48, 0.08);
+    border: 1px solid rgba(24, 96, 48, 0.3);
+    color: #145029;
+  }
+  .enquiry-status--error {
+    background: rgba(178, 58, 46, 0.07);
+    border: 1px solid rgba(178, 58, 46, 0.3);
+    color: #8A2C22;
+  }
+  .enquiry-status a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+  }
 </style>
 
 <script>
-  // Pre-fill from the homepage enquiry bar (/contact?checkin=…&checkout=…&guests=…).
-  const params = new URLSearchParams(window.location.search);
-  if ([...params.keys()].length) {
-    const form = document.querySelector<HTMLFormElement>('form[name="enquiry"]');
-    const setField = (selector: string, value: string | null) => {
-      if (!value) return;
-      const el = form?.querySelector<HTMLInputElement | HTMLSelectElement>(selector);
-      if (el) el.value = value;
-    };
-    setField('input[name="check-in"]', params.get('checkin'));
-    setField('input[name="check-out"]', params.get('checkout'));
-    setField('input[name="guests"]', params.get('guests'));
-    // Arriving from the booking bar implies a stay enquiry — default the interest.
-    if (params.has('checkin') || params.has('checkout') || params.has('guests')) {
-      setField('select[name="interest"]', 'Stay');
+  const WA_NUMBER = '254718045869';
+  const INFO_EMAIL = 'info@mtaliibushcamps.com';
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
+
+  if (form) {
+    // Pre-fill from the homepage enquiry bar (/contact?checkin=…&checkout=…&guests=…).
+    const params = new URLSearchParams(window.location.search);
+    if ([...params.keys()].length) {
+      const setField = (selector: string, value: string | null) => {
+        if (!value) return;
+        const el = form.querySelector<HTMLInputElement | HTMLSelectElement>(selector);
+        if (el) el.value = value;
+      };
+      setField('input[name="check-in"]', params.get('checkin'));
+      setField('input[name="check-out"]', params.get('checkout'));
+      setField('input[name="guests"]', params.get('guests'));
+      if (params.has('checkin') || params.has('checkout') || params.has('guests')) {
+        setField('select[name="interest"]', 'Stay');
+      }
     }
+
+    // Progressive enhancement: JS is present, so take over validation + submit.
+    form.setAttribute('novalidate', '');
+
+    const submitBtn = document.getElementById('enquiry-submit') as HTMLButtonElement;
+    const btnLabel = submitBtn.querySelector('.enquiry-submit__label') as HTMLElement;
+    const statusEl = document.getElementById('enquiry-status') as HTMLElement;
+    const defaultLabel = btnLabel.textContent ?? 'Send Enquiry';
+
+    type FieldRule = { name: string; test: (v: string) => boolean; message: string };
+    const rules: FieldRule[] = [
+      { name: 'name', test: (v) => v.trim() !== '', message: 'Please enter your name.' },
+      { name: 'email', test: (v) => EMAIL_RE.test(v.trim()), message: 'Please enter a valid email address.' },
+      { name: 'message', test: (v) => v.trim() !== '', message: 'Please tell us a little about your trip.' },
+    ];
+
+    const fieldEl = (name: string) =>
+      form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
+    const errEl = (name: string) => document.getElementById(`err-${name}`);
+
+    const showError = (name: string, message: string) => {
+      const input = fieldEl(name);
+      const err = errEl(name);
+      if (input) input.setAttribute('aria-invalid', 'true');
+      if (err) {
+        err.textContent = message;
+        err.hidden = false;
+      }
+    };
+    const clearError = (name: string) => {
+      const input = fieldEl(name);
+      const err = errEl(name);
+      if (input) input.removeAttribute('aria-invalid');
+      if (err) {
+        err.textContent = '';
+        err.hidden = true;
+      }
+    };
+
+    // Clear a field's error as the user corrects it.
+    rules.forEach(({ name, test }) => {
+      const input = fieldEl(name);
+      input?.addEventListener('input', () => {
+        if (test(input.value)) clearError(name);
+      });
+    });
+
+    const setStatus = (kind: 'success' | 'error', html: string) => {
+      statusEl.innerHTML = html;
+      statusEl.classList.remove('enquiry-status--success', 'enquiry-status--error');
+      statusEl.classList.add(`enquiry-status--${kind}`);
+      statusEl.hidden = false;
+    };
+    const clearStatus = () => {
+      statusEl.hidden = true;
+      statusEl.innerHTML = '';
+      statusEl.classList.remove('enquiry-status--success', 'enquiry-status--error');
+    };
+
+    const errorFallbackHtml = (lead: string) =>
+      `${lead} You can also reach us on ` +
+      `<a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener noreferrer">WhatsApp</a> ` +
+      `or at <a href="mailto:${INFO_EMAIL}">${INFO_EMAIL}</a>.`;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearStatus();
+
+      // Validate required fields; focus the first invalid one.
+      let firstInvalid: HTMLElement | null = null;
+      for (const { name, test, message } of rules) {
+        const input = fieldEl(name);
+        if (!input || !test(input.value)) {
+          showError(name, message);
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          clearError(name);
+        }
+      }
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      // In-flight state.
+      submitBtn.disabled = true;
+      btnLabel.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        let data: { success?: boolean; error?: string } = {};
+        try {
+          data = await res.json();
+        } catch {
+          /* non-JSON response — treat as failure below */
+        }
+
+        if (res.ok && data.success) {
+          form.reset();
+          setStatus(
+            'success',
+            '<strong>Thank you — your enquiry is on its way.</strong><br />' +
+              'We&rsquo;ll get back to you within one business day.',
+          );
+          statusEl.focus?.();
+        } else {
+          setStatus(
+            'error',
+            errorFallbackHtml(
+              data.error || 'Sorry, something went wrong while sending your enquiry.',
+            ),
+          );
+        }
+      } catch {
+        setStatus(
+          'error',
+          errorFallbackHtml('We couldn&rsquo;t reach the server — please check your connection.'),
+        );
+      } finally {
+        submitBtn.disabled = false;
+        btnLabel.textContent = defaultLabel;
+      }
+    });
   }
 </script>
