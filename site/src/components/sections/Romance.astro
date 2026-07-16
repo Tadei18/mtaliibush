@@ -1,0 +1,55 @@
+---
+import Kicker from '../Kicker.astro';
+import CTAButton from '../CTAButton.astro';
+import MasonryGallery from '../MasonryGallery.astro';
+
+// Occasion styling — the couples/honeymoon angle that Nelion is pitched at.
+// Kept as its own band rather than mixed into the village views, so the
+// accommodation imagery stays honest about what a standard tent looks like.
+// romance7 is deliberately absent: it is byte-identical to the Lenana suite shot
+// already running in VillageDetails above, so it would repeat on this page.
+import romance1 from '../../assets/romance/romance1.jpg';
+import romance2 from '../../assets/romance/romance2.jpg';
+import romance3 from '../../assets/romance/romance3.jpg';
+import romance4 from '../../assets/romance/romance4.jpg';
+
+const items = [
+  { image: romance1, alt: 'A tented suite opened to its deck, with a rose-petal turndown on the bed and a petal-strewn jacuzzi outside' },
+  { image: romance2, alt: 'A king bed turned down with rose petals arranged to read "I love you", lanterns lit on either side' },
+  { image: romance3, alt: 'A private table for two set on the lawn under a tree, with Mount Kenya on the horizon' },
+  { image: romance4, alt: 'A candlelit dinner for two plated on a wooden board, with wine poured and Mount Kenya beyond' },
+];
+---
+<section id="romance" class="relative bg-cream py-24 md:py-36 scroll-mt-24">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="grid gap-12 md:grid-cols-12 md:gap-20 mb-14 md:mb-20">
+      <div class="md:col-span-5">
+        <div class="reveal reveal--fade-up"><Kicker tone="coffee">Made For Two</Kicker></div>
+        <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+          Romance at Mtalii.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 prose-editorial">
+        <div class="reveal reveal--fade-up" style="--reveal-delay:150ms;">
+          <p>
+            Honeymoons, proposals and anniversaries, held quietly. Tell us what you&rsquo;re marking
+            and the team will dress the tent for it &mdash; petals on the turndown, the tub drawn and
+            waiting, a table for two set out on the lawn with the mountain in view.
+          </p>
+          <p>
+            Most at home in <a href="#nelion" class="text-forest underline decoration-sand underline-offset-4 hover:text-coffee transition-colors">Nelion</a>,
+            our quietest village &mdash; though any tent can be dressed for the occasion.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <MasonryGallery items={items} columns={3} />
+
+    <div class="reveal reveal--fade-up mt-14 flex justify-center" style="--reveal-delay:120ms;">
+      <CTAButton href="/contact?interest=Honeymoon%20%2F%20Special%20Occasion" variant="primary" tone="cream">
+        Plan a special occasion
+      </CTAButton>
+    </div>
+  </div>
+</section>

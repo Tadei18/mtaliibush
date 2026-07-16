@@ -1,0 +1,104 @@
+---
+import Kicker from '../Kicker.astro';
+import CTAButton from '../CTAButton.astro';
+import MasonryGallery from '../MasonryGallery.astro';
+
+// Genuine village photography, curated so each village's images match the copy
+// on its card. The "View Details" buttons on the accommodation cards anchor
+// straight to these ids, so what a guest reads and what they see line up.
+import villageview1 from '../../assets/village/villageview1.jpg';
+import villageview2 from '../../assets/village/villageview2.jpg';
+import villageview3 from '../../assets/village/villageview3.jpg';
+import villageview4 from '../../assets/village/villageview4.jpg';
+import villageview5 from '../../assets/village/villageview5.jpg';
+import villageview6 from '../../assets/village/villageview6.jpg';
+import tentHottub from '../../assets/accommodation/tent-with-hottub.jpg';
+import lenanaSuite from '../../assets/accommodation/lenana-suite.jpg';
+
+const villages = [
+  {
+    id: 'nelion',
+    number: '01',
+    name: 'Nelion',
+    subtitle: 'The Watchman',
+    body:
+      'Made for two &mdash; or one. The quietest corner of camp: a private deck to take the morning on, a soaking tub open to the sky, and a rainforest shower walled in nothing but timber and bush garden.',
+    items: [
+      { image: villageview4, alt: 'A private timber deck with two woven chairs and a jute rug, screened by a bush garden, at a Nelion tented suite' },
+      { image: villageview5, alt: 'An open-air rainforest shower built from stacked stone behind a timber screen, surrounded by planting, at Nelion' },
+      { image: tentHottub, alt: 'Aerial view of a Nelion tented suite deck with a private outdoor soaking tub set among the trees' },
+    ],
+  },
+  {
+    id: 'lenana',
+    number: '02',
+    name: 'Lenana',
+    subtitle: 'The Companion',
+    body:
+      'Plush, canvas-wrapped interiors &mdash; a hand-dressed king bed, safari armchairs and warm lantern light, with a writing desk at the window and considered detail in every corner.',
+    items: [
+      { image: lenanaSuite, alt: 'A Lenana tented suite interior with a hand-dressed king bed, safari armchairs and canvas windows onto the garden' },
+      { image: villageview3, alt: 'The entrance of a Lenana tented suite with a timber dresser, brass wall lamps and stone walls' },
+      { image: villageview6, alt: 'A writing desk and chair at the canvas window of a Lenana tented suite, with open shelving alongside' },
+    ],
+  },
+  {
+    id: 'batian',
+    number: '03',
+    name: 'Batian',
+    subtitle: 'The Elder',
+    body:
+      'Room to gather. Spacious suites spread across the village lawn &mdash; flagstone paths between the canvas, decks that catch the afternoon, and Mt.&nbsp;Kenya standing over the whole of it as the lanterns come on.',
+    items: [
+      { image: villageview1, alt: 'Mount Kenya at sunset seen over the lantern-lit gardens and tent roofs of the Batian village' },
+      { image: villageview2, alt: 'Batian tented suites with timber decks set along a flagstone path through the village garden' },
+    ],
+  },
+];
+---
+<section id="villages" class="relative bg-mist py-24 md:py-36">
+  <div class="mx-auto max-w-wide px-6 md:px-10">
+    <header class="max-w-3xl mb-16 md:mb-20">
+      <div class="reveal reveal--fade-up"><Kicker tone="coffee">Inside The Villages</Kicker></div>
+      <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
+        Three villages, three ways to settle in.
+      </h2>
+      <p class="reveal reveal--fade-up mt-7 prose-editorial" style="--reveal-delay:200ms;">
+        Every tent carries the same appointments &mdash; king or twin beds, an outdoor soaking tub, a
+        rainforest shower and a private deck. What changes is the mood of the village around it.
+      </p>
+    </header>
+
+    <div class="grid gap-20 md:gap-28">
+      {villages.map((village) => (
+        <article id={village.id} class="scroll-mt-28">
+          <header class="mb-8 md:mb-10 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-t border-coffee/20 pt-7">
+            <span class="reveal reveal--fade-up font-body text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-coffee-light">
+              {village.number}
+            </span>
+            <h3 class="reveal reveal--fade-up font-display italic text-4xl md:text-5xl text-forest leading-none">
+              {village.name}
+            </h3>
+            <p class="reveal reveal--fade-up font-body uppercase tracking-[0.24em] text-[0.66rem] text-coffee">
+              {village.subtitle}
+            </p>
+          </header>
+
+          <div class="grid gap-10 md:gap-14 md:grid-cols-12 md:items-start">
+            <div class="md:col-span-4">
+              <p class="reveal reveal--fade-up prose-editorial" set:html={village.body} />
+              <div class="reveal reveal--fade-up mt-8" style="--reveal-delay:120ms;">
+                <CTAButton href="/contact?interest=Stay" variant="outline" tone="cream">
+                  Enquire about {village.name}
+                </CTAButton>
+              </div>
+            </div>
+            <div class="md:col-span-8">
+              <MasonryGallery items={village.items} columns={2} />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -2,27 +2,34 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParallaxHero from '../components/ParallaxHero.astro';
 import TentedVillages from '../components/sections/TentedVillages.astro';
+import VillageDetails from '../components/sections/VillageDetails.astro';
+import Romance from '../components/sections/Romance.astro';
 import PoolGardens from '../components/sections/PoolGardens.astro';
 import FinalCTA from '../components/sections/FinalCTA.astro';
-import heroGardenTents from '../assets/stay/garden-tents.jpg';
-import heroLoungeInterior from '../assets/stay/lounge-interior.jpg';
+// The two establishing village shots, one per line of the headline. Both are
+// landscape — the portrait village frames (villageview1/5/6) would crop to a
+// mid-band in a full-bleed hero and lose the mountain, so they run in the
+// masonry galleries below instead.
+import heroVillagePath from '../assets/village/villageview2.jpg';
+import heroVillageMountain from '../assets/accommodation/village-golden-hour.jpg';
 ---
 <BaseLayout
   title="Stay — Mtalii Bush Camps tented villages at the foothills of Mt. Kenya"
   description="Three themed tented villages — Nelion, Lenana, and Batian — designed to blend authentic bush charm with luxurious comfort. King-size beds, outdoor soaking tubs, rainforest showers."
 >
   <ParallaxHero
-    image1={heroGardenTents}
-    alt1="Wide tented dining structure set among the gardens at Mtalii Bush Camps"
-    image2={heroLoungeInterior}
-    alt2="The plush Mtalii lounge interior with curated sofas and warm light"
-    fit2="contain"
+    image1={heroVillagePath}
+    alt1="Tented suites with timber decks set along a flagstone path through the village garden"
+    image2={heroVillageMountain}
+    alt2="Mtalii tented suites spread across the village lawn at golden hour, Mount Kenya rising beyond"
     kicker="Stay With Us"
     title="A tent under canvas. A village beneath the mountain."
     tagline="Three villages — Nelion, Lenana, Batian — set among acacia gardens and lit by solar lanterns after dusk."
     crumb="Stay"
   />
   <TentedVillages />
+  <VillageDetails />
+  <Romance />
   <PoolGardens />
   <FinalCTA />
 </BaseLayout>

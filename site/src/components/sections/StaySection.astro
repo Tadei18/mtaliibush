@@ -23,6 +23,7 @@ const villages = [
     number: '01',
     name: 'Nelion',
     subtitle: 'The Watchman',
+    detailsHref: '/stay#nelion',
     chips: [{ icon: 'bed', label: 'King bed' }, ...chipBase],
     body:
       'Made for two — or one. Intimate canvas suites for honeymooners, couples and solo travellers seeking quiet: a private deck, a star-lit soaking tub, and paths that glow under solar lanterns after dusk.',
@@ -33,6 +34,7 @@ const villages = [
     number: '02',
     name: 'Lenana',
     subtitle: 'The Companion',
+    detailsHref: '/stay#lenana',
     chips: [{ icon: 'bed', label: 'King / Twin' }, ...chipBase],
     body:
       'Plush, canvas-wrapped interiors — a hand-dressed king bed, safari armchairs and warm lantern light, cocooned by bush garden as evening falls.',
@@ -43,6 +45,7 @@ const villages = [
     number: '03',
     name: 'Batian',
     subtitle: 'The Elder',
+    detailsHref: '/stay#batian',
     chips: [
       { icon: 'bed', label: 'King / Twin' },
       ...chipBase,
@@ -79,6 +82,7 @@ const villages = [
           name={v.name}
           subtitle={v.subtitle}
           chips={v.chips}
+          detailsHref={v.detailsHref}
         >
           {v.body}
         </AccommodationCard>
