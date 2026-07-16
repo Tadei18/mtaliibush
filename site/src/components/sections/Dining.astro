@@ -3,25 +3,29 @@ import Kicker from '../Kicker.astro';
 import DiningCard from '../DiningCard.astro';
 import tentedDining from '../../assets/dining/tented-dining.jpg';
 import mtKenyaTerrace from '../../assets/dining/mt-kenya-terrace.jpg';
+import hungryLions from '../../assets/dining/hungry-lions.jpg';
 import bushDinner from '../../assets/dining/bush-dinner.jpg';
 import outdoorDining from '../../assets/dining/outdoor-dining.jpg';
 import safariTable from '../../assets/dining/safari-table.jpg';
+// The two bars borrow the lounge photography — they live inside those spaces.
+import mshefaClubhouse from '../../assets/lounges/mshefa-clubhouse.jpg';
+import cocktailPortrait from '../../assets/lounges/cocktail-portrait.jpg';
 ---
 <section id="dine" class="relative bg-mist py-24 md:py-36">
   <div class="mx-auto max-w-wide px-6 md:px-10">
     <header class="max-w-3xl mb-16 md:mb-24">
       <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
       <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-forest text-balance" style="--reveal-delay:100ms;">
-        Five tables. Five very different conversations with the wild.
+        Six tables and two bars. Every one a different conversation with the wild.
       </h2>
       <p class="reveal reveal--fade-up mt-7 prose-editorial" style="--reveal-delay:200ms;">
         We believe every meal should be an experience &mdash; flavourful and memorable. Each of our
-        restaurants offers a different taste of the wild, the world, and the warmth of African
-        hospitality.
+        restaurants and bars offers a different taste of the wild, the world, and the warmth of
+        African hospitality.
       </p>
     </header>
 
-    <!-- 5 dining cards — 3 up + 2 up grid -->
+    <!-- 6 restaurants + 2 bars — 3 up / 2 up grid -->
     <div class="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
       <DiningCard
         image={tentedDining}
@@ -37,20 +41,32 @@ import safariTable from '../../assets/dining/safari-table.jpg';
 
       <DiningCard
         image={mtKenyaTerrace}
-        alt="Italian Restaurant & Steakhouse interior, country-side charm and culinary fire"
+        alt="Elephant Salt Lick Italian Restaurant — country-side charm and a wood-fired kitchen"
         number="02"
-        name="Italian Restaurant & Steakhouse"
+        name="Elephant Salt Lick Italian Restaurant"
         tagline="Country-side charm, culinary fire"
       >
-        Juicy steaks, hand-rolled pasta, hand-tossed pizzas and crafted cocktails at the whiskey bar
-        &mdash; tucked inside the lively Mshefa Lounge. The perfect hideout after a day of wild
+        Hand-rolled pasta and hand-tossed pizzas, built on Laikipia produce and finished over open
+        flame &mdash; tucked inside the lively Mshefa Lounge. The perfect hideout after a day of wild
         adventure, served with Mtalii&rsquo;s signature warmth.
+      </DiningCard>
+
+      <DiningCard
+        image={hungryLions}
+        alt="Hungry Lions — a thick-cut steak served at a lawn table in the late afternoon light"
+        number="03"
+        name="Hungry Lions"
+        tagline="Steaks, fire, and a whiskey bar"
+      >
+        The steakhouse side of Mshefa Lounge &mdash; juicy steaks cut thick and seared over flame,
+        with crafted cocktails poured at the whiskey bar. Come hungry; stay for the long, slow end
+        of the evening.
       </DiningCard>
 
       <DiningCard
         image={bushDinner}
         alt="Mwituni Bush Restaurant — open-air dining under the stars with wildlife passing nearby"
-        number="03"
+        number="04"
         name="Mwituni — The Bush Restaurant"
         tagline="Where wilderness meets fine dining"
       >
@@ -62,7 +78,7 @@ import safariTable from '../../assets/dining/safari-table.jpg';
       <DiningCard
         image={outdoorDining}
         alt="Globetrotters Street Kitchen — global street food under canvas"
-        number="04"
+        number="05"
         name="Globetrotters Street Kitchen"
         tagline="The streets of the world, on one plate"
       >
@@ -73,13 +89,37 @@ import safariTable from '../../assets/dining/safari-table.jpg';
       <DiningCard
         image={safariTable}
         alt="Cowboy Barbecue & Smoke House — poolside grill and smoke pit"
-        number="05"
+        number="06"
         name="Cowboy Barbecue & Smoke House"
         tagline="Where fire meets flavour, poolside"
       >
         The ultimate barbecue hub: succulent briskets, flame-seared ribs, T-bone steaks, lamb chops,
         gourmet sausages, and fall-off-the-bone smoked meats grilled live. Stay for themed cowboy
         nights with music, boots and barbecue under the stars.
+      </DiningCard>
+
+      <DiningCard
+        image={mshefaClubhouse}
+        alt="Globetrotters Street Bar — friends over cold beers on the clubhouse lawn at golden hour"
+        number="07"
+        name="Globetrotters Street Bar"
+        tagline="A German&ndash;London pub, bush edition"
+      >
+        A lively street-bar with the swagger of a Berlin corner pub and a London local &mdash; craft
+        beers on rotation, bar bites borrowed from every continent, and big-screen sport when the
+        fixtures matter. The easy buzz that lands right after a day of adventure.
+      </DiningCard>
+
+      <DiningCard
+        image={cocktailPortrait}
+        alt="Mtalii Lounge Bar — a signature cocktail poured and served at golden hour"
+        number="08"
+        name="Mtalii Lounge Bar"
+        tagline="Cocktails, wine, highland coffee"
+      >
+        The refined end of the evening &mdash; signature cocktails, a curated wine list, and
+        Mt.&nbsp;Kenya highland coffee poured in a warm, sociable room. Made for the long
+        conversations that outlast the sundowner.
       </DiningCard>
     </div>
   </div>

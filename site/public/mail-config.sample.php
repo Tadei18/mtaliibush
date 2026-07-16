@@ -25,14 +25,17 @@ return [
     'SMTP_SECURE' => 'ssl',
 
     // Authenticated mailbox — the real account we log in as to send.
+    // This does NOT have to match MAIL_TO; it only has to exist in cPanel and
+    // match SMTP_PASS. Point it at whichever mailbox you authenticate as.
     'SMTP_USER'   => 'info@mtaliibushcamps.com',
 
     // The mailbox password. Set this only in the real mail-config.php on the
     // server — never commit it to git.
     'SMTP_PASS'   => 'CHANGE_ME',
 
-    // Where enquiry notifications are delivered.
-    'MAIL_TO'     => 'info@mtaliibushcamps.com',
+    // Where enquiry notifications are delivered. This mailbox must exist in
+    // cPanel → Email Accounts before the form will deliver anything.
+    'MAIL_TO'     => 'reservations@mtaliibushcamps.com',
 
     // From address — MUST be the authenticated mailbox so SPF/DKIM pass.
     // Do NOT set this to the visitor's address (that would be spoofing).

@@ -5,7 +5,8 @@ import CTAButton from './CTAButton.astro';
 const nav = [
   { href: '/stay', label: 'Stay' },
   { href: '/dine', label: 'Dine' },
-  { href: '/experiences', label: 'Experiences' },
+  { href: '/activities', label: 'Activities' },
+  { href: '/spa', label: 'Spa & Wellness' },
   { href: '/events', label: 'Events' },
   { href: '/rates', label: 'Rates' },
   { href: '/gallery', label: 'Gallery' },
@@ -35,7 +36,10 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
       </span>
     </div>
 
-    <nav class="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary">
+    <!-- Eight nav items (incl. the long "Spa & Wellness") no longer fit beside the
+         logo and CTA at lg/1024px, so the inline nav starts at xl and 1024–1279px
+         uses the overlay menu below. -->
+    <nav class="hidden xl:flex items-center gap-6 2xl:gap-8" aria-label="Primary">
       {nav.map((item) => {
         const active = isActive(item.href);
         return (
@@ -52,7 +56,7 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
       })}
     </nav>
 
-    <div class="hidden lg:block">
+    <div class="hidden xl:block">
       <CTAButton href="/contact" variant="primary" tone="dark">Enquire</CTAButton>
     </div>
 
@@ -62,7 +66,7 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
       aria-label="Open menu"
       aria-controls="mobile-menu"
       aria-expanded="false"
-      class="lg:hidden relative z-50 flex h-11 w-11 items-center justify-center text-cream"
+      class="xl:hidden relative z-50 flex h-11 w-11 items-center justify-center text-cream"
     >
       <span class="sr-only">Menu</span>
       <span class="menu-bars" aria-hidden="true">

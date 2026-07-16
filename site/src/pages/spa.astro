@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Spa from '../components/sections/Spa.astro';
+import Jacuzzi from '../components/sections/Jacuzzi.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
+import heroImage from '../assets/spa/spa-mtkenya.jpg';
+---
+<BaseLayout
+  title="Spa & Wellness — Casadra Spa & the jacuzzi at Mtalii Bush Camps"
+  description="Casadra Spa & Wellness Centre at the foothills of Mt. Kenya — signature spa rituals, massage and holistic therapies, an eco-gym studio, and a private outdoor jacuzzi under the open sky."
+>
+  <PageHero
+    image={heroImage}
+    alt="A tented spa treatment room at Casadra Spa overlooking Mount Kenya"
+    kicker="Restore & Renew"
+    title="Unwind at the foot of the mountain."
+    tagline="Signature rituals, holistic therapy and an eco-gym — then a long soak under open sky."
+    crumb="Spa & Wellness"
+  />
+  <Spa />
+  <Jacuzzi />
+  <FinalCTA />
+</BaseLayout>

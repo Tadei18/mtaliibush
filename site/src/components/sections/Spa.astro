@@ -1,9 +1,8 @@
 ---
-import { Image } from 'astro:assets';
 import Kicker from '../Kicker.astro';
-// Same optimised file as the homepage spa band, so the two stay in sync.
-import spaMtKenya from '../../assets/spa/spa-mtkenya.jpg';
 
+// The Mt. Kenya spa feature image carries the /spa page hero directly above
+// this section, so this band stays typographic to avoid repeating it.
 const columns = [
   {
     title: 'Spa Experiences',
@@ -57,24 +56,13 @@ const columns = [
         <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-cream text-balance" style="--reveal-delay:100ms;">
           Casadra Spa &amp; Wellness Centre.
         </h2>
-        <p class="reveal reveal--fade-up mt-7 prose-editorial text-cream/80" style="--reveal-delay:200ms;">
-          A sanctuary of balance where nature meets wellness &mdash; therapeutic spa treatments, an
-          eco-gym studio, guided fitness sessions and holistic therapies.
-        </p>
       </div>
-      <div class="md:col-span-7">
-        <figure class="reveal reveal--scale-image relative overflow-hidden aspect-[4/3] shadow-soft">
-          <Image
-            src={spaMtKenya}
-            alt="Casadra Spa & Wellness Centre at Mtalii Bush Camps, Mount Kenya in the background"
-            widths={[640, 960, 1280, 1600]}
-            sizes="(min-width:768px) 58vw, 100vw"
-            quality={82}
-            format="webp"
-            loading="lazy"
-            class="absolute inset-0 h-full w-full object-cover"
-          />
-        </figure>
+      <div class="md:col-span-6 md:col-start-7">
+        <p class="reveal reveal--fade-up prose-editorial text-cream/80" style="--reveal-delay:200ms;">
+          A sanctuary of balance where nature meets wellness &mdash; therapeutic spa treatments, an
+          eco-gym studio, guided fitness sessions and holistic therapies, framed by the quiet
+          majesty of Mt.&nbsp;Kenya.
+        </p>
       </div>
     </header>
 

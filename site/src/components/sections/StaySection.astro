@@ -2,15 +2,15 @@
 import Kicker from '../Kicker.astro';
 import CTAButton from '../CTAButton.astro';
 import AccommodationCard from '../AccommodationCard.astro';
-import nelionGoldenHour from '../../assets/accommodation/nelion-golden-hour.jpg';
+import privateJacuzzi from '../../assets/accommodation/private-jacuzzi.jpg';
 import lenanaSuite from '../../assets/accommodation/lenana-suite.jpg';
-import batianJacuzzi from '../../assets/accommodation/batian-jacuzzi.jpg';
+import villageGoldenHour from '../../assets/accommodation/village-golden-hour.jpg';
 
-// Each tented village shares the same considered tent appointments — themed
-// after Mt. Kenya's three highest peaks. Feature chips reflect the true,
-// every-tent inclusions (king/twin beds, outdoor tub, rainforest shower, deck).
-const chips = [
-  { icon: 'bed', label: 'King / Twin' },
+// Every tent carries the same appointments (king/twin beds, outdoor soaking
+// tub, rainforest shower, private deck) and every village shares a bonfire pit
+// at its heart — so the chips below stay true per card, and only the emphasis
+// shifts to suit who each village is pitched at.
+const chipBase = [
   { icon: 'bath', label: 'Outdoor tub' },
   { icon: 'shower', label: 'Rainforest shower' },
   { icon: 'deck', label: 'Private deck' },
@@ -18,13 +18,14 @@ const chips = [
 
 const villages = [
   {
-    image: nelionGoldenHour,
-    alt: 'Mtalii tented suites in golden-hour light with Mount Kenya rising beyond',
+    image: privateJacuzzi,
+    alt: 'A private outdoor soaking tub strewn with rose petals on the deck of a Mtalii tented suite',
     number: '01',
     name: 'Nelion',
     subtitle: 'The Watchman',
+    chips: [{ icon: 'bed', label: 'King bed' }, ...chipBase],
     body:
-      'Spacious safari-style suites that open to the bush and the mountain beyond — authentic canvas charm wrapped around plush, hand-finished comfort.',
+      'Made for two — or one. Intimate canvas suites for honeymooners, couples and solo travellers seeking quiet: a private deck, a star-lit soaking tub, and paths that glow under solar lanterns after dusk.',
   },
   {
     image: lenanaSuite,
@@ -32,17 +33,23 @@ const villages = [
     number: '02',
     name: 'Lenana',
     subtitle: 'The Companion',
+    chips: [{ icon: 'bed', label: 'King / Twin' }, ...chipBase],
     body:
       'Plush, canvas-wrapped interiors — a hand-dressed king bed, safari armchairs and warm lantern light, cocooned by bush garden as evening falls.',
   },
   {
-    image: batianJacuzzi,
-    alt: 'A private outdoor jacuzzi strewn with rose petals on the deck of a Mtalii tented suite',
+    image: villageGoldenHour,
+    alt: 'Mtalii tented suites spread across the village lawn in golden-hour light, Mount Kenya rising beyond',
     number: '03',
     name: 'Batian',
     subtitle: 'The Elder',
+    chips: [
+      { icon: 'bed', label: 'King / Twin' },
+      ...chipBase,
+      { icon: 'fire', label: 'Bonfire pit' },
+    ],
     body:
-      'A private deck and a petal-strewn outdoor jacuzzi under the open sky — the heart of the village, gathered around a shared bonfire pit where stories and stargazing begin.',
+      'Room to gather. Spacious safari-style suites with space for the whole family — king or twin beds, private decks, and a shared bonfire pit at the heart of the village where stories and roasted treats are passed around after dark.',
   },
 ];
 ---
@@ -71,7 +78,7 @@ const villages = [
           number={v.number}
           name={v.name}
           subtitle={v.subtitle}
-          chips={chips}
+          chips={v.chips}
         >
           {v.body}
         </AccommodationCard>

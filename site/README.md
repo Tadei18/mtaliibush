@@ -29,8 +29,8 @@ npm run preview      # preview the build locally
 
 The site builds to fully static output (plain `.html` files — no SSR adapter). The
 enquiry form posts to a PHP handler (`send-enquiry.php`) that emails submissions to
-`info@mtaliibushcamps.com` over authenticated SMTP using PHPMailer (vendored into
-`public/vendor/phpmailer/`, so no Composer is needed on the server).
+`reservations@mtaliibushcamps.com` (`MAIL_TO`) over authenticated SMTP using PHPMailer
+(vendored into `public/vendor/phpmailer/`, so no Composer is needed on the server).
 
 Deploy steps:
 
@@ -49,8 +49,15 @@ Deploy steps:
    nano mail-config.php          # set SMTP_PASS to the mailbox password
    chmod 600 mail-config.php      # owner-only, so it isn't world-readable
    ```
-4. **Make sure the mailbox exists:** in cPanel → **Email Accounts**, confirm
-   `info@mtaliibushcamps.com` exists and you know its password (that's `SMTP_PASS`).
+4. **Make sure both mailboxes exist:** in cPanel → **Email Accounts**, confirm
+   - `reservations@mtaliibushcamps.com` exists — this is `MAIL_TO`, where enquiries land;
+   - the mailbox you authenticate as (`SMTP_USER`, `MAIL_FROM`) exists and you know its
+     password (that's `SMTP_PASS`).
+
+   `SMTP_USER` and `MAIL_TO` do not have to match — the sample authenticates as
+   `info@` and delivers to `reservations@`. If you'd rather send *and* receive as
+   `reservations@`, set `SMTP_USER` and `MAIL_FROM` to it as well. `MAIL_FROM` must
+   always be the authenticated mailbox, or SPF/DKIM will fail.
 5. **Test the form from the live domain** (SMTP won't work from `localhost`).
 
 **SMTP ports:** the config defaults to host `mail.mtaliibushcamps.com`, port **465**

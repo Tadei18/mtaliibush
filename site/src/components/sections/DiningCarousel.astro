@@ -4,16 +4,24 @@ import Kicker from '../Kicker.astro';
 import CTAButton from '../CTAButton.astro';
 import tentedDining from '../../assets/dining/tented-dining.jpg';
 import mtKenyaTerrace from '../../assets/dining/mt-kenya-terrace.jpg';
+import hungryLions from '../../assets/dining/hungry-lions.jpg';
 import bushDinner from '../../assets/dining/bush-dinner.jpg';
 import outdoorDining from '../../assets/dining/outdoor-dining.jpg';
 import safariTable from '../../assets/dining/safari-table.jpg';
+// The two bars borrow the lounge photography — they live inside those spaces.
+import mshefaClubhouse from '../../assets/lounges/mshefa-clubhouse.jpg';
+import cocktailPortrait from '../../assets/lounges/cocktail-portrait.jpg';
 
+// Order and numbering mirror the /dine page: six restaurants, then two bars.
 const restaurants = [
   { image: tentedDining, alt: 'Mwamba Restaurant — tented dining surrounded by gardens', number: '01', name: 'Mwamba Restaurant', hook: 'Continental buffet with Mt. Kenya views.' },
-  { image: mtKenyaTerrace, alt: 'Little Italy Meets Little Thailand — country-side charm and culinary fire', number: '02', name: 'Little Italy Meets Little Thailand', hook: 'Country-side charm, culinary fire.' },
-  { image: bushDinner, alt: 'Mwituni Bush Restaurant — open-air dining under the stars', number: '03', name: 'Mwituni — The Bush Restaurant', hook: 'Where wilderness meets fine dining.' },
-  { image: outdoorDining, alt: 'Globetrotters Street Kitchen — global street food under canvas', number: '04', name: 'Globetrotters Street Kitchen', hook: 'The streets of the world, on one plate.' },
-  { image: safariTable, alt: 'Cowboy Barbecue & Smoke House — poolside grill and smoke pit', number: '05', name: 'Cowboy Barbecue & Smoke House', hook: 'Where fire meets flavour, poolside.' },
+  { image: mtKenyaTerrace, alt: 'Elephant Salt Lick Italian Restaurant — country-side charm and a wood-fired kitchen', number: '02', name: 'Elephant Salt Lick Italian Restaurant', hook: 'Country-side charm, culinary fire.' },
+  { image: hungryLions, alt: 'Hungry Lions — a thick-cut steak served at a lawn table', number: '03', name: 'Hungry Lions', hook: 'Steaks, fire, and a whiskey bar.' },
+  { image: bushDinner, alt: 'Mwituni Bush Restaurant — open-air dining under the stars', number: '04', name: 'Mwituni — The Bush Restaurant', hook: 'Where wilderness meets fine dining.' },
+  { image: outdoorDining, alt: 'Globetrotters Street Kitchen — global street food under canvas', number: '05', name: 'Globetrotters Street Kitchen', hook: 'The streets of the world, on one plate.' },
+  { image: safariTable, alt: 'Cowboy Barbecue & Smoke House — poolside grill and smoke pit', number: '06', name: 'Cowboy Barbecue & Smoke House', hook: 'Where fire meets flavour, poolside.' },
+  { image: mshefaClubhouse, alt: 'Globetrotters Street Bar — friends over cold beers on the clubhouse lawn', number: '07', name: 'Globetrotters Street Bar', hook: 'A German–London pub, bush edition.' },
+  { image: cocktailPortrait, alt: 'Mtalii Lounge Bar — a signature cocktail poured at golden hour', number: '08', name: 'Mtalii Lounge Bar', hook: 'Cocktails, wine, highland coffee.' },
 ];
 ---
 <section id="dine" class="relative bg-mist py-24 md:py-32 scroll-mt-24">
@@ -21,7 +29,7 @@ const restaurants = [
     <header class="mb-12 md:mb-16 min-w-0">
       <div class="reveal reveal--fade-up"><Kicker tone="coffee">Taste the Wild</Kicker></div>
       <h2 class="dine-title reveal reveal--fade-up mt-6 font-display text-forest" style="--reveal-delay:100ms;">
-        Five tables, five conversations with the wild.
+        Six tables. Two bars. One wild conversation.
       </h2>
     </header>
   </div>

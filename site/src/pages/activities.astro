@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Experiences from '../components/sections/Experiences.astro';
-import Spa from '../components/sections/Spa.astro';
 import Lounges from '../components/sections/Lounges.astro';
 import Nearby from '../components/sections/Nearby.astro';
 import ReelsStrip from '../components/ReelsStrip.astro';
@@ -10,20 +9,19 @@ import FinalCTA from '../components/sections/FinalCTA.astro';
 import heroImage from '../assets/activities/horse-riding.jpg';
 ---
 <BaseLayout
-  title="Experiences — Activities, spa & adventures at Mtalii Bush Camps"
-  description="Archery, scenic horse riding, guided hikes to the Mau Caves, quad biking, bonfire evenings, Casadra Spa & Wellness, and unforgettable adventures across Laikipia."
+  title="Activities — Adventures & experiences at Mtalii Bush Camps"
+  description="Archery, scenic horse riding, guided hikes to the Mau Caves, quad biking, bonfire evenings, lounges, and unforgettable adventures across Laikipia."
 >
   <PageHero
     image={heroImage}
     alt="Guests riding on horseback through the acacias of Laikipia"
     kicker="Adventure Awaits"
     title="Move with the morning. Slow down by the fire."
-    tagline="Archery to horseback, Mau caves to spa rituals — your days at Mtalii, exactly as you want them."
-    crumb="Experiences"
+    tagline="Archery to horseback, Mau caves to bonfire nights — your days at Mtalii, exactly as you want them."
+    crumb="Activities"
   />
   <Experiences />
   <ReelsStrip />
-  <Spa />
   <Lounges />
   <Nearby />
   <FinalCTA />
