@@ -3,7 +3,12 @@ import { Image } from 'astro:assets';
 import Kicker from '../Kicker.astro';
 import VenueCard from '../VenueCard.astro';
 import CTAButton from '../CTAButton.astro';
-import eventGathering from '../../assets/events/event-gathering.jpg';
+// TODO: Replace with real photography of the Mitini Camping Arena — a camping,
+// bonfire or festival shot that matches the copy below. The previous image
+// (events/event-gathering.jpg) was a group-aerobics session and did not fit.
+// Neither Photos/ nor "Dinner and horses/" contains a camping/bonfire/festival
+// frame, so this is a committed placeholder until one is supplied.
+import mitiniPlaceholder from '../../assets/events/mitini-placeholder.jpg';
 // Each conference asset is used exactly once on this page — conference-1 carries
 // the page hero, so this band takes conference-3 and the venue cards take the rest.
 import conference2 from '../../assets/events/conference-2.jpg';
@@ -122,8 +127,8 @@ const retreatBeats = [
           name="Mitini Camping Arena"
           tagline="Festivals beneath the mountain."
           capacity="Up to 1,000 guests"
-          image={eventGathering}
-          alt="The Mitini Camping Arena — a large open-air gathering on the lawn beneath Mt. Kenya"
+          image={mitiniPlaceholder}
+          alt="Placeholder graphic for the Mitini Camping Arena — photography to follow"
         >
           Expansive, well-curated camping against the backdrop of Mt.&nbsp;Kenya &mdash; ideal for
           festivals, retreats, group getaways, and large-scale events, with bonfire nights and

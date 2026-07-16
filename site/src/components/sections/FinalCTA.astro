@@ -4,11 +4,8 @@ import CTAButton from '../CTAButton.astro';
 import Kicker from '../Kicker.astro';
 import heroImage from '../../assets/hero/hero-mt-kenya.jpg';
 
+// Contact details live once, in the site footer — this section is CTA only.
 const email = 'marketing@mtaliibushcamps.com';
-const email2 = 'info@mtaliibushcamps.com';
-const phone1 = '+254 718 045 869';
-const phone2 = '+254 702 531 835';
-const phone3 = '+254 711 318 269';
 ---
 <section id="enquire" class="relative isolate overflow-hidden bg-forest-deep text-cream py-28 md:py-40">
   <!-- Background photo at low opacity -->
@@ -37,37 +34,6 @@ const phone3 = '+254 711 318 269';
       <div class="reveal reveal--fade-up mt-10 flex flex-col sm:flex-row gap-4" style="--reveal-delay:300ms;">
         <CTAButton href="/contact" variant="primary" tone="dark">Begin Your Enquiry</CTAButton>
         <CTAButton href={`mailto:${email}`} variant="outline" tone="dark">Email Us</CTAButton>
-      </div>
-    </div>
-
-    <span class="hairline-sand block w-full mt-16 md:mt-24 opacity-50"></span>
-
-    <!-- Contact band -->
-    <div class="grid gap-12 md:grid-cols-3 mt-14">
-      <div class="reveal reveal--fade-up">
-        <p class="font-body uppercase tracking-[0.32em] text-[0.66rem] text-sand mb-4">Reach Us</p>
-        <a href={`mailto:${email}`} class="block font-display text-2xl text-cream hover:text-sand transition-colors break-words">{email}</a>
-        <a href={`mailto:${email2}`} class="mt-1 block font-display text-2xl text-cream hover:text-sand transition-colors break-words">{email2}</a>
-        <div class="mt-4 space-y-2 font-body text-cream/80">
-          <a href={`tel:${phone1.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone1}</a>
-          <a href={`tel:${phone2.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone2}</a>
-          <a href={`tel:${phone3.replace(/\s+/g, '')}`} class="block hover:text-sand transition-colors">{phone3}</a>
-        </div>
-      </div>
-      <div class="reveal reveal--fade-up" style="--reveal-delay:120ms;">
-        <p class="font-body uppercase tracking-[0.32em] text-[0.66rem] text-sand mb-4">Find Us</p>
-        <p class="font-display text-2xl text-cream leading-tight">Nanyuki, Kenya</p>
-        <p class="mt-3 font-body text-cream/80 leading-relaxed">
-          Opposite Nanyuki Airstrip<br />Laikipia &middot; Mt.&nbsp;Kenya Foothills
-        </p>
-      </div>
-      <div class="reveal reveal--fade-up" style="--reveal-delay:240ms;">
-        <p class="font-body uppercase tracking-[0.32em] text-[0.66rem] text-sand mb-4">Open Daily</p>
-        <p class="font-display text-2xl text-cream leading-tight">Year-round</p>
-        <p class="mt-3 font-body text-cream/80 leading-relaxed">
-          Best months: June &ndash; October &amp; January &ndash; February. The mountain rewards
-          early risers.
-        </p>
       </div>
     </div>
   </div>

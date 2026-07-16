@@ -5,8 +5,14 @@ const year = new Date().getFullYear();
 const phone1 = '+254 718 045 869';
 const phone2 = '+254 702 531 835';
 const phone3 = '+254 711 318 269';
-const email = 'marketing@mtaliibushcamps.com';
-const email2 = 'info@mtaliibushcamps.com';
+// The single source of contact truth on the site — the CTA band above the footer
+// deliberately carries no contact details, so these render exactly once per page.
+const emails = [
+  'marketing@mtaliibushcamps.com',
+  'info@mtaliibushcamps.com',
+  'reservations@mtaliibushcamps.com',
+];
+const phones = [phone1, phone2, phone3];
 ---
 <footer class="relative bg-forest-deep text-cream/90">
   <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sand/40 to-transparent"></div>
@@ -36,15 +42,16 @@ const email2 = 'info@mtaliibushcamps.com';
       <div class="md:col-span-3">
         <h4 class="font-body uppercase tracking-[0.22em] text-[0.7rem] text-sand mb-5">Reach Us</h4>
         <ul class="space-y-3 font-body text-cream/80">
-          <li>
-            <a href={`mailto:${email}`} class="hover:text-sand transition-colors break-words">{email}</a>
-          </li>
-          <li>
-            <a href={`mailto:${email2}`} class="hover:text-sand transition-colors break-words">{email2}</a>
-          </li>
-          <li><a href={`tel:${phone1.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone1}</a></li>
-          <li><a href={`tel:${phone2.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone2}</a></li>
-          <li><a href={`tel:${phone3.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{phone3}</a></li>
+          {emails.map((address) => (
+            <li>
+              <a href={`mailto:${address}`} class="hover:text-sand transition-colors break-words">{address}</a>
+            </li>
+          ))}
+          {phones.map((number) => (
+            <li>
+              <a href={`tel:${number.replace(/\s+/g, '')}`} class="hover:text-sand transition-colors">{number}</a>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -54,6 +61,11 @@ const email2 = 'info@mtaliibushcamps.com';
           Nanyuki, Kenya<br />
           Opposite Nanyuki Airstrip<br />
           Laikipia, Mt. Kenya Foothills
+        </p>
+        <!-- Merged in from the old duplicate CTA contact band, so it appears once. -->
+        <p class="mt-5 font-body text-[0.85rem] text-cream/65 leading-relaxed">
+          <span class="text-sand/90">Open daily, year-round.</span><br />
+          Best months: June&ndash;October &amp; January&ndash;February.
         </p>
         <div class="mt-6 flex items-center gap-4">
           <!-- TODO: Replace # with real Instagram URL -->
