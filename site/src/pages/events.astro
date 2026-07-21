@@ -1,10 +1,23 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Events from '../components/sections/Events.astro';
 import Kicker from '../components/Kicker.astro';
 import FinalCTA from '../components/sections/FinalCTA.astro';
 import heroImage from '../assets/events/conference-1.jpg';
+// Real event photography — a themed cowboy dinner night. These sit with the
+// "Others" celebrations theme above; events1-4 all depict the same themed night,
+// so three varied frames are used and the near-duplicate (events3) is left out.
+import celebration1 from '../assets/events/events2.jpg';
+import celebration2 from '../assets/events/events4.jpg';
+import celebration3 from '../assets/events/events1.jpg';
+
+const celebrations = [
+  { image: celebration1, alt: 'Guests in cowboy hats raising a toast at a themed dinner night at Mtalii Bush Camps' },
+  { image: celebration2, alt: 'Guests dancing at a themed cowboy night under festoon lights at Mtalii Bush Camps' },
+  { image: celebration3, alt: 'Friends in western dress seated at a candlelit themed dinner at Mtalii Bush Camps' },
+];
 
 // Four kinds of coming-together. Every claim below is drawn from facilities the
 // camp already lists — the pool, the bonfire pits, the dining venues, the
@@ -112,6 +125,46 @@ const categories = [
               </a>
             </div>
           </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Themed nights & celebrations — real event photography, tied to the
+       "Others" celebrations theme above (galas, festivals, themed nights). -->
+  <section id="celebrations" class="relative bg-forest-deep text-cream py-24 md:py-32 scroll-mt-24 overflow-hidden">
+    <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_15%_10%,rgba(228,192,132,0.12),transparent_65%)]"></span>
+    <div class="relative mx-auto max-w-wide px-6 md:px-10">
+      <header class="grid gap-8 md:grid-cols-12 md:items-end mb-12 md:mb-16">
+        <div class="md:col-span-8">
+          <div class="reveal reveal--fade-up"><Kicker tone="sand">Themed Nights & Celebrations</Kicker></div>
+          <h2 class="reveal reveal--fade-up mt-6 font-display text-display-md text-cream text-balance" style="--reveal-delay:100ms;">
+            When the tables clear, the night gets going.
+          </h2>
+        </div>
+        <div class="md:col-span-4 md:text-right">
+          <p class="reveal reveal--fade-up font-body text-cream/70 leading-relaxed md:ml-auto md:max-w-xs" style="--reveal-delay:150ms;">
+            Cowboy nights, live music and dancing under the canvas &mdash; the celebration end of every
+            gathering, from birthdays to galas.
+          </p>
+        </div>
+      </header>
+
+      <div class="grid gap-4 md:gap-6 md:grid-cols-3">
+        {celebrations.map((shot, i) => (
+          <figure class="reveal reveal--scale-image group relative overflow-hidden rounded-card aspect-[4/3]" style={`--reveal-delay:${i * 120}ms;`}>
+            <Image
+              src={shot.image}
+              alt={shot.alt}
+              widths={[400, 600, 800]}
+              sizes="(min-width: 768px) 30vw, 90vw"
+              quality={78}
+              format="webp"
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.05]"
+            />
+            <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent"></span>
+          </figure>
         ))}
       </div>
     </div>

@@ -1,122 +1,149 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import Kicker from '../components/Kicker.astro';
 import MasonryGallery from '../components/MasonryGallery.astro';
 import ReelsStrip from '../components/ReelsStrip.astro';
 import FinalCTA from '../components/sections/FinalCTA.astro';
 
 import heroImage from '../assets/hero/hero-mt-kenya.jpg';
 
-// Curated gallery set — mixes section work with portrait/landscape variety so the
-// masonry layout has a natural rhythm
+// Villages
+import villageview1 from '../assets/village/villageview1.jpg';
+import villageview2 from '../assets/village/villageview2.jpg';
+import villageview3 from '../assets/village/villageview3.jpg';
+import villageview4 from '../assets/village/villageview4.jpg';
+import villageview5 from '../assets/village/villageview5.jpg';
+import villageview6 from '../assets/village/villageview6.jpg';
+import lenanaSuite from '../assets/accommodation/lenana-suite.jpg';
+import tentHottub from '../assets/accommodation/tent-with-hottub.jpg';
+// Romance
+import romance1 from '../assets/romance/romance1.jpg';
+import romance2 from '../assets/romance/romance2.jpg';
+import romance3 from '../assets/romance/romance3.jpg';
+import romance4 from '../assets/romance/romance4.jpg';
+// Dining
+import diningMwamba from '../assets/dining/dining-mwamba.jpg';
+import diningHungryLions from '../assets/dining/dining-hungry-lions.jpg';
+import diningGlobetrotters from '../assets/dining/dining-globetrotters.jpg';
+import diningCowboys from '../assets/dining/dining-cowboys.jpg';
+import diningJungleStars from '../assets/dining/dining-jungle-stars.jpg';
+// Spa & Pool
+import spaMtKenya from '../assets/spa/spa-mtkenya.jpg';
+import privateJacuzzi from '../assets/accommodation/private-jacuzzi.jpg';
 import poolAerial from '../assets/pool/guitar-pool-aerial.jpg';
 import poolMtKenya from '../assets/pool/guitar-pool-mt-kenya.jpg';
-import tentExterior from '../assets/accommodation/tent-exterior.jpg';
-import tentInterior from '../assets/accommodation/tent-interior.jpg';
-import tentHottub from '../assets/accommodation/tent-with-hottub.jpg';
-import eveningGlow from '../assets/accommodation/evening-glow.jpg';
-import vvipLounge from '../assets/lounges/vvip-lounge.jpg';
-import cocktailPortrait from '../assets/lounges/cocktail-portrait.jpg';
-import mshefa from '../assets/lounges/mshefa-clubhouse.jpg';
-import mwaki from '../assets/lounges/mwaki-fire.jpg';
-import bushDinner from '../assets/dining/bush-dinner.jpg';
-import tentedDining from '../assets/dining/tented-dining.jpg';
-import outdoorDining from '../assets/dining/outdoor-dining.jpg';
-import safariTable from '../assets/dining/safari-table.jpg';
-import mtKenyaTerrace from '../assets/dining/mt-kenya-terrace.jpg';
-import horseRiding from '../assets/activities/horse-riding.jpg';
-import trustWalk from '../assets/activities/team-trust-walk.jpg';
-import quadBonfire from '../assets/activities/quad-bonfire.jpg';
-import groupFitness from '../assets/activities/group-fitness.jpg';
-import boardGames from '../assets/activities/board-games.jpg';
-import spaDetail from '../assets/spa/spa-detail.jpg';
-import wellness from '../assets/spa/wellness-moment.jpg';
-import corporateGroup from '../assets/events/corporate-group.jpg';
-import eventEnergy from '../assets/events/event-energy.jpg';
-import eventGathering from '../assets/events/event-gathering.jpg';
+// Events & Celebrations
+import conference1 from '../assets/events/conference-1.jpg';
+import conference3 from '../assets/events/conference-3.jpg';
+import conference5 from '../assets/events/conference-5.jpg';
+import events1 from '../assets/events/events1.jpg';
+import events2 from '../assets/events/events2.jpg';
+import events4 from '../assets/events/events4.jpg';
+import events5 from '../assets/events/events5.jpg';
 
-import gallery01 from '../assets/gallery/gathering-01.jpg';
-import gallery02 from '../assets/gallery/gathering-02.jpg';
-import leisure01 from '../assets/gallery/leisure-01.jpg';
-import portrait01 from '../assets/gallery/portrait-01.jpg';
-import portrait02 from '../assets/gallery/portrait-02.jpg';
-import moment01 from '../assets/gallery/moment-01.jpg';
-import moment02 from '../assets/gallery/moment-02.jpg';
-import horses01 from '../assets/gallery/horses-01.jpg';
-import horses02 from '../assets/gallery/horses-02.jpg';
-import dining01 from '../assets/gallery/dining-01.jpg';
-import dining02 from '../assets/gallery/dining-02.jpg';
-import evening01 from '../assets/gallery/evening-01.jpg';
-import evening02 from '../assets/gallery/evening-02.jpg';
-import landscape01 from '../assets/gallery/landscape-01.jpg';
-import landscape02 from '../assets/gallery/landscape-02.jpg';
-
-// Hand-ordered to avoid clusters of the same scene
-const items = [
-  { image: heroImage,        alt: 'Golden-hour view of Mtalii tents with Mount Kenya in the distance' },
-  { image: poolAerial,       alt: 'Aerial view of the guitar-shaped infinity pool' },
-  { image: tentExterior,     alt: 'A safari tented suite exterior at golden hour' },
-  { image: bushDinner,       alt: 'Guests gathered around a bush dining table under the trees' },
-  { image: portrait01,       alt: 'A guest portrait at Mtalii' },
-  { image: horseRiding,      alt: 'Riders on horseback in the acacia plains' },
-  { image: vvipLounge,       alt: 'Mtalii VVIP Lounge interior with curated wine moments' },
-  { image: eveningGlow,      alt: 'Mtalii at dusk, soft lanterns lighting the camp' },
-  { image: poolMtKenya,      alt: 'The guitar pool fretboard reaching toward Mount Kenya' },
-  { image: tentInterior,     alt: 'Lantern-lit interior of a safari tented suite' },
-  { image: dining01,         alt: 'A dining moment at Mtalii' },
-  { image: cocktailPortrait, alt: 'A sundowner moment on the terrace' },
-  { image: tentHottub,       alt: 'Private deck with outdoor soaking tub' },
-  { image: mshefa,           alt: 'Mshefa Clubhouse — the social pulse of camp' },
-  { image: trustWalk,        alt: 'Team-building activity in the gardens' },
-  { image: gallery01,        alt: 'A large gathering on the central lawn' },
-  { image: spaDetail,        alt: 'A quiet wellness moment at Casadra Spa' },
-  { image: outdoorDining,    alt: 'Outdoor dining surrounded by gardens' },
-  { image: horses02,         alt: 'A morning with the horses' },
-  { image: wellness,         alt: 'Eco-gym studio and outdoor fitness' },
-  { image: leisure01,        alt: 'A leisurely afternoon at camp' },
-  { image: tentedDining,     alt: 'Tented dining structure surrounded by gardens' },
-  { image: mwaki,            alt: 'Mwaki Lounge — Kikuyu for fire — laid-back bonfire spot' },
-  { image: evening01,        alt: 'Evening conversation at Mtalii' },
-  { image: corporateGroup,   alt: 'A corporate retreat group at Mtalii' },
-  { image: quadBonfire,      alt: 'Bonfire under the Laikipia sky' },
-  { image: portrait02,       alt: 'A guest portrait at Mtalii' },
-  { image: dining02,         alt: 'A long dining table set for guests' },
-  { image: landscape01,      alt: 'Landscape view of the Mtalii grounds' },
-  { image: safariTable,      alt: 'A safari-style table laid for dinner' },
-  { image: moment01,         alt: 'A quiet moment at Mtalii' },
-  { image: eventEnergy,      alt: 'High-energy team activity on the lawn' },
-  { image: horses01,         alt: 'Horses ready for a morning ride' },
-  { image: mtKenyaTerrace,   alt: 'A terrace looking out toward Mt. Kenya' },
-  { image: gallery02,        alt: 'A gathering of friends at Mtalii' },
-  { image: groupFitness,     alt: 'A morning fitness session on the lawn' },
-  { image: evening02,        alt: 'Lanterns and warm light at dusk' },
-  { image: boardGames,       alt: 'A board game in the lounge' },
-  { image: moment02,         alt: 'A captured moment between guests' },
-  { image: landscape02,      alt: 'A wide view across the Mtalii landscape' },
-  { image: eventGathering,   alt: 'A large gathering at Mtalii' },
+// Curated, grouped by theme. Only the strongest, genuine imagery — the mislabelled
+// archery/team-building/aerobics shots and near-duplicate hero slides are left out.
+const groups = [
+  {
+    kicker: 'The Villages',
+    title: 'Tents, gardens & the mountain.',
+    columns: 3 as const,
+    items: [
+      { image: villageview1, alt: 'Mount Kenya at sunset over the lantern-lit gardens and tent roofs of the village at Mtalii Bush Camps' },
+      { image: villageview2, alt: 'Tented suites with timber decks set along a flagstone path through the village garden' },
+      { image: villageview4, alt: 'A private timber deck with woven chairs, screened by a bush garden, at a Mtalii tented suite' },
+      { image: villageview5, alt: 'An open-air stone rainforest shower behind a timber screen at a Mtalii tented suite' },
+      { image: villageview3, alt: 'A tented suite entrance with a timber dresser and brass wall lamps' },
+      { image: villageview6, alt: 'A writing desk at the canvas window of a Mtalii tented suite' },
+      { image: lenanaSuite, alt: 'A tented suite interior with a hand-dressed king bed and safari armchairs' },
+      { image: tentHottub, alt: 'Aerial view of a tented suite deck with a private outdoor soaking tub among the trees' },
+    ],
+  },
+  {
+    kicker: 'Romance',
+    title: 'Made for two.',
+    columns: 2 as const,
+    items: [
+      { image: romance1, alt: 'A tented suite opened to its deck, with a rose-petal turndown on the bed and a petal-strewn jacuzzi outside' },
+      { image: romance3, alt: 'A private table for two set on the lawn under a tree, with Mount Kenya on the horizon' },
+      { image: romance2, alt: 'A king bed turned down with rose petals arranged to read "I love you", lanterns lit on either side' },
+      { image: romance4, alt: 'A candlelit dinner for two plated on a wooden board, with wine poured and Mount Kenya beyond' },
+    ],
+  },
+  {
+    kicker: 'Dining',
+    title: 'Five tables, five moods.',
+    columns: 3 as const,
+    items: [
+      { image: diningMwamba, alt: 'A continental themed buffet laid out at Mwamba Restaurant with a bush view at Mtalii Bush Camps' },
+      { image: diningHungryLions, alt: 'Wood-fired pizza, a burger and pasta at Hungry Lions Café, Mtalii Bush Camps' },
+      { image: diningGlobetrotters, alt: 'Cocktails, wine and whisky along the counter at Globetrotters Street Bar, Mtalii Bush Camps' },
+      { image: diningCowboys, alt: 'A grilled steak with prawns and lobster by the fire at Cowboys Steakhouse, Mtalii Bush Camps' },
+      { image: diningJungleStars, alt: 'Ramen, sushi and dim sum on the table at Jungle Stars, Mtalii Bush Camps' },
+    ],
+  },
+  {
+    kicker: 'Spa & Pool',
+    title: 'Warm water, open sky.',
+    columns: 2 as const,
+    items: [
+      { image: spaMtKenya, alt: 'A tented spa treatment room at Casadra Spa overlooking Mount Kenya' },
+      { image: poolAerial, alt: 'Aerial view of the guitar-shaped infinity pool at Mtalii Bush Camps' },
+      { image: privateJacuzzi, alt: 'A private outdoor jacuzzi strewn with rose petals on the deck of a Mtalii tented suite' },
+      { image: poolMtKenya, alt: 'The guitar-shaped infinity pool reaching toward Mount Kenya' },
+    ],
+  },
+  {
+    kicker: 'Events & Celebrations',
+    title: 'Every reason to gather.',
+    columns: 3 as const,
+    items: [
+      { image: conference1, alt: 'A rustic executive boardroom with a long timber table under a thatched roof at Mtalii Bush Camps' },
+      { image: events5, alt: 'A large marquee event at Mtalii set with a stage, red carpet and seating for hundreds' },
+      { image: conference3, alt: 'An executive meeting room dressed with fresh flowers, opening onto the bush' },
+      { image: events2, alt: 'Guests in cowboy hats raising a toast at a themed dinner night at Mtalii Bush Camps' },
+      { image: conference5, alt: 'A hall arranged classroom-style with a projector screen and Mt. Kenya views' },
+      { image: events4, alt: 'Guests dancing at a themed cowboy night under festoon lights at Mtalii Bush Camps' },
+      { image: events1, alt: 'Friends in western dress seated at a candlelit themed dinner night at Mtalii Bush Camps' },
+    ],
+  },
 ];
 ---
 <BaseLayout
   title="Gallery — Mtalii Bush Camps in pictures"
-  description="A visual tour of Mtalii Bush Camps — tents, gardens, dining, lounges, the guitar pool, horseback rides and unforgettable evenings under the Mt. Kenya sky."
+  description="A visual tour of Mtalii Bush Camps — the tented villages, romance styling, five dining venues, the spa and guitar pool, conferences and celebrations under the Mt. Kenya sky."
 >
   <PageHero
     image={heroImage}
     alt="Mtalii Bush Camps with Mt. Kenya behind the tents at sunset"
     kicker="In Pictures"
     title="A camp, in moments."
-    tagline="Drag, scroll, tap a photo. Slow down with the place."
+    tagline="Villages, romance, dining, wellness and celebrations — tap any photo to view it larger."
     crumb="Gallery"
   />
 
   <section class="relative bg-cream py-20 md:py-28">
     <div class="mx-auto max-w-wide px-6 md:px-10">
-      <p class="reveal reveal--fade-up max-w-3xl mb-12 md:mb-16 font-display italic text-2xl text-coffee leading-snug text-balance">
-        Each frame is a different time of day at Mtalii. Tap any image to view it larger; press
+      <p class="reveal reveal--fade-up max-w-3xl mb-14 md:mb-20 font-display italic text-2xl text-coffee leading-snug text-balance">
+        A curated walk through Mtalii. Tap any image to view it larger; press
         <kbd class="font-body not-italic uppercase tracking-[0.18em] text-[0.7rem] text-forest border border-coffee/30 px-2 py-0.5">Esc</kbd>
         to close.
       </p>
-      <MasonryGallery items={items} columns={3} />
+
+      <div class="grid gap-20 md:gap-28">
+        {groups.map((group) => (
+          <div>
+            <header class="mb-8 md:mb-10 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-t border-coffee/20 pt-7">
+              <div class="reveal reveal--fade-up"><Kicker tone="coffee">{group.kicker}</Kicker></div>
+              <h2 class="reveal reveal--fade-up font-display text-2xl md:text-3xl text-forest leading-tight">
+                {group.title}
+              </h2>
+            </header>
+            <MasonryGallery items={group.items} columns={group.columns} />
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 

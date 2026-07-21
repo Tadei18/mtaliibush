@@ -36,10 +36,11 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
       </span>
     </div>
 
-    <!-- Eight nav items (incl. the long "Spa & Wellness") no longer fit beside the
-         logo and CTA at lg/1024px, so the inline nav starts at xl and 1024–1279px
-         uses the overlay menu below. -->
-    <nav class="hidden xl:flex items-center gap-6 2xl:gap-8" aria-label="Primary">
+    <!-- Eight nav items (incl. the long "Spa & Wellness") only get inline space at
+         xl (1280px+); below that the overlay hamburger is used so smaller screens
+         never cram. Spacing/size are tuned so 1280–1440px laptops sit comfortably
+         and nothing wraps. -->
+    <nav class="hidden xl:flex items-center gap-4 2xl:gap-7" aria-label="Primary">
       {nav.map((item) => {
         const active = isActive(item.href);
         return (
@@ -47,7 +48,7 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
             href={item.href}
             aria-current={active ? 'page' : undefined}
             data-active={active ? 'true' : undefined}
-            class="nav-link group relative font-body text-[0.78rem] uppercase tracking-[0.22em] text-cream/90 hover:text-cream transition-colors"
+            class="nav-link group relative whitespace-nowrap font-body text-[0.74rem] uppercase tracking-[0.13em] text-cream/90 hover:text-cream transition-colors"
           >
             <span>{item.label}</span>
             <span class={`nav-underline absolute -bottom-1 left-0 h-px bg-sand transition-all duration-500 ease-editorial group-hover:w-full ${active ? 'w-full' : 'w-0'}`}></span>
@@ -144,15 +145,38 @@ const waMessage = "Hello Mtalii Bush Camps, I'd like to enquire about a stay.";
   #site-header[data-state="top"] {
     background: linear-gradient(to bottom, rgba(15, 68, 35, 0.45) 0%, rgba(15, 68, 35, 0) 100%);
   }
+  /* Scrolled = the same glass, settled: still frosted and translucent (the blur
+     carries content through), just a touch more opaque with a warm tint, a sand
+     hairline and a soft shadow so the dark nav text stays legible over light
+     content. Not a solid bar. */
   #site-header[data-state="scrolled"] {
-    background: rgba(251, 245, 236, 0.92);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 10px 30px -22px rgba(36, 28, 18, 0.25);
+    background: linear-gradient(to bottom, rgba(251, 245, 236, 0.82), rgba(251, 245, 236, 0.72));
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    border-bottom: 1px solid rgba(228, 192, 132, 0.35);
+    box-shadow: 0 8px 30px -18px rgba(36, 28, 18, 0.35);
+  }
+  /* No backdrop-filter (older browsers): fall back to a near-solid cream so the
+     dark text never sits on a see-through bar it can't be read against. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    #site-header[data-state="scrolled"] {
+      background: rgba(251, 245, 236, 0.97);
+    }
   }
   #site-header[data-state="scrolled"] nav a {
     color: #241C12;
   }
   #site-header[data-state="scrolled"] #menu-toggle { color: #186030; }
+
+  /* The header's colour/shadow transition is motion-safe, but honour a reduced
+     preference by snapping between states instead of easing. */
+  @media (prefers-reduced-motion: reduce) {
+    #site-header,
+    #site-header .logo-swap,
+    #site-header .nav-underline {
+      transition: none !important;
+    }
+  }
 
   /* Logo cross-fade between top (white lockup) and scrolled (colour lockup) */
   .site-header__logo {
