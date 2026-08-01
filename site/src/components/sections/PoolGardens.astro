@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Kicker from '../Kicker.astro';
+import ComingSoonBadge from '../ComingSoonBadge.astro';
 import poolAerial from '../../assets/pool/guitar-pool-aerial.jpg';
 import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
 ---
@@ -15,6 +16,10 @@ import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
         <h2 class="reveal reveal--fade-up mt-7 font-display text-display-lg text-cream text-balance" style="--reveal-delay:100ms;">
           A guitar-shaped infinity pool, tuned to Mt.&nbsp;Kenya.
         </h2>
+        <p class="reveal reveal--fade-up mt-7 inline-flex items-center gap-2.5 rounded-full border border-sand/45 bg-cream/5 px-5 py-2.5 font-body font-semibold uppercase text-[0.68rem] text-sand" style="--reveal-delay:150ms; letter-spacing:0.26em;">
+          <span class="block h-1.5 w-1.5 shrink-0 rounded-full bg-sand" aria-hidden="true"></span>
+          Coming Soon — Not Yet Open
+        </p>
       </div>
       <div class="md:col-span-5 prose-editorial md:pb-2">
         <p class="reveal reveal--fade-up text-cream/85" style="--reveal-delay:200ms;">
@@ -22,6 +27,10 @@ import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
           with private cabanas offering discreet, personalised service. From afternoon teas served
           daily at 4pm to Sunday brunches, this space captures the spirit of slow, intentional
           leisure.
+        </p>
+        <p class="reveal reveal--fade-up mt-5 text-cream/70 text-[0.95rem]" style="--reveal-delay:250ms;">
+          The pool gardens are still being completed and are not yet open to guests. We&rsquo;ll
+          announce the opening date here &mdash; everything else at camp is open as usual.
         </p>
       </div>
     </div>
@@ -39,6 +48,7 @@ import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
           loading="lazy"
           class="absolute inset-0 h-full w-full object-cover"
         />
+        <ComingSoonBadge placement="center" size="md" note="The pool gardens are not yet open to guests." />
       </figure>
       <figure class="reveal reveal--scale-image col-span-12 md:col-span-4 relative overflow-hidden aspect-[3/4]" style="--reveal-delay:150ms;">
         <Image
@@ -51,6 +61,7 @@ import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
           loading="lazy"
           class="absolute inset-0 h-full w-full object-cover"
         />
+        <ComingSoonBadge placement="top-left" size="sm" />
       </figure>
     </div>
 
@@ -69,5 +80,8 @@ import poolMtKenya from '../../assets/pool/guitar-pool-mt-kenya.jpg';
         <p class="mt-2 font-body uppercase tracking-[0.24em] text-[0.66rem] text-cream/70">Private Cabanas</p>
       </div>
     </div>
+    <p class="reveal reveal--fade-up mt-5 text-center font-body uppercase tracking-[0.24em] text-[0.62rem] text-cream/55" style="--reveal-delay:250ms;">
+      Planned rituals, once the pool gardens open
+    </p>
   </div>
 </section>

@@ -1,0 +1,68 @@
+---
+/**
+ * "Coming Soon" overlay for imagery of facilities that aren't open to guests
+ * yet — currently the guitar-shaped infinity pool and its gardens.
+ *
+ * On-brand rather than a generic sticker: a forest-deep glass pill with a sand
+ * rim and sand kicker type, matching the Kicker / EnquiryBar language used
+ * elsewhere. The label is real text (not baked into the image), so it is read
+ * by screen readers and stays legible at any zoom; `pointer-events-none` keeps
+ * it out of the way of the lightbox / link that usually sits under it.
+ *
+ * Place it as a sibling of the <Image> inside a `relative` figure or card.
+ */
+interface Props {
+  /** Main line. */
+  label?: string;
+  /** Optional second line, e.g. "Not yet open to guests". */
+  note?: string;
+  /** Where the badge sits over the image. `custom` leaves positioning to `class`. */
+  placement?: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'custom';
+  /** Visual weight — sm for gallery tiles, md for feature images. */
+  size?: 'sm' | 'md';
+  /** Extra positioning classes (e.g. to clear a fixed header). */
+  class?: string;
+}
+
+const {
+  label = 'Coming Soon',
+  note,
+  placement = 'center',
+  size = 'md',
+  class: className = '',
+} = Astro.props;
+
+const placementClass: Record<string, string> = {
+  center: 'inset-0 flex flex-col items-center justify-center text-center',
+  'top-left': 'left-4 top-4 md:left-5 md:top-5 flex flex-col items-start',
+  'top-right': 'right-4 top-4 md:right-5 md:top-5 flex flex-col items-end text-right',
+  'bottom-left': 'left-4 bottom-4 md:left-5 md:bottom-5 flex flex-col items-start',
+  custom: 'flex flex-col items-start',
+};
+
+const pillClass =
+  size === 'sm'
+    ? 'px-3 py-1.5 text-[0.58rem]'
+    : 'px-5 py-2.5 text-[0.68rem] md:text-[0.72rem]';
+const dotClass = size === 'sm' ? 'h-1 w-1' : 'h-1.5 w-1.5';
+const noteClass = size === 'sm' ? 'text-[0.8rem]' : 'text-sm md:text-base';
+---
+<span class={`pointer-events-none absolute z-20 ${placementClass[placement]} ${className}`}>
+  {placement === 'center' && (
+    <span
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_55%_at_50%_50%,rgba(10,47,24,0.62),rgba(10,47,24,0.18)_65%,transparent_85%)]"
+      aria-hidden="true"
+    ></span>
+  )}
+  <span
+    class={`relative inline-flex items-center gap-2.5 rounded-full border border-sand/45 bg-forest-deep/80 backdrop-blur-sm shadow-[0_14px_34px_-18px_rgba(10,47,24,0.95)] ${pillClass}`}
+  >
+    <span class={`block shrink-0 rounded-full bg-sand ${dotClass}`} aria-hidden="true"></span>
+    <span class="font-body font-semibold uppercase text-sand" style="letter-spacing:0.26em;">{label}</span>
+  </span>
+  {note && (
+    <span class={`relative mt-3 max-w-[22rem] font-display italic text-cream/90 leading-snug [text-shadow:0_2px_14px_rgba(10,47,24,0.7)] ${noteClass}`}>
+      {note}
+    </span>
+  )}
+</span>

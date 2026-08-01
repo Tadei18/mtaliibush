@@ -6,6 +6,7 @@ import slide3 from '../assets/hero/slide-3.jpg';
 import slide4 from '../assets/hero/slide-4.jpg';
 import CTAButton from './CTAButton.astro';
 import EnquiryBar from './EnquiryBar.astro';
+import ComingSoonBadge from './ComingSoonBadge.astro';
 
 // Four-slide ambient hero — crossfade + Ken Burns. First slide is the LCP
 // (preloaded + eager); the rest lazy-load. All four share the same scrim so
@@ -13,7 +14,9 @@ import EnquiryBar from './EnquiryBar.astro';
 const slides = [
   { image: slide1, alt: 'Golden-hour view of Mtalii Bush Camps tents with Mount Kenya rising in the distance' },
   { image: slide2, alt: 'Tented dining structures set in the gardens at Mtalii Bush Camps' },
-  { image: slide3, alt: 'The guitar-shaped infinity pool with Mount Kenya in the distance' },
+  // The pool gardens aren't open yet, so this frame carries a "Coming Soon"
+  // badge that fades in and out with the slide itself.
+  { image: slide3, alt: 'The guitar-shaped infinity pool with Mount Kenya in the distance', comingSoon: true },
   { image: slide4, alt: 'The Mtalii VVIP lounge interior — plush sofas and curated wine moments' },
 ];
 ---
@@ -49,6 +52,20 @@ const slides = [
   <div class="absolute inset-0 z-10 bg-[radial-gradient(120%_80%_at_50%_120%,rgba(15,68,35,0.65),rgba(15,68,35,0.15)_45%,transparent_75%)]"></div>
   <div class="absolute inset-0 z-10 bg-gradient-to-b from-forest-deep/55 via-transparent to-forest-deep/40"></div>
   <div class="absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-forest-deep/70 to-transparent"></div>
+
+  <!--
+    Per-slide "Coming Soon" markers. They live in their own layer above the
+    gradient overlays (the slideshow stack below them is its own stacking
+    context, so a badge nested inside a slide would be washed out by the
+    scrims) and crossfade in lockstep with the slide they belong to.
+  -->
+  <div class="pointer-events-none absolute inset-0 z-20" data-hero-badges>
+    {slides.map((slide, i) => slide.comingSoon && (
+      <div class="hero-badge absolute inset-0" data-badge-index={i} aria-hidden="true">
+        <ComingSoonBadge placement="custom" size="sm" class="top-24 md:top-28 left-6 md:left-10" />
+      </div>
+    ))}
+  </div>
 
   <!-- Foreground content -->
   <div class="relative z-20 flex h-full flex-col items-center justify-center px-6 pb-28 sm:pb-32 lg:pb-36 text-center">
@@ -108,14 +125,27 @@ const slides = [
     transition: transform 7500ms ease-out;
   }
 
+  /* "Coming Soon" markers crossfade with their slide */
+  .hero-badge {
+    opacity: 0;
+    transition: opacity 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hero-badge.is-active {
+    opacity: 1;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-slide,
-    .hero-slide .hero-slide__img {
+    .hero-slide .hero-slide__img,
+    .hero-badge {
       transition: none !important;
       transform: none !important;
     }
     .hero-slide { opacity: 0; }
     .hero-slide[data-slide-index="0"] { opacity: 1; }
+    /* No rotation, so only slide 0 ever shows — its badge (if any) follows. */
+    .hero-badge { opacity: 0; }
+    .hero-badge[data-badge-index="0"] { opacity: 1; }
   }
 </style>
 
@@ -124,9 +154,21 @@ const slides = [
   const root = document.querySelector<HTMLElement>('[data-hero-slideshow]');
   if (root) {
     const slides = Array.from(root.querySelectorAll<HTMLElement>('.hero-slide'));
+    // "Coming Soon" markers live outside the slideshow stack, so they are
+    // shown/hidden alongside the slide index they are tagged with.
+    const badges = Array.from(document.querySelectorAll<HTMLElement>('.hero-badge'));
+    const syncBadges = (active: number) => {
+      for (const badge of badges) {
+        const isActive = Number(badge.dataset.badgeIndex) === active;
+        badge.classList.toggle('is-active', isActive);
+        badge.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      }
+    };
+
     if (slides.length) {
       // Mark slide 0 as active immediately so the Ken Burns starts on first paint
       slides[0].classList.add('is-active');
+      syncBadges(0);
 
       if (!prefersReducedMotion && slides.length > 1) {
         let index = 0;
@@ -136,6 +178,7 @@ const slides = [
           index = (index + 1) % slides.length;
           slides[index].classList.add('is-active');
           slides[index].setAttribute('aria-hidden', 'false');
+          syncBadges(index);
         };
 
         let timer = window.setInterval(advance, 6000);

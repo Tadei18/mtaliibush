@@ -1,9 +1,12 @@
 ---
 import { Picture } from 'astro:assets';
+import ComingSoonBadge from './ComingSoonBadge.astro';
 
 interface GalleryItem {
   image: ImageMetadata;
   alt: string;
+  /** Mark facilities that aren't open to guests yet (e.g. the pool gardens). */
+  comingSoon?: boolean;
 }
 interface Props {
   items: GalleryItem[];
@@ -32,8 +35,9 @@ const colClass: Record<number, string> = {
         loading="lazy"
         class="block w-full h-auto transition-transform duration-[1200ms] ease-editorial group-hover:scale-[1.04]"
         data-zoom-src={item.image.src}
-        data-zoom-alt={item.alt}
+        data-zoom-alt={item.comingSoon ? `${item.alt} — coming soon, not yet open to guests` : item.alt}
       />
+      {item.comingSoon && <ComingSoonBadge placement="top-left" size="sm" />}
       <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
       <span class="pointer-events-none absolute left-4 bottom-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-cream/15 backdrop-blur-sm text-cream border border-cream/35 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

@@ -43,7 +43,9 @@ const jsonLd = {
   },
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Spa & Wellness' },
-    { '@type': 'LocationFeatureSpecification', name: 'Infinity Pool' },
+    // The guitar-shaped pool is still being completed — flagged unavailable so
+    // search results don't advertise it as an open facility.
+    { '@type': 'LocationFeatureSpecification', name: 'Infinity Pool', value: false },
     { '@type': 'LocationFeatureSpecification', name: 'Fine Dining' },
     { '@type': 'LocationFeatureSpecification', name: 'Conference Venues' },
     { '@type': 'LocationFeatureSpecification', name: 'Game Drives & Safari' },
